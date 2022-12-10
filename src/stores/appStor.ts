@@ -8,6 +8,7 @@ import {
   BloodPresure,
 } from '../components/models';
 
+
 export const useAppStore = defineStore('appStore', {
   state: () => ({
     currentPatient: {} as Patient,
