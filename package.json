@@ -11,8 +11,7 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev && npx tailwindcss -i ./src/style.css -o ./src/css/app.css --watch",
     "build": " quasar build",
-    "start": "node server.js",
-    "heroku-postbuild": "npm install @quasar/cli && npm install --only=dev --no-shrinkwrap && npm run build"
+    "start": "node server.js"
   },
   "dependencies": {
     "@chenfengyuan/vue-countdown": "2",
