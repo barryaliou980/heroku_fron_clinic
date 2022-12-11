@@ -130,6 +130,9 @@ export default {
           this.showFormDialog = false;
 
         }
+          if( this.store.malnutrition?.id !== undefined){
+            this.malnutritions = [this.store.malnutrition]
+          }
       }
     },
     next() {
@@ -144,12 +147,12 @@ export default {
       malnutrition: { required },
     };
   },
-  updated() {
-    if( this.store.malnutrition?.id !== undefined){
-      this.malnutritions = [this.store.malnutrition]
-    }
-   ;
-  },
+  // updated() {
+  //   if( this.store.malnutrition?.id !== undefined){
+  //     this.malnutritions = [this.store.malnutrition]
+  //   }
+  //  ;
+  // },
   computed: {
     flagColor() {
       if (Number(this.store.malnutrition?.vital_flag) === 0) {

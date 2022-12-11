@@ -137,6 +137,11 @@ export default {
           this.store.setGlucose(data.data);
           this.showFormDialog = false;
         }
+
+
+          if(this.store.glucose?.id !== undefined ){
+            this.glucoses = [this.store.glucose]
+          }
       }
     },
     next() {
@@ -159,11 +164,11 @@ export default {
       glucose: { required },
     };
   },
-  updated() {
-    if(this.store.glucose?.id !== undefined ){
-      this.glucoses = [this.store.glucose]
-     }
-    },
+  // updated() {
+  //   if(this.store.glucose?.id !== undefined ){
+  //     this.glucoses = [this.store.glucose]
+  //    }
+  //   },
 
   computed: {
     flagColor() {

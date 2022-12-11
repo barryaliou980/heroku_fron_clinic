@@ -15,11 +15,11 @@ declare module '@vue/runtime-core' {
 // for each client)
 
 const api = axios.create({
-  baseURL: 'https://7cab-41-77-188-2.eu.ngrok.io/api',
+  baseURL: 'https://clinic-back-production.up.railway.app/api',
 });
 
-const backendImagePath = 'https://7cab-41-77-188-2.eu.ngrok.io/files/';
-const backendRDTPath = 'https://7cab-41-77-188-2.eu.ngrok.io/rdt/';
+const backendImagePath = 'https://clinic-back-production.up.railway.app/files/';
+const backendRDTPath = 'https://clinic-back-production.up.railway.app/rdt/';
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api

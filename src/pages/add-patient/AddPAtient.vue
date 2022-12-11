@@ -366,7 +366,6 @@ export default {
     if(this.$route.params.id !== undefined){
       this.isLoading(true)
       const {data} = await api.get(`/patients/${this.$route.params.id }`)
-      this.store.resetStore()
       this.store.init(data.data)
       this.store.setTabs('alarms')
        this.isLoading(false)

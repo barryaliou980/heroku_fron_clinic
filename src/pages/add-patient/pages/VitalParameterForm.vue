@@ -215,6 +215,10 @@ export default {
           this.store.setOxygen(data.data);
           this.showFormDialog = false;
         }
+         if(this.store.oxygen?.id !== undefined ){
+      this.oxyOptions = [this.store.oxygen];
+    }
+       
 
       } else if (this.title === 'Temperature') {
        
@@ -246,6 +250,9 @@ export default {
             this.showFormDialog = false;
 
           }
+           if(this.store.temperature?.id !== undefined ){
+           this.tempOptions = [this.store.temperature];
+        }
        
       }
     },
@@ -266,15 +273,15 @@ export default {
       $q: useQuasar(),
     };
   },
-  updated() {
-    if(this.store.temperature?.id !== undefined ){
-    this.tempOptions = [this.store.temperature];
-    }
-    if(this.store.oxygen?.id !== undefined ){
-      this.oxyOptions = [this.store.oxygen];
-    }
+  // updated() {
+    // if(this.store.temperature?.id !== undefined ){
+    // this.tempOptions = [this.store.temperature];
+    // }
+    // if(this.store.oxygen?.id !== undefined ){
+    //   this.oxyOptions = [this.store.oxygen];
+    // }
 
-  },
+  // },
   created() {
  if(this.store.temperature?.id !== undefined ){
     this.tempOptions = [this.store.temperature];
