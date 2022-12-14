@@ -115,11 +115,11 @@ export default {
         moment().diff(this.store.currentPatient.date_of_birth, 'years') < 18 ||
         this.store.currentPatient?.pregnant == 'Yes'
       ) {
-        this.$emit('startCountdownCovid', 0.2);
+        this.$emit('startCountdownCovid', 900);
         this.$emit('next', 'malnutrition');
           this.store.setTabs('malnutrition')
       } else {
-        this.$emit('startCountdownCovid', 0.2);
+        this.$emit('startCountdownCovid', 900);
         this.$emit('next', 'blood_pr');
          this.store.setTabs('blood_pr')
       }

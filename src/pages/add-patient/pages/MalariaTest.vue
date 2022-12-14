@@ -110,7 +110,7 @@ export default {
       }
     },
     instruction() {
-      console.log('test', this.store.currentPatient);
+
       console.log(
         'Age',
         moment().diff(this.store.currentPatient.date_of_birth, 'years')
@@ -126,11 +126,11 @@ export default {
           this.$emit('next', 'malnutrition');
           this.store.setTabs('malnutrition')
         }
-        this.$emit('startCountdownMalaria', 0.2);
+        this.$emit('startCountdownMalaria', 900);
       } else {
         this.$emit('next', 'test_glucose');
          this.store.setTabs('test_glucose')
-        this.$emit('startCountdownMalaria', 0.2);
+        this.$emit('startCountdownMalaria', 900);
       }
     },
     onFormDialogClose() {
