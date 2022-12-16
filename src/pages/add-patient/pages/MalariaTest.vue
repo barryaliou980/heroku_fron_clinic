@@ -126,11 +126,11 @@ export default {
           this.$emit('next', 'malnutrition');
           this.store.setTabs('malnutrition')
         }
-        this.$emit('startCountdownMalaria', 900);
+        this.$emit('startCountdownMalaria', 300);
       } else {
         this.$emit('next', 'test_glucose');
          this.store.setTabs('test_glucose')
-        this.$emit('startCountdownMalaria', 900);
+        this.$emit('startCountdownMalaria', 300);
       }
     },
     onFormDialogClose() {
