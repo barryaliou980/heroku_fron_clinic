@@ -85,7 +85,15 @@
               :validator="v$.medical_back.is_physical_activity"
         />
 
-        <q-btn @click="submit" color="primary" class="tw-mt-2" label="Enregistre"/>
+        <q-btn
+        @click="submit"
+        color="primary"
+        class="tw-mt-2"
+        label="Enregistre"
+        :loading="loadingBtn"
+        />
+
+
        <div class="tw-flex tw-justify-center tw-mt-4">
          <q-btn @click="validerEndProcess" color="red" label="Terminer le process" />
          </div>
@@ -117,6 +125,20 @@
             </q-card-actions>
           </q-card>
         </q-dialog>
+          <q-dialog v-model="open2" persistent  >
+          <q-card
+          class="tw-bg-red-500 tw-text-white"
+          >
+            <q-card-section >
+              <div class="text-h6 tw-text-center">Vous Pouvez pas terminer le proccess tant que vous ne saisissez pas les resultats</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+            </q-card-section>
+            <q-card-actions align="right">
+              <q-btn label="OK" color="blue" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
 </template>
 
 <script lang="ts">
@@ -131,8 +153,10 @@ export default {
       emits: [],
 data(){
     return{
+        loadingBtn:false,
         open:false,
         open1:false,
+        open2:false,
         vacinationOptions:[
             'Non',
             'Yes'
@@ -210,12 +234,24 @@ methods:{
         }
     },
    async  validerEndProcess(){
-          const result_1 = await this.testBackrournd1()
-            const result_2 = await this.testBackrournd2()
-            const result_3 = await this.testBackrournd3()
-             const result_4 = await this.testBackrournd4()
+        const result_1 = await this.testBackrournd1()
+        const result_2 = await this.testBackrournd2()
+        const result_3 = await this.testBackrournd3()
+        const result_4 = await this.testBackrournd4()
        if(result_1 && result_2 && result_3  && result_4){
-            this.open=true
+          if(JSON.stringify(this.store.medicalBackground) !== '{}'){
+            const result =  this.isOk()
+            if(result){
+                 this.open=true
+            }else{
+                this.open2=true
+            }
+        }else{
+            this.open2=false
+            this.testBackrournd1()
+        }
+
+
         }
     },
    async submit(){
@@ -224,20 +260,23 @@ methods:{
             const result_3 = await this.testBackrournd3()
              const result_4 = await this.testBackrournd4()
        if(result_1 && result_2 && result_3  && result_4){
-
+             this.loadingBtn = true
            this.medical_back.patient_id = this.store.currentPatient.id
 
            if( this.store.medicalBackground.id===undefined){
                const {data} = await api.post('/medical', this.medical_back)
                this.medical_back = data.data
                this.store.setMedicalBackground(data.data)
+                 this.loadingBtn = false
                this.open1 = true
            }else{
               const {data} = await api.put(`/medical/${this.store.medicalBackground.id}`, this.medical_back)
                this.medical_back = data.data
                this.store.setMedicalBackground(data.data)
+                 this.loadingBtn = false
                this.open1 = true
            }
+
 
        }
 
@@ -275,19 +314,8 @@ methods:{
         return true
     },
      end_process(){
-        console.log('backtes', JSON.stringify(this.store.medicalBackground) !== '{}')
-        console.log('testok',this.isOk())
-        if(JSON.stringify(this.store.medicalBackground) !== '{}'){
-            const result =  this.isOk()
-            if(result){
                 this.store.resetStore()
                 this.$router.replace({name:'admin.list.patient'})
-            }
-        }else{
-            console.log('test')
-            this.open=false
-            this.testBackrournd1()
-        }
 
     }
 },
