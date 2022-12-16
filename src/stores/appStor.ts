@@ -8,7 +8,6 @@ import {
   BloodPresure,
 } from '../components/models';
 
-
 export const useAppStore = defineStore('appStore', {
   state: () => ({
     currentPatient: {} as Patient,
@@ -35,6 +34,8 @@ export const useAppStore = defineStore('appStore', {
     malariaResult: {} as RdTestResult,
     medicalBackground: {} as MedicalBackground,
     tabs: ['mails'],
+    activeCovid: false,
+    activeMalaria: false,
   }),
   persist: true,
   actions: {
@@ -55,6 +56,12 @@ export const useAppStore = defineStore('appStore', {
     },
     setCovidTest(payload: boolean) {
       this.testCovid = payload;
+    },
+    setActiveCovid(payload: boolean) {
+      this.activeCovid = payload;
+    },
+    setActiveMalaria(payload: boolean) {
+      this.activeMalaria = payload;
     },
     setGlucose(payload: Glucose) {
       this.glucose = payload;
@@ -107,6 +114,8 @@ export const useAppStore = defineStore('appStore', {
       this.malariaResult = {} as RdTestResult;
       this.medicalBackground = {};
       this.tabs = ['mails'];
+      this.activeCovid = false;
+      this.activeMalaria = false;
     },
   },
   getters: {},

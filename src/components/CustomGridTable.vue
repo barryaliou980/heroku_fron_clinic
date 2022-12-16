@@ -13,7 +13,7 @@
           <div class="q-pa-xs col-xs-12 col-sm-6 col-md-6 col-lg-6">
             <card-profile :row="props.row"></card-profile>
           </div>
-          
+
         </template>
        <template v-slot:top-right>
           <q-input v-if="show_filter" filled borderless dense debounce="300" v-model="filter" placeholder="Search">
@@ -25,7 +25,7 @@
           <q-btn class="q-ml-sm" icon="filter_list" @click="show_filter=!show_filter" flat/>
         </template>
 
-        
+
       </q-table>
 
     </q-card-section>

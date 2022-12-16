@@ -10,7 +10,7 @@
             :validator="v$.medical_back.con_tabacco"
 
         />
-    
+
     </div>
    <base-select
         class="tw-mt-2 tw-mb-1"
@@ -19,7 +19,6 @@
         :options="options"
         :validator="v$.medical_back.con_alcohol"
     />
-  
     </div>
    <base-select
         class="tw-mt-2 tw-mb-1"
@@ -75,7 +74,7 @@
         label="Which ones"
         v-model="medical_back.vitamins"
           :validator="v$.medical_back.vitamins"
-       />    
+       />
         </div>
         <q-separator />
         <base-select
@@ -86,7 +85,7 @@
               :validator="v$.medical_back.is_physical_activity"
         />
 
-        <q-btn @click="submit" color="primary" class="tw-mt-2" label="Save"/> 
+        <q-btn @click="submit" color="primary" class="tw-mt-2" label="Enregistre"/>
        <div class="tw-flex tw-justify-center tw-mt-4">
          <q-btn @click="validerEndProcess" color="red" label="Terminer le process" />
          </div>
@@ -105,6 +104,19 @@
             </q-card-actions>
           </q-card>
         </q-dialog>
+          <q-dialog v-model="open1" persistent color="red">
+          <q-card
+          >
+            <q-card-section >
+              <div class="text-h6">Medical background enregistrer avec succes</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+            </q-card-section>
+            <q-card-actions align="right">
+              <q-btn label="OK" color="blue" v-close-popup />
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
 </template>
 
 <script lang="ts">
@@ -120,10 +132,11 @@ export default {
 data(){
     return{
         open:false,
+        open1:false,
         vacinationOptions:[
             'Non',
             'Yes'
-        ], 
+        ],
         options:[
             'Yes','No'
         ],
@@ -141,7 +154,7 @@ methods:{
     },
     async testBackrournd2(){
     if(await this.v$.medical_back.do_you_have_any_diagn_cond.$validate()){
-      
+
         if(this.medical_back.do_you_have_any_diagn_cond==='Yes'){
               console.log('Cond',this.medical_back.do_you_have_any_diagn_cond)
             if(await this.v$.medical_back.for_diagn_cond.$validate() && this.v$.medical_back.where_diagn_cond .$validate()&& this.v$.medical_back.are_on_treatment_diagn_cond.$validate()){
@@ -155,7 +168,7 @@ methods:{
 
     }
     return false
-   
+
     },
     async testBackrournd3(){
     if(await this.v$.medical_back.do_you_take_any_vitamins.$validate()){
@@ -163,14 +176,14 @@ methods:{
             if(await this.v$.medical_back.vitamins.$validate()){
                 return true
             }else{
-                return false 
+                return false
             }
 
         }else{
 
             return true;
         }
-        
+
     }
     return false
      },
@@ -218,13 +231,16 @@ methods:{
                const {data} = await api.post('/medical', this.medical_back)
                this.medical_back = data.data
                this.store.setMedicalBackground(data.data)
+               this.open1 = true
            }else{
               const {data} = await api.put(`/medical/${this.store.medicalBackground.id}`, this.medical_back)
                this.medical_back = data.data
                this.store.setMedicalBackground(data.data)
+               this.open1 = true
            }
+
        }
-    
+
     },
     isOk(){
         if(this.store.testCovid){
@@ -299,8 +315,8 @@ validations(){
         vitamins: {required},
         is_physical_activity: {required},
         con_tabacco: {required},
-        con_alcohol: {required}, 
-      }  
+        con_alcohol: {required},
+      }
     }
 
 },

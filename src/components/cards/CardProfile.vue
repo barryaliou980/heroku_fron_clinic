@@ -1,41 +1,43 @@
 <template>
-  <q-card @click="openModal">
-    <q-card-section class="text-center">
-      <q-avatar size="100px" class="shadow-10">
-        <!-- <img
-          :src="row.photo !== null ? `${path}${row.photo}` : `../../assets/default.png`"
-        /> -->
-        <img
-           v-if="row.photo !== null"
-           :src="`${path}${row.photo}`"
-           
-        />
-        <img 
-         v-else
-         src="../../assets/default.png"           
-        />
-        />
-      </q-avatar>
-    </q-card-section>
+  <q-card class="row" >
+    <div @click="openModal" class="col">
+      <q-card-section class="text-center">
+        <q-avatar size="100px" class="shadow-10">
+          <!-- <img
+            :src="row.photo !== null ? `${path}${row.photo}` : `../../assets/default.png`"
+          /> -->
+          <img
+            v-if="row.photo !== null"
+            :src="`${path}${row.photo}`"
 
-    <q-card-section class="q-pt-none text-center">
-      <div class="text-h6 text-grey-8">
-        {{ row.name }}
-      </div>
-    </q-card-section>
-
-    <q-card-actions align="center">
+          />
+          <img
+          v-else
+          src="../../assets/default.png"
+          />
+          />
+        </q-avatar>
+      </q-card-section>
+      <q-card-section class="q-pt-none text-center">
+        <div class="text-h6 text-grey-8">
+          {{ row.name }}
+        </div>
+      </q-card-section>
+    </div>
+    <q-card-actions class="col tw-justify-center" align="center">
       <q-btn
-       align="between"
+        class="tw-w-2/3 tw-mb-0.5"
         :color="glucose.glucose_level?flagColor(glucose.vital_flag):'primary'"
         square
         icon="view_in_ar"
+        @click="openGlucose=true"
       >
           <div>Glucose</div>
         <q-tooltip> Glucose {{glucose.glucose_level}} </q-tooltip>
       </q-btn>
       <q-btn
-      
+          class="tw-w-2/3 tw-mb-0.5"
+          @click="openMalnu=true"
         :color="malnutrition.arm_circumference?flagColor(malnutrition.vital_flag):'primary'"
         square
         icon="mood_bad"
@@ -44,31 +46,39 @@
         <q-tooltip> Malnutrition {{malnutrition.arm_circumference}} </q-tooltip>
       </q-btn>
       <q-btn
+          class="tw-w-2/3 tw-mb-0.5"
         :color="bloodPressure.bp_sys_avarage?flagColor(bloodPressure.vital_flag): 'primary'"
         square
         icon="bloodtype"
-     
+        @click="openBlood=true"
+
       >
        <div> Blood Presure</div>
         <q-tooltip> Blood Presure </q-tooltip>
       </q-btn>
-      
+
       <q-btn
+        class="tw-w-2/3 tw-mb-0.5"
         :color="malariaResult.rdt_result?rdTestFlag(malariaResult.rdt_result):'primary'"
         square
         icon="personal_injury"
+          @click="openMalaria=true"
       >
        <div>Malaria</div>
         <q-tooltip> {{(malariaResult.rdt_result?'Le resultat du  malaria est '+malariaResult.rdt_result:'Malaria')}}  </q-tooltip>
       </q-btn>
+
       <q-btn
+          class="tw-w-2/3 tw-mb-0.5"
         :color="covidResult.rdt_result?rdTestFlag(covidResult.rdt_result):'primary'"
         square
         icon="coronavirus"
+        @click="openCovid=true"
       >
        <div>Covid 19</div>
         <q-tooltip>{{(covidResult.rdt_result?'Le resultat du  Covid 19 est '+covidResult.rdt_result:'Covid 19')}} </q-tooltip>
       </q-btn>
+
     </q-card-actions>
   </q-card>
   <base-dialog
@@ -162,7 +172,7 @@
         <p class="text-h5 tw-text-green-800">Information sur les RDT Test</p>
         <q-separator class="tw-mt-2" />
         <div class="tw-ml-4 tw-mt-2">
-         
+
           <p v-if="covidResult.rdt_result" class="text-h6">
             Malaria:
             <span  :style="`background-color:${rdTestFlag(malariaResult.rdt_result)}`" class="tw-text-white">
@@ -186,20 +196,204 @@
       </div>
     </div>
   </base-dialog>
+  <base-dialog
+
+     v-model:open="openCovid"
+      :title="`Historique covid`"
+      @close="openCovid=false"
+      :loading="formLoading"
+      size="sm"
+      persistent
+      class="tw-text-left"
+     >
+      <div>
+        <base-table
+          v-if=" malarias.length>0"
+          :column-defs="columns"
+          :rows="covids"
+          :hide-pagination="true"
+          separator="cell"
+        >
+          <template #body-cell-rdt_result_at="props">
+                <q-td :props="props">
+                    {{dateFormat(props)}}
+                </q-td>
+              </template>
+        </base-table>
+        <p class="text-center" v-else> pas d'historique</p>
+        <q-separator class="tw-mt-2" />
+      <div class="tw-flex tw-justify-end">
+        <q-btn
+          class="tw-mt-4 tw-mr-5"
+          @click="openCovid = false"
+          label="Fermer"
+          color="primary"
+        />
+      </div>
+    </div>
+  </base-dialog>
+
+   <base-dialog
+     v-model:open="openMalaria"
+      :title="`Historique Malaria`"
+     @close="openMalaria=false"
+      :loading="formLoading"
+      size="sm"
+      persistent
+      class="tw-text-left"
+     >
+      <div>
+        <base-table
+         v-if=" malarias.length>0"
+          :column-defs="columns"
+          :rows="malarias"
+          :hide-pagination="true"
+           separator="cell"
+        >
+         <template #body-cell-rdt_result_at="props">
+                <q-td :props="props">
+                    {{dateFormat(props)}}
+                </q-td>
+              </template>
+        </base-table>
+        <q-separator class="tw-mt-2" />
+      <div class="tw-flex tw-justify-end">
+        <q-btn
+          class="tw-mt-4 tw-mr-5"
+          @click="openMalaria = false"
+          label="Fermer"
+          color="primary"
+        />
+      </div>
+    </div>
+  </base-dialog>
+
+  <base-dialog
+     v-model:open="openGlucose"
+      :title="`Historique Glucose`"
+      @close="openGlucose=false"
+      :loading="formLoading"
+      size="sm"
+      persistent
+      class="tw-text-left"
+     >
+      <div>
+        <base-table
+          v-if=" glucoses.length>0"
+          :column-defs="gcolumns"
+          :rows="glucoses"
+          :hide-pagination="true"
+           separator="cell"
+        >
+           <template #body-cell-created_at="props">
+                <q-td :props="props">
+                    {{dateFormat(props)}}
+                </q-td>
+              </template>
+        </base-table>
+        <p class="text-center" v-else> pas d'historique</p>
+        <q-separator class="tw-mt-2" />
+      <div class="tw-flex tw-justify-end">
+        <q-btn
+          class="tw-mt-4 tw-mr-5"
+          @click="openGlucose = false"
+          label="Fermer"
+          color="primary"
+        />
+      </div>
+    </div>
+  </base-dialog>
+    <base-dialog
+     v-model:open="openMalnu"
+      :title="`Historique Malnutrition`"
+      @close="openMalnu=false"
+      :loading="formLoading"
+      size="sm"
+      persistent
+      class="tw-text-left"
+     >
+      <div>
+        <base-table
+          v-if=" malnutritions.length>0"
+          :column-defs="mcolumns"
+          :rows="malnutritions"
+          :hide-pagination="true"
+           separator="cell"
+        >
+          <template #body-cell-created_at="props">
+                <q-td :props="props">
+                    {{dateFormat(props)}}
+                </q-td>
+              </template>
+        </base-table>
+        <p class="text-center" v-else> pas d'historique</p>
+        <q-separator class="tw-mt-2" />
+      <div class="tw-flex tw-justify-end">
+        <q-btn
+          class="tw-mt-4 tw-mr-5"
+          @click="openMalnu = false"
+          label="Fermer"
+          color="primary"
+        />
+      </div>
+    </div>
+  </base-dialog>
+      <base-dialog
+     v-model:open="openBlood"
+      :title="`Historique Blood Pressure`"
+      @close="openBlood=false"
+      :loading="formLoading"
+      size="md"
+      persistent
+      class="tw-text-left"
+     >
+      <div>
+        <base-table
+           v-if=" bloodPressures.length>0"
+          :column-defs="bcolumns"
+          :rows="bloodPressures"
+          :hide-pagination="true"
+           separator="cell"
+        >
+            <template #body-cell-created_at="props">
+                <q-td :props="props">
+                    {{dateFormat(props)}}
+                </q-td>
+              </template>
+        </base-table>
+        <p class="text-center" v-else> pas d'historique</p>
+        <q-separator class="tw-mt-2" />
+      <div class="tw-flex tw-justify-end">
+        <q-btn
+          class="tw-mt-4 tw-mr-5"
+          @click="openBlood = false"
+          label="Fermer"
+          color="primary"
+        />
+      </div>
+    </div>
+  </base-dialog>
 </template>
 
 <script >
 import { backendImagePath } from 'src/boot/axios';
+import moment from 'moment'
+import 'moment/locale/es'  // without this line it didn't work
+moment.locale('fr')
 export default {
   name: 'CardProfile',
   props: ['row'],
   data() {
     return {
+      openBlood:false,
+      openCovid:false,
+      openMalnu:false,
+      openGlucose:false,
+      openMalaria:false,
       default_image: '/src/assets/default.png',
       path: backendImagePath,
       open: false,
       formLoading: false,
-
       bloodPressure: {},
       oxygen: {},
       glucose: {},
@@ -207,6 +401,131 @@ export default {
       malnutrition: {},
       malariaResult: {},
       covidResult: {},
+        columns: [
+          {
+          field: 'rdt_type',
+           name:  'rdt_type',
+          label: 'Test',
+          align: 'left',
+        },
+        {
+          field: 'rdt_result_at',
+           name:  'rdt_result_at',
+          label: 'Date',
+          align: 'left',
+        },
+        {
+          field: 'rdt_result',
+          name: 'rdt_result',
+          label: 'Resultat',
+          align: 'left',
+        },
+
+        // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
+      ],
+        gcolumns: [
+            {
+          field: 'vital_type',
+           name:  'vital_type',
+          label: 'Test',
+          align: 'left',
+        },
+        {
+          field: 'created_at',
+           name:  'created_at',
+          label: 'Date',
+          align: 'left',
+        },
+        {
+          field: 'glucose_level',
+          name: 'glucose_level',
+          label: 'Resultat',
+          align: 'left',
+        },
+
+        // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
+      ],
+        mcolumns: [
+          {
+          field: 'vital_type',
+           name:  'vital_type',
+          label: 'Test',
+          align: 'left',
+        },
+        {
+          field: 'created_at',
+           name:  'created_at',
+          label: 'Date',
+          align: 'left',
+        },
+        {
+          field: 'arm_circumference',
+          name: 'arm_circumference',
+          label: 'Resultat',
+          align: 'left',
+        },
+
+        // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
+      ],
+       bcolumns: [
+          {
+          field: 'vital_type',
+           name:  'vital_type',
+          label: 'Test',
+          align: 'left',
+        },
+        {
+          field: 'created_at',
+           name:  'created_at',
+          label: 'Date',
+          align: 'left',
+        },
+        {
+          field: 'bp_dias_left',
+          name: 'bp_dias_left',
+          label: 'Dias Bras gauche',
+          align: 'left',
+        },
+         {
+          field: 'bp_dias_right',
+          name: 'bp_dias_right',
+          label: 'Dias Bras droit',
+          align: 'left',
+        },
+          {
+          field: 'bp_sys_left',
+          name: 'bp_sys_left',
+          label: 'Sys Bras gauche',
+          align: 'left',
+        },
+         {
+          field: 'bp_sys_right',
+          name: 'bp_sys_right',
+          label: 'Sys Bras droit',
+          align: 'left',
+        },
+          {
+          field: 'bp_dias_avarage',
+          name: 'bp_dias_avarage',
+          label: 'Dias average',
+          align: 'left',
+        },
+        {
+          field: 'bp_sys_avarage',
+          name:  'bp_sys_avarage',
+          label: 'Sys average',
+          align: 'left',
+        },
+
+
+        // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
+      ],
+      covids:[],
+      malarias:[],
+      glucoses:[],
+      malnutritions:[],
+      bloodPressures:[]
+
     };
   },
   methods: {
@@ -217,6 +536,7 @@ export default {
     onFormDialogClose() {
       this.open = false;
     },
+
     flagColor(flag) {
       if (Number(flag) === 0) {
         return 'green';
@@ -239,9 +559,17 @@ export default {
         return 'blue';
       }
     },
-    
+    dateFormat(date){
+      return moment(date).format('lll');
+    }
+
   },
   created() {
+    this.covids = this.row.covids
+    this.malarias = this.row.malarias
+    this.glucoses= this.row.glucoses
+    this.malnutritions = this.row.malnutritions
+    this.bloodPressures = this.row.blood_pressures
     this.row.vitals.forEach((element) => {
       if (element.vital_type === 'bloodPressure' && element.is_active ===1) {
         this.bloodPressure = element;

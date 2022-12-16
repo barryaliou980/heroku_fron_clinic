@@ -22,7 +22,7 @@ export default ({
     this.data =  data
     console.log('patient', data)
   }
-  
+
 })
 </script>
 

@@ -74,14 +74,14 @@
 
       </q-card>
     </div>
-    
+
 
     <div class="tw-grid tw-grid-cols-2 tw-gap-3">
       <q-page-sticky class="tw-pt-16" position="top-right" :offset="[18, 18]">
         <q-btn
           v-show="hideMalariaBtn"
           :label="disableBtnM === false ? 'Resultat Malaria' : ''"
-          v-if="activeMalaria"
+          v-if="store.activeMalaria"
           :disable="disableBtnM"
           :class="
             disableBtnM === false ? 'tw-animate-bounce tw-ml-1' : 'tw-ml-1'
@@ -102,7 +102,7 @@
 
         <q-btn
           v-show="hideCovidBtn"
-          v-if="activeCovid"
+          v-if="store.activeCovid"
           :disable="disableBtnC"
           :class="
             disableBtnC === false ? 'tw-animate-bounce tw-ml-1' : 'tw-ml-1'
@@ -196,17 +196,17 @@
         label="Enregistrer"
       />
     </div>
-    <q-spinner
+    <!-- <q-spinner
       style="margin-left: 70%; margin-top: -15%"
       v-if="loading"
       color="primary"
       size="4em"
       :thickness="10"
-    />
+    /> -->
   </base-dialog>
         <q-dialog v-model="leaveStatut" persistent color="red">
           <q-card
-          
+
           >
             <q-card-section >
               <div class="text-h6">Voulez-vous supprimer cet utilisateur</div>
@@ -282,6 +282,7 @@ export default {
   methods: {
     startCountdownMalaria(n: number) {
       this.activeMalaria = true;
+      this.store.setActiveMalaria(true)
       this.time = n * 1000;
       this.disableBtnM = true;
     },
@@ -291,6 +292,7 @@ export default {
     },
     startCountdownCovid(n: number) {
       this.activeCovid = true;
+      this.store.setActiveCovid(true)
       this.time = n * 1000;
       this.disableBtnC = true;
     },
@@ -367,9 +369,13 @@ export default {
       this.isLoading(true)
       const {data} = await api.get(`/patients/${this.$route.params.id }`)
       this.store.init(data.data)
-      this.store.setTabs('alarms')
-       this.isLoading(false)
-      this.next('alarms')
+      if(!this.store.tabs.includes('alarms')){
+        this.store.setTabs('alarms')
+      }
+      this.isLoading(false)
+     let lastPosition =this.store.tabs.slice(-1)
+      this.next(lastPosition[0])
+      console.log('TEST CREATED AT', lastPosition)
     }
   },
   validations() {
@@ -386,7 +392,7 @@ export default {
       fabRight: ref(true),
       v$: useVuelidate(),
       store: useAppStore(),
-    
+
     };
   },
   watch: {
@@ -402,7 +408,7 @@ export default {
     },
   },
   async beforeRouteLeave (to, from, next) {
-     this.store.resetStore() 
+     this.store.resetStore()
      next()
   }
 };
