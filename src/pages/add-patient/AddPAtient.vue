@@ -93,7 +93,7 @@
           <vue-countdown
             v-if="disableBtnM"
             class="tw-text-xl"
-            :time="time"
+            :time="malariaTimer"
             @end="onCountdownEndMalaaria"
             v-slot="{ minutes, seconds }"
             >Malaria :{{ minutes }}:{{ seconds }}</vue-countdown
@@ -114,7 +114,7 @@
           <vue-countdown
             v-if="disableBtnC"
             class="tw-text-xl"
-            :time="time"
+            :time="covidTimer"
             @end="onCountdownEndCovid"
             v-slot="{ minutes, seconds }"
             >Covid :{{ minutes }}:{{ seconds }}</vue-countdown
@@ -274,7 +274,8 @@ export default {
       resultOptions: ['positif', 'negatif', 'indeterminate', 'invalid'],
       disableBtnM: true,
       disableBtnC: true,
-      time: 0,
+      covidTimer: 0,
+      malariaTimer: 0,
       activeMalaria: false,
       activeCovid: false,
     };
@@ -283,7 +284,7 @@ export default {
     startCountdownMalaria(n: number) {
       this.activeMalaria = true;
       this.store.setActiveMalaria(true)
-      this.time = n * 1000;
+      this.malariaTimer = n * 1000;
       this.disableBtnM = true;
     },
     onCountdownEndMalaaria() {
@@ -293,7 +294,7 @@ export default {
     startCountdownCovid(n: number) {
       this.activeCovid = true;
       this.store.setActiveCovid(true)
-      this.time = n * 1000;
+      this.covidTimer = n * 1000;
       this.disableBtnC = true;
     },
     onCountdownEndCovid() {
