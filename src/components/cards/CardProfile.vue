@@ -554,7 +554,6 @@ export default {
     }
 
 
-
   },
   created() {
     this.covids = this.row.covids
