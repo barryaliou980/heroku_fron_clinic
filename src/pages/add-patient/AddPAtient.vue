@@ -436,6 +436,8 @@ export default {
       this.next(lastPosition[0]);
       console.log('TEST CREATED AT', lastPosition);
     }
+      let lastPosition = this.store.tabs.slice(-1)
+      this.next(lastPosition[0])
   },
   validations() {
     return {
