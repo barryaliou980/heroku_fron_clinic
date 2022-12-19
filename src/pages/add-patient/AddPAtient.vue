@@ -209,12 +209,15 @@
 
           >
             <q-card-section >
-              <div class="text-h6">Voulez-vous supprimer cet utilisateur</div>
+              <div class="tw-text-xl text-center">
+               Avez-vous finis de d'enroler ce patient ? <br/>
+               En quittant vous pouvez plus continuer le processus
+              </div>
             </q-card-section>
 
             <q-card-actions align="right">
-              <q-btn label="Valider" color="blue"  />
-              <q-btn label="Cancel" color="red" @click="(leaveStatut=false)"/>
+              <q-btn label="Oui" color="blue" @click="endStatus=true"  />
+              <q-btn label="Non" color="red" @click="(leaveStatut=false)"/>
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -229,7 +232,7 @@ import VueCountdown from '@chenfengyuan/vue-countdown';
 import { useAppStore } from 'src/stores/appStor';
 import { api } from 'src/boot/axios';
 import { store } from 'quasar/wrappers';
-import { useQuasar } from 'quasar';
+import { useQuasar } from 'quasar'
 
 export default {
   components: {
@@ -278,6 +281,7 @@ export default {
       malariaTimer: 0,
       activeMalaria: false,
       activeCovid: false,
+      endStatus:false
     };
   },
   methods: {
@@ -325,6 +329,30 @@ export default {
       this.saveBtn = false;
       this.open = false;
     },
+    leaveRoute:async function(){
+      this.$q.dialog({
+        title: 'Voulez-vous quitter le processus ?',
+        message: 'En quittant  vous confirmer que ce processus est terminer',
+         ok: {
+          push: true
+        },
+        cancel: {
+          push: true,
+          color: 'negative'
+        },
+        persistent: true
+      }).onOk(() => {
+        return true
+
+      }).onCancel(() => {
+        //
+        return false
+
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+        return false
+      })
+     },
     async submit() {
       if (await this.v$.rdtTestResult.$validate()) {
         const fileData = new FormData();
@@ -374,7 +402,7 @@ export default {
         this.store.setTabs('alarms')
       }
       this.isLoading(false)
-     let lastPosition =this.store.tabs.slice(-1)
+      let lastPosition =this.store.tabs.slice(-1)
       this.next(lastPosition[0])
       console.log('TEST CREATED AT', lastPosition)
     }
@@ -393,6 +421,7 @@ export default {
       fabRight: ref(true),
       v$: useVuelidate(),
       store: useAppStore(),
+      q$: useQuasar()
 
     };
   },
@@ -409,8 +438,31 @@ export default {
     },
   },
   async beforeRouteLeave (to, from, next) {
-     this.store.resetStore()
-     next()
+
+   this.$q.dialog({
+        title: 'Voulez-vous quitter le processus ?',
+        message: 'En quittant  vous confirmer que ce processus est terminer',
+         ok: {
+          push: true
+        },
+        cancel: {
+          push: true,
+          color: 'negative'
+        },
+        persistent: true
+      }).onOk(() => {
+        this.store.resetStore()
+        window.location.href= to.fullPath
+
+      }).onCancel(() => {
+        return false
+
+      }).onDismiss(() => {
+        return false
+      })
+      console.log('END')
+      next(false)
+
   }
 };
 </script>
