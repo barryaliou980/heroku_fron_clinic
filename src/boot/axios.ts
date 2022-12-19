@@ -15,11 +15,11 @@ declare module '@vue/runtime-core' {
 // for each client)
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: 'http://api.laclinico.com/api',
 });
 
-const backendImagePath = 'http://127.0.0.1:8000/files/';
-const backendRDTPath = 'http://127.0.0.1:8000/rdt/';
+const backendImagePath = 'http://api.laclinico.com/files/';
+const backendRDTPath = 'http://api.laclinico.com/rdt/';
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api

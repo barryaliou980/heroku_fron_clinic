@@ -3,7 +3,7 @@
     v-if="Object.keys(rdtCovid).length == 0"
     class="tw-flex tw-justify-center tw-px-4 tw-py-4"
   >
-    <q-btn color="blue" label="Demarer le test" @click="instruction" />
+    <q-btn color="blue" label="Start the test" @click="instruction" />
   </div>
   <div v-else class="q-pa-md q-gutter-sm">
     <q-banner rounded class="bg-grey-3">
@@ -38,7 +38,7 @@
         geographical locations you want your ads to show on, and more.
 
         <q-stepper-navigation>
-          <q-btn @click="step = 2" color="primary" label="Suivant" />
+          <q-btn @click="step = 2" color="primary" label="Next" />
         </q-stepper-navigation>
       </q-step>
 
@@ -52,7 +52,7 @@
         keywords.
 
         <q-stepper-navigation>
-          <q-btn @click="step = 4" color="primary" label="Suivant" />
+          <q-btn @click="step = 4" color="primary" label="Next" />
           <q-btn
             flat
             @click="step = 1"
@@ -62,7 +62,7 @@
           />
         </q-stepper-navigation>
       </q-step>
-      <q-step :name="4" title="Demarer le test" icon="add_comment">
+      <q-step :name="4" title="Start the test" icon="add_comment">
         Try out different ad text to see what brings in the most customers, and
         learn how to enhance your ads using features like ad extensions. If you
         run into any problems with your ads, find out how to tell if they're
@@ -90,7 +90,7 @@ import { useAppStore } from 'src/stores/appStor';
 import { ref } from 'vue';
 import { backendRDTPath } from 'src/boot/axios';
 export default {
-    emits: [],
+  emits: [],
   data() {
     return {
       open: true,
@@ -117,11 +117,11 @@ export default {
       ) {
         this.$emit('startCountdownCovid', 900);
         this.$emit('next', 'malnutrition');
-          this.store.setTabs('malnutrition')
+        this.store.setTabs('malnutrition');
       } else {
         this.$emit('startCountdownCovid', 900);
         this.$emit('next', 'blood_pr');
-         this.store.setTabs('blood_pr')
+        this.store.setTabs('blood_pr');
       }
     },
     onFormDialogClose() {

@@ -57,7 +57,7 @@
     </base-dialog>
   </div>
 
-  <q-btn @click="next" color="blue" label="Suivant" />
+  <q-btn @click="next" color="blue" label="Next" />
 </template>
 
 <script lag="ts">
@@ -67,7 +67,7 @@ import { useAppStore } from 'src/stores/appStor';
 import { api } from 'src/boot/axios';
 
 export default {
-    emits: [],
+  emits: [],
   data() {
     return {
       glucose: null,
@@ -108,51 +108,48 @@ export default {
     },
     async submit() {
       if (this.v$.glucose.$validate()) {
-
-        if(this.store.glucose.id === undefined){
-           let formData = {
-          patient_id: this.store?.currentPatient?.id,
-          vital_type: 'glucose',
-          glucose_level: this.glucose,
-        };
-        this.$emit('isLoading', true)
+        if (this.store.glucose.id === undefined) {
+          let formData = {
+            patient_id: this.store?.currentPatient?.id,
+            vital_type: 'glucose',
+            glucose_level: this.glucose,
+          };
+          this.$emit('isLoading', true);
 
           const { data } = await api.post('/vitals', formData);
-          this.$emit('isLoading', false)
+          this.$emit('isLoading', false);
           this.glucoses = [data.data];
           this.store.setGlucose(data.data);
           this.showFormDialog = false;
-        }else{
+        } else {
           let formData = {
-            id:this.store.glucose.id ,
-          patient_id: this.store?.currentPatient?.id,
-          vital_type: 'glucose',
-          glucose_level: this.glucose,
-        };
-        this.$emit('isLoading', true)
+            id: this.store.glucose.id,
+            patient_id: this.store?.currentPatient?.id,
+            vital_type: 'glucose',
+            glucose_level: this.glucose,
+          };
+          this.$emit('isLoading', true);
 
           const { data } = await api.post('/vitals', formData);
-          this.$emit('isLoading', false)
+          this.$emit('isLoading', false);
           this.glucoses = [data.data];
           this.store.setGlucose(data.data);
           this.showFormDialog = false;
         }
 
-
-          if(this.store.glucose?.id !== undefined ){
-            this.glucoses = [this.store.glucose]
-          }
+        if (this.store.glucose?.id !== undefined) {
+          this.glucoses = [this.store.glucose];
+        }
       }
     },
     next() {
       if (this.glucoses.length > 0) {
         if (this.store.testCovid) {
           this.$emit('next', 'test_covid');
-          this.store.setTabs('test_covid')
+          this.store.setTabs('test_covid');
         } else {
           this.$emit('next', 'blood_pr');
-          this.store.setTabs('blood_pr')
-
+          this.store.setTabs('blood_pr');
         }
       } else {
         console.log('Glucose');
@@ -184,9 +181,9 @@ export default {
     },
   },
   created() {
-if(this.store.glucose?.id !== undefined ){
-      this.glucoses = [this.store.glucose]
-     }
+    if (this.store.glucose?.id !== undefined) {
+      this.glucoses = [this.store.glucose];
+    }
   },
   setup() {
     return {

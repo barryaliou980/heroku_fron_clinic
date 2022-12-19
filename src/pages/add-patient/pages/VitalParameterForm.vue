@@ -88,7 +88,7 @@
     </div>
   </div>
   <div class="tw-flex tw-flex-row tw-justify-start tw-space-x-3">
-    <q-btn color="blue" class="tw-flex" label="Suivant" @click="nextStep" />
+    <q-btn color="blue" class="tw-flex" label="Next" @click="nextStep" />
   </div>
   <base-dialog
     v-model:open="showFormDialog"
@@ -192,68 +192,62 @@ export default {
     },
     async submit(params: any) {
       if (this.title === 'Oxygen') {
-     
-        if(this.store.oxygen?.id===undefined){
-           let formData = {
-          patient_id: this.store?.currentPatient?.id,
-          vital_type: 'oxygen',
-          oxygen_saturation: params.value,
-        };
+        if (this.store.oxygen?.id === undefined) {
+          let formData = {
+            patient_id: this.store?.currentPatient?.id,
+            vital_type: 'oxygen',
+            oxygen_saturation: params.value,
+          };
           const { data } = await api.post('/vitals', formData);
           this.oxyOptions = data.data;
           this.store.setOxygen(data.data);
           this.showFormDialog = false;
-        }else{
-             let formData = {
-              id:this.store.oxygen?.id,
-          patient_id: this.store?.currentPatient?.id,
-          vital_type: 'oxygen',
-          oxygen_saturation: params.value,
-        };
+        } else {
+          let formData = {
+            id: this.store.oxygen?.id,
+            patient_id: this.store?.currentPatient?.id,
+            vital_type: 'oxygen',
+            oxygen_saturation: params.value,
+          };
           const { data } = await api.post('/vitals/', formData);
           this.oxyOptions = data.data;
           this.store.setOxygen(data.data);
           this.showFormDialog = false;
         }
-         if(this.store.oxygen?.id !== undefined ){
-      this.oxyOptions = [this.store.oxygen];
-    }
-       
-
-      } else if (this.title === 'Temperature') {
-       
-          if(this.store.temperature?.id===undefined){
-             let formData = {
-              patient_id: this.store?.currentPatient?.id,
-              vital_type: 'temperature',
-              temperature: params.value,
-            };
-             this.$emit('isLoading', true)
-             const { data } = await api.post('/vitals', formData);
-             this.$emit('isLoading', false)
-            this.tempOptions = data.data;
-            this.store.setTemperature(data.data);
-            this.showFormDialog = false;
-          }else{
-             let formData = {
-              id:this.store.temperature.id,
-              patient_id: this.store?.currentPatient?.id,
-              vital_type: 'temperature',
-              temperature: params.value,
-              vital_flag: this.tempOptions?.vital_flag
-            };
-            this.$emit('isLoading', true)
-            const { data } = await api.post('/vitals/', formData);
-            this.$emit('isLoading', false)
-            this.tempOptions = data.data;
-            this.store.setTemperature(data.data);
-            this.showFormDialog = false;
-
-          }
-           if(this.store.temperature?.id !== undefined ){
-           this.tempOptions = [this.store.temperature];
+        if (this.store.oxygen?.id !== undefined) {
+          this.oxyOptions = [this.store.oxygen];
         }
-       
+      } else if (this.title === 'Temperature') {
+        if (this.store.temperature?.id === undefined) {
+          let formData = {
+            patient_id: this.store?.currentPatient?.id,
+            vital_type: 'temperature',
+            temperature: params.value,
+          };
+          this.$emit('isLoading', true);
+          const { data } = await api.post('/vitals', formData);
+          this.$emit('isLoading', false);
+          this.tempOptions = data.data;
+          this.store.setTemperature(data.data);
+          this.showFormDialog = false;
+        } else {
+          let formData = {
+            id: this.store.temperature.id,
+            patient_id: this.store?.currentPatient?.id,
+            vital_type: 'temperature',
+            temperature: params.value,
+            vital_flag: this.tempOptions?.vital_flag,
+          };
+          this.$emit('isLoading', true);
+          const { data } = await api.post('/vitals/', formData);
+          this.$emit('isLoading', false);
+          this.tempOptions = data.data;
+          this.store.setTemperature(data.data);
+          this.showFormDialog = false;
+        }
+        if (this.store.temperature?.id !== undefined) {
+          this.tempOptions = [this.store.temperature];
+        }
       }
     },
     nextStep() {
@@ -262,7 +256,7 @@ export default {
         JSON.stringify(this.store.oxygen) !== '{}'
       ) {
         this.$emit('next', 'movies');
-        this.store.setTabs('movies')
+        this.store.setTabs('movies');
       } else {
       }
     },
@@ -274,26 +268,23 @@ export default {
     };
   },
   // updated() {
-    // if(this.store.temperature?.id !== undefined ){
-    // this.tempOptions = [this.store.temperature];
-    // }
-    // if(this.store.oxygen?.id !== undefined ){
-    //   this.oxyOptions = [this.store.oxygen];
-    // }
+  // if(this.store.temperature?.id !== undefined ){
+  // this.tempOptions = [this.store.temperature];
+  // }
+  // if(this.store.oxygen?.id !== undefined ){
+  //   this.oxyOptions = [this.store.oxygen];
+  // }
 
   // },
   created() {
- if(this.store.temperature?.id !== undefined ){
-    this.tempOptions = [this.store.temperature];
+    if (this.store.temperature?.id !== undefined) {
+      this.tempOptions = [this.store.temperature];
       this.tempFlag = this.store.temperature?.vital_flag;
     }
-    if( this.store.oxygen?.id !== undefined ){
+    if (this.store.oxygen?.id !== undefined) {
       this.oxyOptions = [this.store.oxygen];
-          this.oxygenFlag = this.store.oxygen?.vital_flag;
+      this.oxygenFlag = this.store.oxygen?.vital_flag;
     }
-  
-
-
   },
   computed: {
     flagColorT() {

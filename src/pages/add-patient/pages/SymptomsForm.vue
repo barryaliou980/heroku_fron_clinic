@@ -222,10 +222,10 @@
             "
           >
             <q-card-section v-if="malaria === true || covid === true">
-              <div class="text-h6">Ce patient doit faire le RD-Test de :</div>
+              <div class="text-h6">This patient must do the RD-Test of :</div>
             </q-card-section>
             <q-card-section v-else>
-              <div class="text-h6">Ce patient ne doit pas passer de test</div>
+              <div class="text-h6">This patient should not be tested</div>
             </q-card-section>
 
             <q-card-section class="q-pt-none">
@@ -237,7 +237,7 @@
               </p>
             </q-card-section>
             <q-card-actions align="right">
-              <q-btn label="Valider" color="blue" @click="submit" />
+              <q-btn label="Valided" color="blue" @click="submit" />
               <q-btn label="Cancel" color="red" v-close-popup />
             </q-card-actions>
           </q-card>
@@ -258,7 +258,7 @@ import { Symptom, RdTest } from '../../../components/models';
 import { useQuasar } from 'quasar';
 import { api } from 'src/boot/axios';
 export default {
-    emits: [],
+  emits: [],
   data() {
     return {
       symptoms: {
@@ -363,7 +363,7 @@ export default {
       if (JSON.stringify(this.testCovid) !== JSON.stringify({})) {
         test.push(this.testCovid);
         this.store.setCovidTest(true);
-        covid=true
+        covid = true;
         console.log('Covid');
       } else {
         this.store.setCovidTest(false);
@@ -379,40 +379,42 @@ export default {
       this.symptoms.patient_id = this.store.currentPatient.id;
       this.symptoms.temperature_id = this.store.temperature?.id;
       this.symptoms.oxygen_id = this.store.oxygen?.id;
-      if(this.store.symptom.id===undefined){
-        this.$emit('isLoading', true)
+      if (this.store.symptom.id === undefined) {
+        this.$emit('isLoading', true);
         const { data } = await api.post('/symptoms', this.symptoms);
-        this.$emit('isLoading', false)
-        console.log('Data', data)
+        this.$emit('isLoading', false);
+        console.log('Data', data);
         this.store.setSymptom(data.data);
-      }else{
-        this.$emit('isLoading', true)
-         const { data } = await api.put(`/symptoms/${this.store.symptom.id}`, this.symptoms);
-         this.$emit('isLoading', false)
-         console.log('Data', data)
+      } else {
+        this.$emit('isLoading', true);
+        const { data } = await api.put(
+          `/symptoms/${this.store.symptom.id}`,
+          this.symptoms
+        );
+        this.$emit('isLoading', false);
+        console.log('Data', data);
         this.store.setSymptom(data.data);
       }
 
       this.open = false;
 
       if (malaria === true) {
-         this.$emit('next', 'test_malaria');
-         this.store.setTabs('test_malaria')
+        this.$emit('next', 'test_malaria');
+        this.store.setTabs('test_malaria');
       } else if (
         moment().diff(this.store.currentPatient.date_of_birth, 'years') < 5 ||
         this.store.currentPatient?.pregnant == 'Yes'
       ) {
-        if(covid===true){
-
+        if (covid === true) {
           this.$emit('next', 'test_covid');
-          this.store.setTabs('test_covid')
-        }else{
+          this.store.setTabs('test_covid');
+        } else {
           this.$emit('next', 'malnutrition');
-          this.store.setTabs('malnutrition')
+          this.store.setTabs('malnutrition');
         }
       } else {
         this.$emit('next', 'test_glucose');
-         this.store.setTabs('test_glucose')
+        this.store.setTabs('test_glucose');
       }
     },
   },

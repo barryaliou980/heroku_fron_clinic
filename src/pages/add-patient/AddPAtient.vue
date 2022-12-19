@@ -12,19 +12,55 @@
           narrow-indicator
           style="width: "
         >
-          <q-tab v-if="store.tabs.includes('mails')" name="mails" label="Patient Information" />
-          <q-tab v-if="store.tabs.includes('alarms')" name="alarms" label="Vitales Parameters" />
-          <q-tab v-if="store.tabs.includes('movies')" name="movies" label="Symptomes" />
-          <q-tab v-if="store.tabs.includes('test_malaria')" name="test_malaria" label="Malaria RDT Test" />
-          <q-tab v-if="store.tabs.includes('test_glucose')" name="test_glucose" label="Glucose Test" />
-          <q-tab v-if="store.tabs.includes('test_covid')" name="test_covid" label="Covid RDT Test" />
-          <q-tab v-if="store.tabs.includes('malnutrition')" name="malnutrition" label="Malnutrition" />
-          <q-tab v-if="store.tabs.includes('blood_pr')" name="blood_pr" label="Blood Pressure" />
-          <q-tab v-if="store.tabs.includes('medical_back')" name="medical_back" label="Medical Background" />
+          <q-tab
+            v-if="store.tabs.includes('mails')"
+            name="mails"
+            label="Patient Information"
+          />
+          <q-tab
+            v-if="store.tabs.includes('alarms')"
+            name="alarms"
+            label="Vitales Parameters"
+          />
+          <q-tab
+            v-if="store.tabs.includes('movies')"
+            name="movies"
+            label="Symptomes"
+          />
+          <q-tab
+            v-if="store.tabs.includes('test_malaria')"
+            name="test_malaria"
+            label="Malaria RDT Test"
+          />
+          <q-tab
+            v-if="store.tabs.includes('test_glucose')"
+            name="test_glucose"
+            label="Glucose Test"
+          />
+          <q-tab
+            v-if="store.tabs.includes('test_covid')"
+            name="test_covid"
+            label="Covid RDT Test"
+          />
+          <q-tab
+            v-if="store.tabs.includes('malnutrition')"
+            name="malnutrition"
+            label="Malnutrition"
+          />
+          <q-tab
+            v-if="store.tabs.includes('blood_pr')"
+            name="blood_pr"
+            label="Blood Pressure"
+          />
+          <q-tab
+            v-if="store.tabs.includes('medical_back')"
+            name="medical_back"
+            label="Medical Background"
+          />
         </q-tabs>
         <q-separator />
 
-        <q-tab-panels  v-model="tab" animated>
+        <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="mails">
             <div class="text-h6">Patient Demographic</div>
             <DemographicPage @next="next" @isLoading="isLoading" />
@@ -71,16 +107,14 @@
             <BackgroundMedical @next="next" @isLoading="isLoading" />
           </q-tab-panel>
         </q-tab-panels>
-
       </q-card>
     </div>
-
 
     <div class="tw-grid tw-grid-cols-2 tw-gap-3">
       <q-page-sticky class="tw-pt-16" position="top-right" :offset="[18, 18]">
         <q-btn
           v-show="hideMalariaBtn"
-          :label="disableBtnM === false ? 'Resultat Malaria' : ''"
+          :label="disableBtnM === false ? 'Malaria Result' : ''"
           v-if="store.activeMalaria"
           :disable="disableBtnM"
           :class="
@@ -119,16 +153,12 @@
             v-slot="{ minutes, seconds }"
             >Covid :{{ minutes }}:{{ seconds }}</vue-countdown
           >
-          <p v-else class="tw-text-md">resultat Covid</p>
+          <p v-else class="tw-text-md">Covid Result</p>
         </q-btn>
       </q-page-sticky>
     </div>
-
   </div>
-   <loader-dialog
-    v-model="loading"
-    persistent
-    />
+  <loader-dialog v-model="loading" persistent />
   <base-dialog
     v-model:open="open"
     :title="resultModatTitle"
@@ -193,7 +223,7 @@
         color="blue"
         style="margin-left: 30%"
         class="tw-mt-4"
-        label="Enregistrer"
+        label="Save"
       />
     </div>
     <!-- <q-spinner
@@ -204,23 +234,21 @@
       :thickness="10"
     /> -->
   </base-dialog>
-        <q-dialog v-model="leaveStatut" persistent color="red">
-          <q-card
+  <q-dialog v-model="leaveStatut" persistent color="red">
+    <q-card>
+      <q-card-section>
+        <div class="tw-text-xl text-center">
+          Have you finished enrolling this patient ? <br />
+          By quitting you can no longer continue the process
+        </div>
+      </q-card-section>
 
-          >
-            <q-card-section >
-              <div class="tw-text-xl text-center">
-               Avez-vous finis de d'enroler ce patient ? <br/>
-               En quittant vous pouvez plus continuer le processus
-              </div>
-            </q-card-section>
-
-            <q-card-actions align="right">
-              <q-btn label="Oui" color="blue" @click="endStatus=true"  />
-              <q-btn label="Non" color="red" @click="(leaveStatut=false)"/>
-            </q-card-actions>
-          </q-card>
-        </q-dialog>
+      <q-card-actions align="right">
+        <q-btn label="Oui" color="blue" @click="endStatus = true" />
+        <q-btn label="Non" color="red" @click="leaveStatut = false" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts">
@@ -232,7 +260,7 @@ import VueCountdown from '@chenfengyuan/vue-countdown';
 import { useAppStore } from 'src/stores/appStor';
 import { api } from 'src/boot/axios';
 import { store } from 'quasar/wrappers';
-import { useQuasar } from 'quasar'
+import { useQuasar } from 'quasar';
 
 export default {
   components: {
@@ -261,7 +289,7 @@ export default {
   },
   data() {
     return {
-      leaveStatut:false,
+      leaveStatut: false,
       open: false,
       loading: false,
       saveBtn: false,
@@ -281,13 +309,13 @@ export default {
       malariaTimer: 0,
       activeMalaria: false,
       activeCovid: false,
-      endStatus:false
+      endStatus: false,
     };
   },
   methods: {
     startCountdownMalaria(n: number) {
       this.activeMalaria = true;
-      this.store.setActiveMalaria(true)
+      this.store.setActiveMalaria(true);
       this.malariaTimer = n * 1000;
       this.disableBtnM = true;
     },
@@ -297,7 +325,7 @@ export default {
     },
     startCountdownCovid(n: number) {
       this.activeCovid = true;
-      this.store.setActiveCovid(true)
+      this.store.setActiveCovid(true);
       this.covidTimer = n * 1000;
       this.disableBtnC = true;
     },
@@ -320,8 +348,8 @@ export default {
       this.rdtTestResult.label = evt;
       this.resultModatTitle =
         this.rdtTestResult.label == 'covid'
-          ? 'Saisissez resultat du COVID'
-          : 'Saisissez resultat du malaria';
+          ? 'Enter Covid result'
+          : 'Enter malaria result';
       console.log('Ckiked');
     },
     onFormDialogClose() {
@@ -329,36 +357,38 @@ export default {
       this.saveBtn = false;
       this.open = false;
     },
-    leaveRoute:async function(){
-      this.$q.dialog({
-        title: 'Voulez-vous quitter le processus ?',
-        message: 'En quittant  vous confirmer que ce processus est terminer',
-         ok: {
-          push: true
-        },
-        cancel: {
-          push: true,
-          color: 'negative'
-        },
-        persistent: true
-      }).onOk(() => {
-        return true
-
-      }).onCancel(() => {
-        //
-        return false
-
-      }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
-        return false
-      })
-     },
+    leaveRoute: async function () {
+      this.$q
+        .dialog({
+          title: 'Do you want to exit the process ?',
+          message: 'By exiting you confirm that this process is complete',
+          ok: {
+            push: true,
+          },
+          cancel: {
+            push: true,
+            color: 'negative',
+          },
+          persistent: true,
+        })
+        .onOk(() => {
+          return true;
+        })
+        .onCancel(() => {
+          //
+          return false;
+        })
+        .onDismiss(() => {
+          // console.log('I am triggered on both OK and Cancel')
+          return false;
+        });
+    },
     async submit() {
       if (await this.v$.rdtTestResult.$validate()) {
         const fileData = new FormData();
         this.loading = true;
         this.saveBtn = true;
-        console.log('RDT',this.store.symptom?.id)
+        console.log('RDT', this.store.symptom?.id);
         fileData.append('rdt_image', this.rdtTestResult.image);
         fileData.append('patient_id', this.store.currentPatient?.id);
         fileData.append('rdt_type', this.rdtTestResult.label);
@@ -379,32 +409,32 @@ export default {
               this.hideCovidBtn = false;
               this.store.setCovidResult(response.data.data);
               console.log('covid', response.data);
-              this.loading = false
+              this.loading = false;
             } else if (response.data.data.rdt_type === 'malaria') {
               this.hideMalariaBtn = false;
               this.store.setMalariaResult(response.data.data);
               console.log('covid', response.data);
-              this.loading = false
+              this.loading = false;
             }
           });
       }
     },
-    isLoading(status:boolean){
-      this.loading = status
+    isLoading(status: boolean) {
+      this.loading = status;
     },
   },
- async created() {
-    if(this.$route.params.id !== undefined){
-      this.isLoading(true)
-      const {data} = await api.get(`/patients/${this.$route.params.id }`)
-      this.store.init(data.data)
-      if(!this.store.tabs.includes('alarms')){
-        this.store.setTabs('alarms')
+  async created() {
+    if (this.$route.params.id !== undefined) {
+      this.isLoading(true);
+      const { data } = await api.get(`/patients/${this.$route.params.id}`);
+      this.store.init(data.data);
+      if (!this.store.tabs.includes('alarms')) {
+        this.store.setTabs('alarms');
       }
-      this.isLoading(false)
-      let lastPosition =this.store.tabs.slice(-1)
-      this.next(lastPosition[0])
-      console.log('TEST CREATED AT', lastPosition)
+      this.isLoading(false);
+      let lastPosition = this.store.tabs.slice(-1);
+      this.next(lastPosition[0]);
+      console.log('TEST CREATED AT', lastPosition);
     }
   },
   validations() {
@@ -421,8 +451,7 @@ export default {
       fabRight: ref(true),
       v$: useVuelidate(),
       store: useAppStore(),
-      q$: useQuasar()
-
+      q$: useQuasar(),
     };
   },
   watch: {
@@ -437,32 +466,32 @@ export default {
       immediate: true, // This ensures the watcher is triggered upon creation
     },
   },
-  async beforeRouteLeave (to, from, next) {
-
-   this.$q.dialog({
-        title: 'Voulez-vous quitter le processus ?',
-        message: 'En quittant  vous confirmer que ce processus est terminer',
-         ok: {
-          push: true
+  async beforeRouteLeave(to, from, next) {
+    this.$q
+      .dialog({
+        title: 'Do you want to exit the process ?',
+        message: 'By exiting you confirm that this process is complete',
+        ok: {
+          push: true,
         },
         cancel: {
           push: true,
-          color: 'negative'
+          color: 'negative',
         },
-        persistent: true
-      }).onOk(() => {
-        this.store.resetStore()
-        window.location.href= to.fullPath
-
-      }).onCancel(() => {
-        return false
-
-      }).onDismiss(() => {
-        return false
+        persistent: true,
       })
-      console.log('END')
-      next(false)
-
-  }
+      .onOk(() => {
+        this.store.resetStore();
+        window.location.href = to.fullPath;
+      })
+      .onCancel(() => {
+        return false;
+      })
+      .onDismiss(() => {
+        return false;
+      });
+    console.log('END');
+    next(false);
+  },
 };
 </script>
