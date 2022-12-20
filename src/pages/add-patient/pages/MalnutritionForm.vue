@@ -56,7 +56,7 @@
     </base-dialog>
   </div>
 
-  <q-btn @click="next" color="blue" label="Suivant" />
+  <q-btn @click="next" color="blue" label="Next" />
 </template>
 
 <script lag="ts">
@@ -66,7 +66,7 @@ import { useAppStore } from 'src/stores/appStor';
 import { api } from 'src/boot/axios';
 
 export default {
-    emits: [],
+  emits: [],
   data() {
     return {
       malnutrition: null,
@@ -111,34 +111,35 @@ export default {
           vital_type: 'malnutrition',
           arm_circumference: this.malnutrition,
         };
-        if(this.store.malnutrition.id===undefined){
-
-          this.$emit('isLoading', true)
+        if (this.store.malnutrition.id === undefined) {
+          this.$emit('isLoading', true);
           const { data } = await api.post('/vitals', formData);
-          this.$emit('isLoading', false)
+          this.$emit('isLoading', false);
           this.malnutritions = [data.data];
           this.store.setMalnutrition(data.data);
           console.log('submit', data.data);
           this.showFormDialog = false;
-        }else{
-          this.$emit('isLoading', true)
-           const { data } = await api.put(`/vitals/${this.store.malnutrition.id}`, formData);
-           this.$emit('isLoading', false)
+        } else {
+          this.$emit('isLoading', true);
+          const { data } = await api.put(
+            `/vitals/${this.store.malnutrition.id}`,
+            formData
+          );
+          this.$emit('isLoading', false);
           this.malnutritions = [data.data];
           this.store.setMalnutrition(data.data);
           console.log('submit', data.data);
           this.showFormDialog = false;
-
         }
-          if( this.store.malnutrition?.id !== undefined){
-            this.malnutritions = [this.store.malnutrition]
-          }
+        if (this.store.malnutrition?.id !== undefined) {
+          this.malnutritions = [this.store.malnutrition];
+        }
       }
     },
     next() {
       if (this.malnutritions.length > 0) {
         this.$emit('next', 'medical_back');
-        this.store.setTabs('medical_back')
+        this.store.setTabs('medical_back');
       }
     },
   },
@@ -167,8 +168,8 @@ export default {
     },
   },
   created() {
-  if( this.store.malnutrition?.id !== undefined){
-      this.malnutritions = [this.store.malnutrition]
+    if (this.store.malnutrition?.id !== undefined) {
+      this.malnutritions = [this.store.malnutrition];
     }
   },
   setup() {

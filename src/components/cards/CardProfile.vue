@@ -1,20 +1,13 @@
 <template>
-  <q-card class="row" >
+  <q-card class="row">
     <div @click="openModal" class="col">
       <q-card-section class="text-center">
         <q-avatar size="100px" class="shadow-10">
           <!-- <img
             :src="row.photo !== null ? `${path}${row.photo}` : `../../assets/default.png`"
           /> -->
-          <img
-            v-if="row.photo !== null"
-            :src="`${path}${row.photo}`"
-
-          />
-          <img
-          v-else
-          src="../../assets/default.png"
-          />
+          <img v-if="row.photo !== null" :src="`${path}${row.photo}`" />
+          <img v-else src="../../assets/default.png" />
           />
         </q-avatar>
       </q-card-section>
@@ -27,63 +20,93 @@
     <q-card-actions class="col tw-justify-center" align="center">
       <q-btn
         class="tw-w-2/3 tw-mb-0.5"
-        :color="glucose.glucose_level?flagColor(glucose.vital_flag):'primary'"
+        :color="
+          glucose.glucose_level ? flagColor(glucose.vital_flag) : 'primary'
+        "
         square
         icon="view_in_ar"
         @click="openGlucose"
       >
-          <div>Glucose</div>
-        <q-tooltip> Glucose {{glucose.glucose_level}} </q-tooltip>
+        <div>Glucose</div>
+        <q-tooltip> Glucose {{ glucose.glucose_level }} </q-tooltip>
       </q-btn>
       <q-btn
         class="tw-w-2/3 tw-mb-0.5"
         @click="openMalnu"
-        :color="malnutrition.arm_circumference?flagColor(malnutrition.vital_flag):'primary'"
+        :color="
+          malnutrition.arm_circumference
+            ? flagColor(malnutrition.vital_flag)
+            : 'primary'
+        "
         square
         icon="mood_bad"
       >
-       <div>Malnutrition</div>
-        <q-tooltip> Malnutrition {{malnutrition.arm_circumference}} </q-tooltip>
+        <div>Malnutrition</div>
+        <q-tooltip>
+          Malnutrition {{ malnutrition.arm_circumference }}
+        </q-tooltip>
       </q-btn>
       <q-btn
         class="tw-w-2/3 tw-mb-0.5"
-        :color="bloodPressure.bp_sys_avarage?flagColor(bloodPressure.vital_flag): 'primary'"
+        :color="
+          bloodPressure.bp_sys_avarage
+            ? flagColor(bloodPressure.vital_flag)
+            : 'primary'
+        "
         square
         icon="bloodtype"
         @click="openBlood"
-
       >
-       <div> Blood Presure</div>
+        <div>Blood Presure</div>
         <q-tooltip> Blood Presure </q-tooltip>
       </q-btn>
 
       <q-btn
         class="tw-w-2/3 tw-mb-0.5"
-        :color="malariaResult.rdt_result?rdTestFlag(malariaResult.rdt_result):'primary'"
+        :color="
+          malariaResult.rdt_result
+            ? rdTestFlag(malariaResult.rdt_result)
+            : 'primary'
+        "
         square
         icon="personal_injury"
         @click="openM"
       >
-       <div>Malaria</div>
-        <q-tooltip> {{(malariaResult.rdt_result?'Le resultat du  malaria est '+malariaResult.rdt_result:'Malaria')}}  </q-tooltip>
+        <div>Malaria</div>
+        <q-tooltip>
+          {{
+            malariaResult.rdt_result
+              ? 'Le resultat du  malaria est ' + malariaResult.rdt_result
+              : 'Malaria'
+          }}
+        </q-tooltip>
       </q-btn>
 
       <q-btn
-          class="tw-w-2/3 tw-mb-0.5"
-        :color="covidResult.rdt_result?rdTestFlag(covidResult.rdt_result):'primary'"
+        class="tw-w-2/3 tw-mb-0.5"
+        :color="
+          covidResult.rdt_result
+            ? rdTestFlag(covidResult.rdt_result)
+            : 'primary'
+        "
         square
         icon="coronavirus"
         @click="openC"
       >
-       <div>Covid 19</div>
-        <q-tooltip>{{(covidResult.rdt_result?'Le resultat du  Covid 19 est '+covidResult.rdt_result:'Covid 19')}} </q-tooltip>
+        <div>Covid 19</div>
+        <q-tooltip
+          >{{
+            covidResult.rdt_result
+              ? 'Le resultat du  Covid 19 est ' + covidResult.rdt_result
+              : 'Covid 19'
+          }}
+        </q-tooltip>
       </q-btn>
-
     </q-card-actions>
   </q-card>
   <base-dialog
     v-model:open="open"
-    :title="`Detail patient`"
+    :title="`Patient detail`"
     @close="onFormDialogClose"
     :loading="formLoading"
     size="md"
@@ -92,14 +115,14 @@
   >
     <div>
       <div>
-        <p class="text-h5 tw-text-green-800">Informations sur Patient</p>
+        <p class="text-h5 tw-text-green-800">Patient Infos</p>
         <q-separator class="tw-mt-2" />
         <div class="tw-ml-4 tw-mt-2">
           <p class="text-h6">
-            Nom:<span class="tw-text-gray-500"> {{ row.name }} </span>
+            Name:<span class="tw-text-gray-500"> {{ row.name }} </span>
           </p>
           <p class="text-h6">
-            Date de naissance:
+            Date of birth:
             <span class="tw-text-gray-500"> {{ row.date_of_birth }}</span>
           </p>
           <p class="text-h6">
@@ -110,13 +133,11 @@
           </p>
         </div>
         <q-separator class="tw-mt-2" />
-        <p class="text-h5 tw-text-green-800">
-          Information sur les parametres vitaux
-        </p>
+        <p class="text-h5 tw-text-green-800">Vitals Parameters Infos</p>
         <q-separator class="tw-mt-2" />
         <div class="tw-ml-4 tw-mt-2">
           <p class="text-h6">
-            Oxygene:
+            Oxygen:
             <span
               :style="`background-color:${flagColor(oxygen.vital_flag)}`"
               class="tw-text-white"
@@ -157,77 +178,90 @@
               :style="`background-color:${flagColor(bloodPressure.vital_flag)}`"
             >
               <span class="tw-white tw-ml-4">
-                Bras Droit: Diastol: {{ bloodPressure.bp_dias_right }} | Systol:
+                Arm Right: Diastol: {{ bloodPressure.bp_dias_right }} | Systol:
                 {{ bloodPressure.bp_sys_right }}</span
               >
               <br />
               <span class="tw-white tw-ml-4">
-                Bras Gauche: Diastol: {{ bloodPressure.bp_dias_left }} | Systol:
+                Arm Left: Diastol: {{ bloodPressure.bp_dias_left }} | Systol:
                 {{ bloodPressure.bp_sys_left }}</span
               >
             </span>
           </p>
         </div>
         <q-separator class="tw-mt-2" />
-        <p class="text-h5 tw-text-green-800">Information sur les RDT Test</p>
+        <p class="text-h5 tw-text-green-800">RD Test Informations</p>
         <q-separator class="tw-mt-2" />
         <div class="tw-ml-4 tw-mt-2">
-
           <p v-if="covidResult.rdt_result" class="text-h6">
             Malaria:
-            <span  :style="`background-color:${rdTestFlag(malariaResult.rdt_result)}`" class="tw-text-white">
+            <span
+              :style="`background-color:${rdTestFlag(
+                malariaResult.rdt_result
+              )}`"
+              class="tw-text-white"
+            >
               {{ malariaResult.rdt_result }}
             </span>
           </p>
-           <p v-if="covidResult.rdt_result" class="text-h6">
+          <p v-if="covidResult.rdt_result" class="text-h6">
             Covid:
-            <span  :style="`background-color:${rdTestFlag(covidResult.rdt_result)}`" class="tw-text-white"> {{ covidResult.rdt_result }} </span>
+            <span
+              :style="`background-color:${rdTestFlag(covidResult.rdt_result)}`"
+              class="tw-text-white"
+            >
+              {{ covidResult.rdt_result }}
+            </span>
           </p>
         </div>
       </div>
       <div class="tw-flex tw-justify-end">
-        <q-btn @click="$router.replace(`/detail-patient/${row.id}`)" class="tw-mt-4 tw-mr-5" label="Consulter" color="blue" />
+        <q-btn
+          @click="$router.replace(`/detail-patient/${row.id}`)"
+          class="tw-mt-4 tw-mr-5"
+          label="New Consultation"
+          color="blue"
+        />
         <q-btn
           class="tw-mt-4 tw-mr-5"
           @click="open = false"
-          label="Fermer"
+          label="Close"
           color="primary"
         />
       </div>
     </div>
   </base-dialog>
-   <base-dialog
-      v-model:open="openRDt"
-      :title="`Historique ${rdtTitle}`"
-     @close="openMalaria=false"
-      :loading="formLoading"
-      size="sm"
-      persistent
-      class="tw-text-left"
-     >
-      <div>
-        <base-table
-         v-if=" malarias.length>0"
-          :column-defs="rdtColums"
-          :rows="rdtData"
-          :hide-pagination="true"
-           separator="cell"
-        >
-             <template v-slot:body="props">
-            <q-tr :props="props" :class="rdtflagColor(props.row.rdt_result)">
-              <q-td v-for="col in props.cols" :key="col.name" :props="props">
-
-                <p >{{ col.value }}</p>
-              </q-td>
-            </q-tr>
-          </template>
-         <!-- <template #body-cell-rdt_result_at="props">
+  <base-dialog
+    v-model:open="openRDt"
+    :title="`Historique ${rdtTitle}`"
+    @close="openMalaria = false"
+    :loading="formLoading"
+    size="sm"
+    persistent
+    class="tw-text-left"
+  >
+    <div>
+      <base-table
+        v-if="malarias.length > 0"
+        :column-defs="rdtColums"
+        :rows="rdtData"
+        :hide-pagination="true"
+        separator="cell"
+      >
+        <template v-slot:body="props">
+          <q-tr :props="props" :class="rdtflagColor(props.row.rdt_result)">
+            <q-td v-for="col in props.cols" :key="col.name" :props="props">
+              <p>{{ col.value }}</p>
+            </q-td>
+          </q-tr>
+        </template>
+        <!-- <template #body-cell-rdt_result_at="props">
                 <q-td :props="props">
                     {{dateFormat(props)}}
                 </q-td>
               </template> -->
-        </base-table>
-        <q-separator class="tw-mt-2" />
+      </base-table>
+      <q-separator class="tw-mt-2" />
       <div class="tw-flex tw-justify-end">
         <q-btn
           class="tw-mt-4 tw-mr-5"
@@ -238,31 +272,30 @@
       </div>
     </div>
   </base-dialog>
-   <base-dialog
-     v-model:open="openVital"
-      :title="`Historique ${vitalTitle}`"
-      @close="openVital=false"
-      :loading="formLoading"
-      size="sm"
-      persistent
-      class="tw-text-left"
-     >
-      <div>
-        <base-table
-          v-if=" glucoses.length>0"
-          :column-defs="vitalColums"
-          :rows="vitalData"
-          :hide-pagination="true"
-           separator="cell"
-        >
-                <template v-slot:body="props">
-            <q-tr :props="props" :class="flagColorO(props.row.vital_flag)">
-              <q-td v-for="col in props.cols" :key="col.name" :props="props">
-
-                <p >{{ col.value }}</p>
-              </q-td>
-            </q-tr>
-          </template>
+  <base-dialog
+    v-model:open="openVital"
+    :title="`Historique ${vitalTitle}`"
+    @close="openVital = false"
+    :loading="formLoading"
+    size="sm"
+    persistent
+    class="tw-text-left"
+  >
+    <div>
+      <base-table
+        v-if="glucoses.length > 0"
+        :column-defs="vitalColums"
+        :rows="vitalData"
+        :hide-pagination="true"
+        separator="cell"
+      >
+        <template v-slot:body="props">
+          <q-tr :props="props" :class="flagColorO(props.row.vital_flag)">
+            <q-td v-for="col in props.cols" :key="col.name" :props="props">
+              <p>{{ col.value }}</p>
+            </q-td>
+          </q-tr>
+        </template>
         <!-- <q-tr class="tw-bg-red-500">
             <template #body-cell-created_at="props">
                 <q-td :props="props">
@@ -270,10 +303,9 @@
                 </q-td>
               </template>
           </q-tr> -->
-
-        </base-table>
-        <p class="text-center" v-else> pas d'historique</p>
-        <q-separator class="tw-mt-2" />
+      </base-table>
+      <p class="text-center" v-else>pas d'historique</p>
+      <q-separator class="tw-mt-2" />
       <div class="tw-flex tw-justify-end">
         <q-btn
           class="tw-mt-4 tw-mr-5"
@@ -284,22 +316,21 @@
       </div>
     </div>
   </base-dialog>
-
 </template>
 
 <script >
 import { backendImagePath } from 'src/boot/axios';
-import moment from 'moment'
-import 'moment/locale/es'  // without this line it didn't work
-moment.locale('fr')
+import moment from 'moment';
+import 'moment/locale/es'; // without this line it didn't work
+moment.locale('fr');
 export default {
   name: 'CardProfile',
   props: ['row'],
   data() {
     return {
-      openRDt:false,
-      openVital:false,
-      openMalaria:false,
+      openRDt: false,
+      openVital: false,
+      openMalaria: false,
       default_image: '/src/assets/default.png',
       path: backendImagePath,
       open: false,
@@ -311,18 +342,17 @@ export default {
       malnutrition: {},
       malariaResult: {},
       covidResult: {},
-      rdtColums:[],
-      vitalColums:[],
-      rdtData:[],
-      vitalData:[],
-      covids:[],
-      malarias:[],
-      glucoses:[],
-      malnutritions:[],
-      bloodPressures:[],
-      rdtTitle:'',
-      vitalTitle:''
-
+      rdtColums: [],
+      vitalColums: [],
+      rdtData: [],
+      vitalData: [],
+      covids: [],
+      malarias: [],
+      glucoses: [],
+      malnutritions: [],
+      bloodPressures: [],
+      rdtTitle: '',
+      vitalTitle: '',
     };
   },
   methods: {
@@ -333,8 +363,7 @@ export default {
     onFormDialogClose() {
       this.open = false;
     },
-   flagColorO(flag) {
-
+    flagColorO(flag) {
       if (Number(flag) === 0) {
         return 'bg-positive text-white';
       } else if (Number(flag) === 1) {
@@ -345,18 +374,17 @@ export default {
         return 'bg-white text-black';
       }
     },
-       rdtflagColor(flag) {
-
-       if (flag === 'negatif') {
+    rdtflagColor(flag) {
+      if (flag === 'negatif') {
         return 'bg-positive text-white';
-      } else if (flag === 'indeterminate' ||flag === 'invalid' ) {
+      } else if (flag === 'indeterminate' || flag === 'invalid') {
         return 'bg-warning text-white';
       } else if (flag === 'positif') {
-       return 'bg-negative text-white';
+        return 'bg-negative text-white';
       } else {
-       return 'bg-white text-black';
+        return 'bg-white text-black';
       }
-      },
+    },
     flagColor(flag) {
       if (Number(flag) === 0) {
         return 'green';
@@ -371,7 +399,7 @@ export default {
     rdTestFlag(flag) {
       if (flag === 'negatif') {
         return 'green';
-      } else if (flag === 'indeterminate' ||flag === 'invalid' ) {
+      } else if (flag === 'indeterminate' || flag === 'invalid') {
         return 'orange';
       } else if (flag === 'positif') {
         return 'red';
@@ -379,20 +407,20 @@ export default {
         return 'blue';
       }
     },
-    dateFormat(date){
+    dateFormat(date) {
       return moment(date).format('lll');
     },
-    openM(){
-      this.rdtColums=  [
-          {
+    openM() {
+      (this.rdtColums = [
+        {
           field: 'rdt_type',
-           name:  'rdt_type',
+          name: 'rdt_type',
           label: 'Test',
           align: 'left',
         },
         {
           field: 'rdt_result_at',
-           name:  'rdt_result_at',
+          name: 'rdt_result_at',
           label: 'Date',
           align: 'left',
         },
@@ -404,23 +432,22 @@ export default {
         },
 
         // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
-      ],
-      this.rdtData= this.malarias
-      this.rdtTitle = 'Malaria'
-      this.openRDt =true
-
+      ]),
+        (this.rdtData = this.malarias);
+      this.rdtTitle = 'Malaria';
+      this.openRDt = true;
     },
-    openC(){
-       this.rdtColums=  [
-          {
+    openC() {
+      this.rdtColums = [
+        {
           field: 'rdt_type',
-           name:  'rdt_type',
+          name: 'rdt_type',
           label: 'Test',
           align: 'left',
         },
         {
           field: 'rdt_result_at',
-           name:  'rdt_result_at',
+          name: 'rdt_result_at',
           label: 'Date',
           align: 'left',
         },
@@ -433,22 +460,21 @@ export default {
 
         // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
       ];
-      this.rdtData = this.covids
-      this.rdtTitle = 'Covid'
-        this.openRDt =true
-
+      this.rdtData = this.covids;
+      this.rdtTitle = 'Covid';
+      this.openRDt = true;
     },
-    openGlucose(){
-      this.vitalColums=  [
-            {
+    openGlucose() {
+      (this.vitalColums = [
+        {
           field: 'vital_type',
-           name:  'vital_type',
+          name: 'vital_type',
           label: 'Test',
           align: 'left',
         },
         {
           field: 'created_at',
-           name:  'created_at',
+          name: 'created_at',
           label: 'Date',
           align: 'left',
         },
@@ -460,50 +486,50 @@ export default {
         },
 
         // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
-      ],
-      this.vitalData = this.glucoses
-      this.vitalTitle = 'Glucose'
-      this.openVital =true
+      ]),
+        (this.vitalData = this.glucoses);
+      this.vitalTitle = 'Glucose';
+      this.openVital = true;
     },
-      openBlood(){
-      this.vitalColums= [
-          {
+    openBlood() {
+      (this.vitalColums = [
+        {
           field: 'vital_type',
-           name:  'vital_type',
+          name: 'vital_type',
           label: 'Test',
           align: 'left',
         },
         {
           field: 'created_at',
-           name:  'created_at',
+          name: 'created_at',
           label: 'Date',
           align: 'left',
         },
         {
           field: 'bp_dias_left',
           name: 'bp_dias_left',
-          label: 'Dias Bras gauche',
+          label: 'Dias Arm Left',
           align: 'left',
         },
-         {
+        {
           field: 'bp_dias_right',
           name: 'bp_dias_right',
-          label: 'Dias Bras droit',
+          label: 'Dias Arm Right',
           align: 'left',
         },
-          {
+        {
           field: 'bp_sys_left',
           name: 'bp_sys_left',
-          label: 'Sys Bras gauche',
+          label: 'Sys Arm Left',
           align: 'left',
         },
-         {
+        {
           field: 'bp_sys_right',
           name: 'bp_sys_right',
-          label: 'Sys Bras droit',
+          label: 'Sys Arm Right',
           align: 'left',
         },
-          {
+        {
           field: 'bp_dias_avarage',
           name: 'bp_dias_avarage',
           label: 'Dias average',
@@ -511,29 +537,28 @@ export default {
         },
         {
           field: 'bp_sys_avarage',
-          name:  'bp_sys_avarage',
+          name: 'bp_sys_avarage',
           label: 'Sys average',
           align: 'left',
         },
 
-
         // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
-      ],
-      this.vitalData = this.bloodPressures
-      this.vitalTitle = 'Blood Pressure'
-      this.openVital =true
+      ]),
+        (this.vitalData = this.bloodPressures);
+      this.vitalTitle = 'Blood Pressure';
+      this.openVital = true;
     },
-        openMalnu(){
-      this.vitalColums=[
-          {
+    openMalnu() {
+      (this.vitalColums = [
+        {
           field: 'vital_type',
-           name:  'vital_type',
+          name: 'vital_type',
           label: 'Test',
           align: 'left',
         },
         {
           field: 'created_at',
-           name:  'created_at',
+          name: 'created_at',
           label: 'Date',
           align: 'left',
         },
@@ -545,34 +570,32 @@ export default {
         },
 
         // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
-      ],
-      this.vitalData = this.malnutritions
-      this.vitalTitle = 'Malnutrition'
-      this.openVital =true
-    }
-
-
+      ]),
+        (this.vitalData = this.malnutritions);
+      this.vitalTitle = 'Malnutrition';
+      this.openVital = true;
+    },
   },
   created() {
-    this.covids = this.row.covids
-    this.malarias = this.row.malarias
-    this.glucoses= this.row.glucoses
-    this.malnutritions = this.row.malnutritions
-    this.bloodPressures = this.row.blood_pressures
+    this.covids = this.row.covids;
+    this.malarias = this.row.malarias;
+    this.glucoses = this.row.glucoses;
+    this.malnutritions = this.row.malnutritions;
+    this.bloodPressures = this.row.blood_pressures;
     this.row.vitals.forEach((element) => {
-      if (element.vital_type === 'bloodPressure' && element.is_active ===1) {
+      if (element.vital_type === 'bloodPressure' && element.is_active === 1) {
         this.bloodPressure = element;
       }
-      if (element.vital_type === 'malnutrition' && element.is_active ===1) {
+      if (element.vital_type === 'malnutrition' && element.is_active === 1) {
         this.malnutrition = element;
       }
-      if (element.vital_type === 'oxygen' && element.is_active ===1) {
+      if (element.vital_type === 'oxygen' && element.is_active === 1) {
         this.oxygen = element;
       }
-      if (element.vital_type === 'temperature' && element.is_active ===1) {
+      if (element.vital_type === 'temperature' && element.is_active === 1) {
         this.temperature = element;
       }
-      if (element.vital_type === 'glucose' && element.is_active ===1) {
+      if (element.vital_type === 'glucose' && element.is_active === 1) {
         this.glucose = element;
       }
     });
