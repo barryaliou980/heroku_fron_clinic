@@ -217,7 +217,6 @@
             <q-tr :props="props" :class="rdtflagColor(props.row.rdt_result)">
               <q-td v-for="col in props.cols" :key="col.name" :props="props">
 
-
                 <p >{{ col.value }}</p>
               </q-td>
             </q-tr>
@@ -259,7 +258,6 @@
                 <template v-slot:body="props">
             <q-tr :props="props" :class="flagColorO(props.row.vital_flag)">
               <q-td v-for="col in props.cols" :key="col.name" :props="props">
-
 
                 <p >{{ col.value }}</p>
               </q-td>

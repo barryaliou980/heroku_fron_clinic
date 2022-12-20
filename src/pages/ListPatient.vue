@@ -9,16 +9,20 @@
         class=" shadow-2"
         :breakpoint="0"
       >
-        <q-tab name="mails" icon="mail" />
-        <q-tab name="alarms" icon="alarm" />
+        <q-tab name="mails" icon="recent_actors" />
+        <q-tab name="alarms" icon="grid_view" />
       </q-tabs>
+
          <q-tab-panels v-model="tab" animated>
+
           <q-tab-panel name="mails">
             <table-custom-grid :data="data" class="q-mt-lg"></table-custom-grid>
           </q-tab-panel>
+
           <q-tab-panel name="alarms">
-           <ArrayTable  :data="data"/>
+           <CustomPatient  :data="data"/>
           </q-tab-panel>
+
         </q-tab-panels>
         </q-card>
       </div>
@@ -32,7 +36,7 @@ import {defineAsyncComponent, ref} from 'vue';
 export default ({
   components: {
     TableCustomGrid: defineAsyncComponent(() => import('src/components/CustomGridTable.vue')),
-    ArrayTable: defineAsyncComponent(() => import('src/components/CustomePatientTable.vue')),
+    CustomPatient: defineAsyncComponent(() => import('src/components/CustomePatientTable.vue')),
   },
   data(){
     return{
