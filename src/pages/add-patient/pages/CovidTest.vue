@@ -3,7 +3,7 @@
     v-if="Object.keys(rdtCovid).length == 0"
     class="tw-flex tw-justify-center tw-px-4 tw-py-4"
   >
-    <q-btn color="blue" label="Start the test" @click="instruction" />
+    <q-btn v-if="store.activeCovid!==true" color="blue" label="Start the test" @click="instruction" />
   </div>
   <div v-else class="q-pa-md q-gutter-sm">
     <q-banner rounded class="bg-grey-3">
@@ -112,7 +112,7 @@ export default {
     instruction() {
       console.log('test', this.store.currentPatient);
       if (
-        moment().diff(this.store.currentPatient.date_of_birth, 'years') < 18 ||
+        moment().diff(this.store.currentPatient.date_of_birth, 'years') < 5 ||
         this.store.currentPatient?.pregnant == 'Yes'
       ) {
         this.$emit('startCountdownCovid', 900);

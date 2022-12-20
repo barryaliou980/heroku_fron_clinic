@@ -154,11 +154,11 @@
         </div>
       </div>
       <div class="tw-flex tw-justify-end">
-        <q-btn @click="$router.replace(`/detail-patient/${row.id}`)" class="tw-mt-4 tw-mr-5" label="Consulter" color="blue" />
+        <q-btn @click="$router.replace(`/detail-patient/${row.id}`)" class="tw-mt-4 tw-mr-5" label="New consultation" color="blue" />
         <q-btn
           class="tw-mt-4 tw-mr-5"
           @click="open = false"
-          label="Fermer"
+          label="Close"
           color="primary"
         />
       </div>
@@ -183,8 +183,8 @@ export default defineComponent({
   },
   data(){
     return{
-        filter: ref(''),
-        show_filter:false,
+      filter: ref(''),
+      show_filter:false,
       oxygen:{},
       malnutrition:{},
       temperature:{},

@@ -95,7 +95,7 @@
     :title="selectedRowId > 0 ? `Edit ${title}` : `Add ${title}`"
     @close="onFormDialogClose"
     :loading="formLoading"
-    size="lg"
+    size="sm"
   >
     <TemperatureAndOxygenForm :optionData="optionData" @submit="submit" />
   </base-dialog>

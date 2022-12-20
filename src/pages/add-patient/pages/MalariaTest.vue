@@ -3,7 +3,7 @@
     v-if="Object.keys(rdtMalaria).length == 0"
     class="tw-flex tw-justify-center tw-px-4 tw-py-4"
   >
-    <q-btn color="blue" label="Start the test" @click="instruction" />
+    <q-btn v-if="store.activeMalaria!==true"  color="blue" label="Start the test" @click="instruction" />
   </div>
   <div v-else class="q-pa-md q-gutter-sm">
     <q-banner rounded class="bg-grey-3">

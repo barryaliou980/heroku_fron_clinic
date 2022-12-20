@@ -399,7 +399,7 @@ export default {
     },
     openC(){
        this.rdtColums=  [
-          {
+      {
           field: 'rdt_type',
            name:  'rdt_type',
           label: 'Test',
