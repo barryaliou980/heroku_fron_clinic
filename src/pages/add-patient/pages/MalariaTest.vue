@@ -29,30 +29,35 @@
     <q-stepper v-model="step" vertical color="primary" animated>
       <q-step
         :name="1"
-        title="Netoyer le RDT Test"
+        title="VERIFIER LE MATERIEL"
         icon="settings"
         :done="step > 1"
       >
-        For each ad campaign that you create, you can control how much you're
-        willing to spend on clicks and conversions, which networks and
-        geographical locations you want your ads to show on, and more.
-
+      <div >
+       <img
+          src="/src/assets/malaria_instruction/1-verifier-materiel.png"
+            style="height: 150px; max-width: 300px"
+       />
+       </div>
         <q-stepper-navigation>
-          <q-btn @click="step = 2" color="primary" label="Next" />
+          <q-btn @click="step = 2" color="primary" label="Suivant" />
         </q-stepper-navigation>
       </q-step>
 
       <q-step
         :name="2"
-        title="Prelever le sang du patient"
+        title="Nettoyez et Piquez"
         icon="create_new_folder"
         :done="step > 2"
       >
-        An ad group contains one or more ads which target a shared set of
-        keywords.
-
+      <div >
+       <img
+          src="/src/assets/malaria_instruction/2-Nettoyer-et-piquez.png"
+            style="height: 150px; max-width: 300px"
+       />
+       </div>
         <q-stepper-navigation>
-          <q-btn @click="step = 4" color="primary" label="Next" />
+          <q-btn @click="step = 3" color="primary" label="Suivant" />
           <q-btn
             flat
             @click="step = 1"
@@ -62,19 +67,64 @@
           />
         </q-stepper-navigation>
       </q-step>
-      <q-step :name="4" title="Start the test" icon="add_comment">
-        Try out different ad text to see what brings in the most customers, and
-        learn how to enhance your ads using features like ad extensions. If you
-        run into any problems with your ads, find out how to tell if they're
-        running and how to resolve approval issues.
+      <q-step :done="step > 3" :name="3" title="Prelevez" icon="add_comment">
+          <div >
+       <img
+          src="/src/assets/malaria_instruction/3-Prelevez.png"
+            style="height: 150px; max-width: 300px"
+       />
+       </div>
 
         <q-stepper-navigation>
-          <q-btn color="primary" label="OK" @click="open = false" />
+          <q-btn color="primary" label="Suivant" @click="step = 4" />
           <q-btn
             flat
             @click="step = 2"
             color="primary"
-            label="Precedent"
+            label="precedent"
+            class="q-ml-sm"
+          />
+        </q-stepper-navigation>
+      </q-step>
+
+        <q-step :done="step > 4" :name="4" title="Mettre le sang dans la cassette" icon="add_comment">
+        <div >
+       <img
+          src="/src/assets/malaria_instruction/4-Mettre-le-sang-dans-la-cassette.png"
+            style="height: 150px; width:140px; max-width: 300px"
+       />
+       </div>
+
+        <q-stepper-navigation>
+          <q-btn color="primary" label="Suivant" @click="step = 5"/>
+          <q-btn
+            flat
+            @click="step = 3"
+            color="primary"
+            label="precedent"
+            class="q-ml-sm"
+          />
+        </q-stepper-navigation>
+        </q-step>
+          <q-step :name="5" title="Mettre le tampon et Attendre le Minuteur " icon="add_comment">
+          <div >
+       <img
+          src="/src/assets/malaria_instruction/5-Mettre-le-tampon.png"
+            style="height: 150px; max-width: 300px"
+       />
+       <img
+          src="/src/assets/malaria_instruction/timer.png"
+            style="height: 150px; max-width: 300px"
+       />
+       </div>
+
+        <q-stepper-navigation>
+          <q-btn color="primary" label="ok"  @click="open = false"/>
+          <q-btn
+            flat
+            @click="step =4"
+            color="primary"
+            label="precedent"
             class="q-ml-sm"
           />
         </q-stepper-navigation>
