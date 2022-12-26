@@ -34,9 +34,9 @@
         :done="step > 1"
       >
       <div >
-       <img
-          src="/src/assets/malaria_instruction/1-verifier-materiel.png"
-            style="height: 150px; max-width: 300px"
+      <q-img
+          src="../../../assets/1-malaria.png"
+          style="height: 150px; max-width: 300px"
        />
        </div>
         <q-stepper-navigation>
@@ -51,8 +51,8 @@
         :done="step > 2"
       >
       <div >
-       <img
-          src="/src/assets/malaria_instruction/2-Nettoyer-et-piquez.png"
+    <q-img
+          src="../../../assets/2-malaria.png"
             style="height: 150px; max-width: 300px"
        />
        </div>
@@ -69,8 +69,8 @@
       </q-step>
       <q-step :done="step > 3" :name="3" title="Prelevez" icon="add_comment">
           <div >
-       <img
-          src="/src/assets/malaria_instruction/3-Prelevez.png"
+        <q-img
+          src="../../../assets/3-malaria.png"
             style="height: 150px; max-width: 300px"
        />
        </div>
@@ -89,8 +89,8 @@
 
         <q-step :done="step > 4" :name="4" title="Mettre le sang dans la cassette" icon="add_comment">
         <div >
-       <img
-          src="/src/assets/malaria_instruction/4-Mettre-le-sang-dans-la-cassette.png"
+       <q-img
+          src="../../../assets/4-malaria.png"
             style="height: 150px; width:140px; max-width: 300px"
        />
        </div>
@@ -108,12 +108,12 @@
         </q-step>
           <q-step :name="5" title="Mettre le tampon et Attendre le Minuteur " icon="add_comment">
           <div >
-       <img
-          src="/src/assets/malaria_instruction/5-Mettre-le-tampon.png"
+         <q-img
+          src="../../../assets/5-malaria.png"
             style="height: 150px; max-width: 300px"
        />
        <img
-          src="/src/assets/malaria_instruction/timer.png"
+          src="../../../assets/timer.png"
             style="height: 150px; max-width: 300px"
        />
        </div>

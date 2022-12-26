@@ -35,7 +35,7 @@
       >
       <div class="text-center">
           <q-img
-           src="/src/assets/Covid-19-instruction/1-Le nez.png"
+            src="../../../assets/1-Le_nez.png"
             style="height: 150px; width:140px; max-width: 300px"
        />
        </div>
@@ -52,7 +52,7 @@
       >
         <div class="text-center">
           <q-img
-           src="/src/assets/Covid-19-instruction/cassette.png"
+           src="../../../assets/cassette.png"
             style="height: 150px; width:140px; max-width: 300px"
        />
        </div>
@@ -70,7 +70,7 @@
       <q-step   :done="step > 3" :name="3" title="Verser 3 gouttes dans la cassette" icon="add_comment">
           <div class="text-center">
           <q-img
-           src="/src/assets/Covid-19-instruction/mesure.png"
+           src="../../../assets/mesure.png"
             style="height: 150px; width:140px; max-width: 300px"
        />
        </div>
@@ -86,10 +86,10 @@
           />
         </q-stepper-navigation>
       </q-step>
-         <q-step   :done="step > 4" :name="4" title="Verser 3 gouttes dans la cassette" icon="add_comment">
+         <q-step   :done="step > 4" :name="4" title="Attendre 15 min" icon="add_comment">
           <div class="text-center">
        <q-img
-           src="/src/assets/Covid-19-instruction/timer.png"
+           src="../../../assets/timer.png"
             style="height: 150px; width:140px; max-width: 300px"
        />
        </div>
