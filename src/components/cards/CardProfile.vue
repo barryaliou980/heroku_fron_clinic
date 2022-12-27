@@ -62,6 +62,7 @@
       </q-btn>
 
       <q-btn
+        v-if="JSON.stringify(malariaResult) === '{}' || malariaResult.rdt_result!=null"
         class="tw-w-2/3 tw-mb-0.5"
         :color="
           malariaResult.rdt_result
@@ -81,8 +82,19 @@
           }}
         </q-tooltip>
       </q-btn>
+      <q-btn v-else
+        @click="setRDTResult('malaria')"
+        class="tw-w-2/3 tw-mb-0.5"
+        color="#000"
+        style="color: #ffb3b3;"
+        square
+        outline
+        icon="personal_injury"
+      > Resultat
+      </q-btn>
 
       <q-btn
+        v-if="JSON.stringify(covidResult) === '{}' || covidResult.rdt_result!=null"
         class="tw-w-2/3 tw-mb-0.5"
         :color="
           covidResult.rdt_result
@@ -102,6 +114,18 @@
           }}
         </q-tooltip>
       </q-btn>
+        <q-btn v-else
+        @click="setRDTResult('covid')"
+        class="tw-w-2/3 tw-mb-0.5"
+        color="#000"
+        style="color: #ffb3b3;"
+        square
+        outline
+        icon="personal_injury"
+      > Resultat
+      </q-btn>
+
+
     </q-card-actions>
   </q-card>
   <base-dialog
@@ -217,7 +241,7 @@
       </div>
       <div class="tw-flex tw-justify-end">
         <q-btn
-          @click="$router.replace(`/detail-patient/${row.id}`)"
+          @click="newConsul"
           class="tw-mt-4 tw-mr-5"
           label="New Consultation"
           color="blue"
@@ -265,7 +289,7 @@
       <div class="tw-flex tw-justify-end">
         <q-btn
           class="tw-mt-4 tw-mr-5"
-          @click="openMalaria = false"
+          @click="openRDt = false"
           label="Fermer"
           color="primary"
         />
@@ -309,13 +333,104 @@
       <div class="tw-flex tw-justify-end">
         <q-btn
           class="tw-mt-4 tw-mr-5"
-          @click="openGlucose = false"
+          @click="openVital = false"
           label="Fermer"
           color="primary"
         />
       </div>
     </div>
   </base-dialog>
+    <base-dialog
+    v-model:open="openResult"
+    :title="resultModatTitle"
+    @close="onFormDialogClose"
+    :loading="formLoading"
+    size="sm"
+    persistent
+  >
+    <div class="tw-mb-4">
+      <base-select
+        label="Select the result"
+        :options="resultOptions"
+        v-model="rdtTestResult.result"
+        :validator="v$.rdtTestResult.result"
+      />
+
+      <q-uploader
+        color="teal"
+        style="max-width: 300px; margin-left: 9%"
+        v-model="rdtTestResult.image"
+        multiple
+        @added="file_selected"
+      >
+        <template v-slot:header="scope">
+          <q-btn
+            v-if="scope.canAddFiles"
+            type="a"
+            class="full-width"
+            label="Pick Files"
+            icon="camera_enhance"
+          >
+            <q-tooltip>Pick Files</q-tooltip>
+            <q-uploader-add-trigger></q-uploader-add-trigger>
+          </q-btn>
+        </template>
+        <template v-slot:list="scope">
+          <q-img
+            v-if="typeof rdtTestResult.image !== 'undefined'"
+            :src="imageUploadedUrl"
+            :alt="scope.name"
+            spinner-color="white"
+            style="height: 180px; max-width: auto"
+          >
+          </q-img>
+          <p style="margin: 5% 20%" v-else>
+            <q-badge color="red">
+              No image of result selected
+              <q-icon name="warning" color="white" class="q-ml-xs" />
+            </q-badge>
+          </p>
+        </template>
+      </q-uploader>
+      <div v-if="msgValidation">
+        <q-badge style="margin: 4% 32%; font-size: 1em" color="red">
+          {{ msgValidation }}
+        </q-badge>
+      </div>
+
+      <q-btn
+        @click="submit"
+        :disabled="saveBtn"
+        color="blue"
+        style="margin-left: 30%"
+        class="tw-mt-4"
+        label="Save"
+      />
+    </div>
+    <!-- <q-spinner
+      style="margin-left: 70%; margin-top: -15%"
+      v-if="loading"
+      color="primary"
+      size="4em"
+      :thickness="10"
+    /> -->
+  </base-dialog>
+    <q-dialog v-model="openConfirm" persistent color="red">
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">
+        Voulez-faire une nouvelle consultation ?
+        </div>
+        <p class="text-lg">Ce patient a des resultat non Saisi</p>
+        <p class="text-lg">En continuons vous aller ecraser les anciens test</p>
+      </q-card-section>
+      <q-card-section class="q-pt-none"> </q-card-section>
+      <q-card-actions align="right">
+        <q-btn label="Continuer" color="blue" @click="$router.replace(`/detail-patient/${row.id}`)" />
+        <q-btn label="Annuler" color="red" @click="openConfirm=false; open=false"/>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script >
@@ -323,11 +438,19 @@ import { backendImagePath } from 'src/boot/axios';
 import moment from 'moment';
 import 'moment/locale/es'; // without this line it didn't work
 moment.locale('fr');
+import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import { useAppStore } from 'src/stores/appStor';
+import { api } from 'src/boot/axios';
+
 export default {
   name: 'CardProfile',
   props: ['row'],
   data() {
     return {
+      openConfirm:false,
+      resultModatTitle: '',
+      openResult:false,
       openRDt: false,
       openVital: false,
       openMalaria: false,
@@ -353,9 +476,81 @@ export default {
       bloodPressures: [],
       rdtTitle: '',
       vitalTitle: '',
+       rdtTestResult: {},
+      resultOptions: ['positif', 'negatif', 'indeterminate', 'invalid'],
+       msgValidation: 'Image is required',
+        imageUploadedUrl: '',
+        saveBtn:false
     };
   },
   methods: {
+    newConsul(){
+      if((JSON.stringify(this.malariaResult) === '{}' || this.malariaResult.rdt_result!=null) && (JSON.stringify(this.covidResult) === '{}' || this.covidResult.rdt_result!=null)){
+        this.$router.replace(`/detail-patient/${this.row.id}`)
+      }else{
+        this.openConfirm=true
+      }
+
+    },
+   file_selected: function (file) {
+      this.rdtTestResult.image = file[0];
+      this.imageUploadedUrl = URL.createObjectURL(this.rdtTestResult.image);
+      this.msgValidation = '';
+    },
+     setRDTResult(evt) {
+      this.openResult = true;
+      this.rdtTestResult = {};
+      this.rdtTestResult.label = evt;
+      this.resultModatTitle =
+        this.rdtTestResult.label == 'covid'
+          ? 'Enter Covid result'
+          : 'Enter malaria result';
+      console.log('Ckiked');
+    },
+      async submit() {
+
+      if (await this.v$.rdtTestResult.$validate()) {
+         let result
+        if(this.rdtTestResult.label==='covid'){
+           result = this.covidResult
+        }else if(this.rdtTestResult.label==='malaria'){
+           result = this.covidResult
+        }
+        const fileData = new FormData();
+        this.loading = true;
+        this.saveBtn = true;
+        fileData.append('rdt_image', this.rdtTestResult.image);
+        fileData.append('patient_id', result.patient_id);
+        fileData.append('rdt_type', this.rdtTestResult.label);
+        fileData.append('rdt_result', this.rdtTestResult.result);
+        fileData.append('symptome_id', result.symptome_id);
+        fileData.append('id', result.id)
+
+        api
+          .post('/rdt', fileData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((response) => {
+            this.open = false;
+            this.loading = false;
+            this.saveBtn = false;
+            if (response.data.data.rdt_type === 'covid') {
+              this.hideCovidBtn = false;
+         ;
+              console.log('covid', response.data);
+              this.loading = false;
+            } else if (response.data.data.rdt_type === 'malaria') {
+              this.hideMalariaBtn = false;
+
+              console.log('covid', response.data);
+              this.loading = false;
+            }
+            this.$router.go()
+          });
+      }
+    },
     openModal() {
       console.log('open modal', this.row);
       this.open = true;
@@ -411,7 +606,7 @@ export default {
       return moment(date).format('lll');
     },
     openM() {
-      (this.rdtColums = [
+      this.rdtColums = [
         {
           field: 'rdt_type',
           name: 'rdt_type',
@@ -432,8 +627,8 @@ export default {
         },
 
         // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
-      ]),
-        (this.rdtData = this.malarias);
+      ];
+        this.rdtData = this.malarias;
       this.rdtTitle = 'Malaria';
       this.openRDt = true;
     },
@@ -465,7 +660,7 @@ export default {
       this.openRDt = true;
     },
     openGlucose() {
-      (this.vitalColums = [
+      this.vitalColums = [
         {
           field: 'vital_type',
           name: 'vital_type',
@@ -486,13 +681,13 @@ export default {
         },
 
         // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
-      ]),
-        (this.vitalData = this.glucoses);
+      ];
+        this.vitalData = this.glucoses;
       this.vitalTitle = 'Glucose';
       this.openVital = true;
     },
     openBlood() {
-      (this.vitalColums = [
+      this.vitalColums = [
         {
           field: 'vital_type',
           name: 'vital_type',
@@ -543,13 +738,13 @@ export default {
         },
 
         // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
-      ]),
+      ];
         (this.vitalData = this.bloodPressures);
       this.vitalTitle = 'Blood Pressure';
       this.openVital = true;
     },
     openMalnu() {
-      (this.vitalColums = [
+      this.vitalColums = [
         {
           field: 'vital_type',
           name: 'vital_type',
@@ -570,11 +765,19 @@ export default {
         },
 
         // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
-      ]),
+      ]
       this.vitalData = this.malnutritions;
       this.vitalTitle = 'Malnutrition';
       this.openVital = true;
     },
+  },
+   validations() {
+    return {
+      rdtTestResult: {
+        result: { required },
+        image: { required },
+      },
+    };
   },
   created() {
     this.covids = this.row.covids;
@@ -607,6 +810,12 @@ export default {
         this.covidResult = element;
       }
     });
+  },
+    setup() {
+    return {
+      v$: useVuelidate(),
+      store: useAppStore(),
+    };
   },
 };
 </script>

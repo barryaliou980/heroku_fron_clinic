@@ -104,7 +104,7 @@
 
           <q-tab-panel name="medical_back">
             <div class="text-h6">{{ $t('background_medical') }}</div>
-            <BackgroundMedical @next="next" @isLoading="isLoading" />
+            <BackgroundMedical @endProcess="endProcess" @next="next" @isLoading="isLoading" />
           </q-tab-panel>
         </q-tab-panels>
       </q-card>
