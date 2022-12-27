@@ -52,7 +52,7 @@
       >
         <div class="text-center">
           <q-img
-           src="../../../assets/cassette.png"
+            src="../../../assets/mesure.png"
             style="height: 150px; width:140px; max-width: 300px"
        />
        </div>
@@ -70,7 +70,8 @@
       <q-step   :done="step > 3" :name="3" title="Verser 3 gouttes dans la cassette" icon="add_comment">
           <div class="text-center">
           <q-img
-           src="../../../assets/mesure.png"
+           src="../../../assets/cassette.png"
+
             style="height: 150px; width:140px; max-width: 300px"
        />
        </div>

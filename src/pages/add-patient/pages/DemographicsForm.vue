@@ -35,7 +35,7 @@
               :options="Qoptions"
               :validator="v$.patient.do_you_know_date_of_birth"
                @update:model-value="updatBirthdayKnow"
-              
+
 
             />
             <div>
@@ -59,14 +59,14 @@
                  v-model="patient.date_of_birth"
                  @blur="getAge"
               />
-         
+
             <!-- <base-input
               v-if="patient.do_you_know_date_of_birth===true"
               :validator="v$.patient.date_of_birth"
               type="date"
               v-model="patient.date_of_birth"
             /> -->
-          
+
             </div>
 
             <q-uploader
@@ -114,14 +114,17 @@
             <base-input
               label="Town"
               v-model="patient.town"
+              :disable="true"
               :validator="v$.patient.town"
             />
-            <base-input
-              label="Quartier"
+            <base-select
+              :options="sPrefectures"
+              label="Sous-prefecture"
               v-model="patient.quartier"
               :validator="v$.patient.quartier"
             />
-            <base-input
+            <base-select
+             :options="secteurs"
               label="Secteur"
               v-model="patient.sector"
               :validator="v$.patient.sector"
@@ -312,12 +315,17 @@ export default {
     emits: [],
   data() {
     return {
+      sPrefectures:['Soyah'],
+      secteurs:['Soyah Centre', 'Berteyah', 'Farenta', 'Nôbé', 'Kenten', 'Bhoully', 'Fodeyah'],
       birthDayStatus:true,
       alert: false,
       selected_file: '',
       image: '',
       imageUploadedUrl: '',
-      patient: {} as Patient,
+      patient: {
+      town: 'Mamou',
+       quartier: 'Soyah',
+      } as Patient,
       Qoptions: ['Yes', 'No'],
       GenderOptions: ['Male', 'Female'],
       isWoman: false,
@@ -397,7 +405,7 @@ export default {
       let age = moment().year()
       let year = age - this.patient.date_of_birth
       let date = new Date(year,0,1)
-      this.patient.date_of_birth = moment(date).format('YYYY/MM/DD'); 
+      this.patient.date_of_birth = moment(date).format('YYYY/MM/DD');
       this.birthDayStatus=false
     },
     updateIsWoman(value: string) {
@@ -521,7 +529,7 @@ export default {
           this.$emit('next', 'alarms');
           this.store.setTabs('alarms')
           }
-      
+
         }
       }
     },
@@ -558,9 +566,12 @@ export default {
   created() {
     this.patient.photo = '';
     this.patient.do_you_know_date_of_birth = 'Yes'
-    this.patient = this.store.currentPatient;
+    if(this.store.currentPatient.id){
+     this.patient = this.store.currentPatient;
     this.imageUploadedUrl = this.patient.photo;
-    
+    }
+
+
   },
   setup() {
     return {

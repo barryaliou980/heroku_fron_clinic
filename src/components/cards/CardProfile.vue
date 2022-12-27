@@ -283,7 +283,7 @@
   >
     <div>
       <base-table
-        v-if="glucoses.length > 0"
+        v-if="vitalData.length > 0"
         :column-defs="vitalColums"
         :rows="vitalData"
         :hide-pagination="true"
@@ -571,7 +571,7 @@ export default {
 
         // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
       ]),
-        (this.vitalData = this.malnutritions);
+      this.vitalData = this.malnutritions;
       this.vitalTitle = 'Malnutrition';
       this.openVital = true;
     },

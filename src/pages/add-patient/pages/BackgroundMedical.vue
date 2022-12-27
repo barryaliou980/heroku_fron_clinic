@@ -310,6 +310,7 @@ export default {
       return true;
     },
     end_process() {
+      this.$emit('endProcess')
       this.store.resetStore();
       this.$router.replace({ name: 'admin.list.patient' });
     },
