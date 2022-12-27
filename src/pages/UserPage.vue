@@ -19,28 +19,25 @@
 
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="agent">
-              <table-actions 
+              <table-actions
                 type="agent"
-            title="Agents" 
-            :data="agents" 
-            class="q-mt-lg"
-            @getData="getData"
-          
+                title="Agents"
+                :data="agents"
+                class="q-mt-lg"
+                @getData="getData"
+
             />
           </q-tab-panel>
           <q-tab-panel name="admins">
-           <table-actions 
-            title="Admins" 
+           <table-actions
+            title="Admins"
             :data="admins"
             type="admin"
             class="q-mt-lg"
             @getData="getData"
-             
+
             />
           </q-tab-panel>
-
-        
-
         </q-tab-panels>
       </q-card>
     </div>

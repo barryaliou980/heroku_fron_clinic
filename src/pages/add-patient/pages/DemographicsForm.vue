@@ -121,15 +121,18 @@
             <base-input
               :label="$t('patient.town')"
               v-model="patient.town"
+              :disable="true"
               :validator="v$.patient.town"
             />
-            <base-input
+            <base-select
+              :options="sPrefectures"
               :label="$t('patient.quartier')"
               v-model="patient.quartier"
               :validator="v$.patient.quartier"
             />
-            <base-input
-              :label="$t('patient.sector')"
+            <base-select
+              :options="secteurs"
+              label="Secteur"
               v-model="patient.sector"
               :validator="v$.patient.sector"
             />
@@ -326,12 +329,25 @@ export default {
   emits: [],
   data() {
     return {
+      sPrefectures: ['Soyah'],
+      secteurs: [
+        'Soyah Centre',
+        'Berteyah',
+        'Farenta',
+        'Nôbé',
+        'Kenten',
+        'Bhoully',
+        'Fodeyah',
+      ],
       birthDayStatus: true,
       alert: false,
       selected_file: '',
       image: '',
       imageUploadedUrl: '',
-      patient: {} as Patient,
+      patient: {
+        town: 'Mamou',
+        quartier: 'Soyah',
+      } as Patient,
       Qoptions: ['Yes', 'No'],
       GenderOptions: ['Male', 'Female'],
       isWoman: false,
@@ -572,8 +588,10 @@ export default {
   created() {
     this.patient.photo = '';
     this.patient.do_you_know_date_of_birth = 'Yes';
-    this.patient = this.store.currentPatient;
-    this.imageUploadedUrl = this.patient.photo;
+    if (this.store.currentPatient.id) {
+      this.patient = this.store.currentPatient;
+      this.imageUploadedUrl = this.patient.photo;
+    }
   },
   setup() {
     return {

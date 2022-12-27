@@ -113,7 +113,6 @@
     <div class="tw-grid tw-grid-cols-2 tw-gap-3">
       <q-page-sticky class="tw-pt-16" position="top-right" :offset="[18, 18]">
         <q-btn
-          v-show="hideMalariaBtn"
           :label="disableBtnM === false ? $t('malaria_result') : ''"
           v-if="store.activeMalaria"
           :disable="disableBtnM"
@@ -135,7 +134,6 @@
         </q-btn>
 
         <q-btn
-          v-show="hideCovidBtn"
           v-if="store.activeCovid"
           :disable="disableBtnC"
           :class="
@@ -249,6 +247,51 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
+  <base-dialog
+    v-model="consentementModal"
+    persistent
+    color="red"
+    title="Consentement"
+    size="md"
+  >
+    <q-card>
+      <q-card-section>
+        <div class="tw-text-md">
+          <p class="tw-font-semibold tw-m-2">CONFIDENTIALITY</p>
+          Explain how confidentiality will be protected, and who will have
+          access to the data.
+
+          <p class="tw-font-semibold tw-m-2">WHAT THE STUDY IS ABOUT?</p>
+          This research involves answering some questions related to your health
+          and background. Depending on your answers, you may need to get a test
+          for Covid-19 or malaria. This will be decided using the digital tool.
+          You will also be tested for diabetes and high blood pressure unless
+          you are among the excluded groups. You will receive the results of
+          your tests, treatment for malaria if positive. You will then be
+          advised on further care.
+          <p class="tw-font-semibold tw-m-2">VOLUNTARY PARTICIPATION</p>
+          Your participation is voluntary and you can withdraw at any time after
+          having agreed to participate. You are free to refuse to accept any
+          procedure. If you have any questions about this research, you may ask
+          me, or contact [provide details for someone at C+O – Adama?). You can
+          also
+          <p class="tw-font-semibold tw-m-2">CONSENTING TO PARTICIPATE</p>
+          Checking this box confirms that the CHW has read the above script to
+          the participant and they have provided informed consent to participate
+          in the study.
+        </div>
+      </q-card-section>
+
+      <q-card-actions align="right">
+        <q-btn
+          label="I Agree"
+          color="blue"
+          @click="consentementModal = false"
+        />
+        <q-btn label="I disagree" color="red" @click="consentement()" />
+      </q-card-actions>
+    </q-card>
+  </base-dialog>
 </template>
 
 <script lang="ts">
@@ -289,6 +332,8 @@ export default {
   },
   data() {
     return {
+      isEndProcess: false,
+      consentementModal: false,
       leaveStatut: false,
       open: false,
       loading: false,
@@ -313,6 +358,12 @@ export default {
     };
   },
   methods: {
+    endProcess() {
+      this.isEndProcess = true;
+    },
+    consentement() {
+      window.location.href = '/';
+    },
     startCountdownMalaria(n: number) {
       this.activeMalaria = true;
       this.store.setActiveMalaria(true);
@@ -386,7 +437,6 @@ export default {
         const fileData = new FormData();
         this.loading = true;
         this.saveBtn = true;
-        console.log('RDT', this.store.symptom?.id);
         fileData.append('rdt_image', this.rdtTestResult.image);
         fileData.append('patient_id', this.store.currentPatient?.id);
         fileData.append('rdt_type', this.rdtTestResult.label);
@@ -406,11 +456,13 @@ export default {
             if (response.data.data.rdt_type === 'covid') {
               this.hideCovidBtn = false;
               this.store.setCovidResult(response.data.data);
+              this.store.setActiveCovid(false);
               console.log('covid', response.data);
               this.loading = false;
             } else if (response.data.data.rdt_type === 'malaria') {
               this.hideMalariaBtn = false;
               this.store.setMalariaResult(response.data.data);
+              this.store.setActiveMalaria(false);
               console.log('covid', response.data);
               this.loading = false;
             }
@@ -432,8 +484,13 @@ export default {
       this.isLoading(false);
       let lastPosition = this.store.tabs.slice(-1);
       this.next(lastPosition[0]);
-      console.log('TEST CREATED AT', lastPosition);
+    } else {
+      if (this.store.currentPatient.id === undefined) {
+        this.consentementModal = true;
+      }
     }
+    let lastPosition = this.store.tabs.slice(-1);
+    this.next(lastPosition[0]);
   },
   validations() {
     return {
@@ -465,30 +522,33 @@ export default {
     },
   },
   async beforeRouteLeave(to, from, next) {
-    this.$q
-      .dialog({
-        title: 'Do you want to exit the process ?',
-        message: 'By exiting you confirm that this process is complete',
-        ok: {
-          push: true,
-        },
-        cancel: {
-          push: true,
-          color: 'negative',
-        },
-        persistent: true,
-      })
-      .onOk(() => {
-        this.store.resetStore();
-        window.location.href = to.fullPath;
-      })
-      .onCancel(() => {
-        return false;
-      })
-      .onDismiss(() => {
-        return false;
-      });
-    console.log('END');
+    if (this.isEndProcess === false) {
+      this.$q
+        .dialog({
+          title: 'Do you want to exit the process ?',
+          message: 'By exiting you confirm that this process is complete',
+          ok: {
+            push: true,
+          },
+          cancel: {
+            push: true,
+            color: 'negative',
+          },
+          persistent: true,
+        })
+        .onOk(() => {
+          this.store.resetStore();
+          window.location.href = to.fullPath;
+        })
+        .onCancel(() => {
+          return false;
+        })
+        .onDismiss(() => {
+          return false;
+        });
+    } else {
+      next(true);
+    }
     next(false);
   },
 };

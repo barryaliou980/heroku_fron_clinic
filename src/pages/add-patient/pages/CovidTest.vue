@@ -3,7 +3,12 @@
     v-if="Object.keys(rdtCovid).length == 0"
     class="tw-flex tw-justify-center tw-px-4 tw-py-4"
   >
-    <q-btn color="blue" :label="$t('start_the_test')" @click="instruction" />
+    <q-btn
+      v-if="store.activeCovid !== true"
+      color="blue"
+      :label="$t('start_the_test')"
+      @click="instruction"
+    />
   </div>
   <div v-else class="q-pa-md q-gutter-sm">
     <q-banner rounded class="bg-grey-3">
@@ -33,10 +38,12 @@
         icon="settings"
         :done="step > 1"
       >
-        For each ad campaign that you create, you can control how much you're
-        willing to spend on clicks and conversions, which networks and
-        geographical locations you want your ads to show on, and more.
-
+        <div class="text-center">
+          <q-img
+            src="../../../assets/1-Le_nez.png"
+            style="height: 150px; width: 140px; max-width: 300px"
+          />
+        </div>
         <q-stepper-navigation>
           <q-btn @click="step = 2" color="primary" :label="$t('btnContinue')" />
         </q-stepper-navigation>
@@ -48,11 +55,14 @@
         icon="create_new_folder"
         :done="step > 2"
       >
-        An ad group contains one or more ads which target a shared set of
-        keywords.
-
+        <div class="text-center">
+          <q-img
+            src="../../../assets/mesure.png"
+            style="height: 150px; width: 140px; max-width: 300px"
+          />
+        </div>
         <q-stepper-navigation>
-          <q-btn @click="step = 4" color="primary" :label="$t('btnContinue')" />
+          <q-btn @click="step = 3" color="primary" :label="$t('btnContinue')" />
           <q-btn
             flat
             @click="step = 1"
@@ -63,26 +73,49 @@
         </q-stepper-navigation>
       </q-step>
       <q-step
-        :name="4"
-        :title="$t('instruction_third_covid')"
+        :done="step > 3"
+        :name="3"
+        title="Verser 3 gouttes dans la cassette"
         icon="add_comment"
       >
-        Try out different ad text to see what brings in the most customers, and
-        learn how to enhance your ads using features like ad extensions. If you
-        run into any problems with your ads, find out how to tell if they're
-        running and how to resolve approval issues.
+        <div class="text-center">
+          <q-img
+            src="../../../assets/cassette.png"
+            style="height: 150px; width: 140px; max-width: 300px"
+          />
+        </div>
 
         <q-stepper-navigation>
-          <q-btn
-            color="primary"
-            :label="$t('instruction_end_covid')"
-            @click="open = false"
-          />
+          <q-btn color="primary" label="Suivant" @click="step = 4" />
           <q-btn
             flat
             @click="step = 2"
             color="primary"
             :label="$t('btnBack')"
+            class="q-ml-sm"
+          />
+        </q-stepper-navigation>
+      </q-step>
+      <q-step
+        :done="step > 4"
+        :name="4"
+        title="Attendre 15 min"
+        icon="add_comment"
+      >
+        <div class="text-center">
+          <q-img
+            src="../../../assets/timer.png"
+            style="height: 150px; width: 140px; max-width: 300px"
+          />
+        </div>
+
+        <q-stepper-navigation>
+          <q-btn color="primary" label="OK" @click="open = false" />
+          <q-btn
+            flat
+            @click="step = 3"
+            color="primary"
+            label="Precedent"
             class="q-ml-sm"
           />
         </q-stepper-navigation>
@@ -120,7 +153,7 @@ export default {
     instruction() {
       console.log('test', this.store.currentPatient);
       if (
-        moment().diff(this.store.currentPatient.date_of_birth, 'years') < 18 ||
+        moment().diff(this.store.currentPatient.date_of_birth, 'years') < 5 ||
         this.store.currentPatient?.pregnant == 'Yes'
       ) {
         this.$emit('startCountdownCovid', 900);

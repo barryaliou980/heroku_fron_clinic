@@ -39,6 +39,7 @@
   </q-card>
 </template>
 
+
 <script>
 import { ref } from 'vue';
 import { defineComponent } from 'vue';
