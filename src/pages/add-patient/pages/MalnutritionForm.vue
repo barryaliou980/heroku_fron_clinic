@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-btn
       @click="openForm"
-      label="Add Malnutrition"
+      :label="$t('add_malnutrition')"
       class="tw-mt-5"
       color="primary"
     />
@@ -22,6 +22,11 @@
           :hide-pagination="true"
           separator="cell"
         >
+          <template v-slot:header="props">
+            <q-td v-for="head in props.cols" :key="head.name">
+              {{ $t(`${head.field}`) }}
+            </q-td>
+          </template>
           <template v-slot:body="props">
             <q-tr :props="props" :class="flagColor">
               <q-td v-for="col in props.cols" :key="col.name" :props="props">
@@ -40,23 +45,28 @@
     </div>
     <base-dialog
       v-model:open="showFormDialog"
-      :title="selectedRowId > 0 ? `Edit ${title}` : `Add ${title}`"
+      :title="selectedRowId > 0 ? $t(`edit_${title}`) : $t(`add_${title}`)"
       @close="onFormDialogClose"
       :loading="formLoading"
       size="sm"
       persistent
     >
       <base-input
-        label=" Entrez la valuer "
+        :label="$t('set_value')"
         v-model="malnutrition"
         type="number"
         :validator="v$.malnutrition"
       />
-      <q-btn class="tw-mt-3" @click="submit" color="blue" label="Submit" />
+      <q-btn
+        class="tw-mt-3"
+        @click="submit"
+        color="blue"
+        :label="$t('btnSubmit')"
+      />
     </base-dialog>
   </div>
 
-  <q-btn @click="next" color="blue" label="Next" />
+  <q-btn @click="next" color="blue" :label="$t('btnContinue')" />
 </template>
 
 <script lag="ts">

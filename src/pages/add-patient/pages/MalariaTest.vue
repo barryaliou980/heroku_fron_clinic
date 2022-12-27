@@ -3,7 +3,7 @@
     v-if="Object.keys(rdtMalaria).length == 0"
     class="tw-flex tw-justify-center tw-px-4 tw-py-4"
   >
-    <q-btn color="blue" label="Start the test" @click="instruction" />
+    <q-btn color="blue" :label="$t('start_the_test')" @click="instruction" />
   </div>
   <div v-else class="q-pa-md q-gutter-sm">
     <q-banner rounded class="bg-grey-3">
@@ -21,7 +21,7 @@
   </div>
   <base-dialog
     v-model:open="open"
-    title="Instructions Malaria"
+    :title="$t('instruction_malaria')"
     @close="onFormDialogClose"
     @update="update"
     persistent
@@ -29,7 +29,7 @@
     <q-stepper v-model="step" vertical color="primary" animated>
       <q-step
         :name="1"
-        title="Netoyer le RDT Test"
+        :title="$t('malaria_first_instr')"
         icon="settings"
         :done="step > 1"
       >
@@ -38,13 +38,13 @@
         geographical locations you want your ads to show on, and more.
 
         <q-stepper-navigation>
-          <q-btn @click="step = 2" color="primary" label="Next" />
+          <q-btn @click="step = 2" color="primary" :label="$t('btnContinue')" />
         </q-stepper-navigation>
       </q-step>
 
       <q-step
         :name="2"
-        title="Prelever le sang du patient"
+        :title="$t('malaria_scnd_instr')"
         icon="create_new_folder"
         :done="step > 2"
       >
@@ -52,17 +52,17 @@
         keywords.
 
         <q-stepper-navigation>
-          <q-btn @click="step = 4" color="primary" label="Next" />
+          <q-btn @click="step = 4" color="primary" :label="$t('btnContinue')" />
           <q-btn
             flat
             @click="step = 1"
             color="primary"
-            label="Precedent"
+            :label="$t('btnBack')"
             class="q-ml-sm"
           />
         </q-stepper-navigation>
       </q-step>
-      <q-step :name="4" title="Start the test" icon="add_comment">
+      <q-step :name="4" :title="$t('malaria_start_instr')" icon="add_comment">
         Try out different ad text to see what brings in the most customers, and
         learn how to enhance your ads using features like ad extensions. If you
         run into any problems with your ads, find out how to tell if they're
@@ -74,7 +74,7 @@
             flat
             @click="step = 2"
             color="primary"
-            label="Precedent"
+            :label="$t('btnBack')"
             class="q-ml-sm"
           />
         </q-stepper-navigation>

@@ -10,27 +10,53 @@
           icon="menu"
           aria-label="Menu"
         />
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-        <q-space/>
-        <div class="q-gutter-sm row items-center no-wrap">       
+        <q-toolbar-title> {{ $t('layout.appName') }} </q-toolbar-title>
+
+        <q-space />
+        <div class="q-gutter-sm row items-center no-wrap">
           <q-btn round flat>
             <q-avatar size="26px">
-              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
             </q-avatar>
-              <q-menu>
-          <q-list style="min-width: 100px">
-            <q-item clickable @click="logOut">
-              <q-item-section>Deconnection</q-item-section>
-            </q-item>
-              <q-separator />
-            <q-item clickable v-close-popup>
-              <q-item-section>Parameters</q-item-section>
-            </q-item>
-            <q-separator />
-          </q-list>
-        </q-menu>
+            <q-menu>
+              <q-list style="min-width: 100px">
+                <q-item clickable @click="logOut">
+                  <q-item-section>{{ $t('layout.logout') }}</q-item-section>
+                </q-item>
+                <q-separator />
+                <q-item clickable v-close-popup>
+                  <q-item-section>{{ $t('layout.settings') }}</q-item-section>
+                </q-item>
+                <q-item clickable>
+                  <q-item-section>{{ $t('layout.language') }}</q-item-section>
+                  <q-item-section side>
+                    <q-icon name="keyboard_arrow_right" />
+                  </q-item-section>
+
+                  <q-menu anchor="top end" self="top start">
+                    <q-list>
+                      <q-item dense clickable>
+                        <q-item-section
+                          @click="setLanguage('en-Us')"
+                          class="tw-mt-5"
+                          color="primary"
+                          >{{ $t('layout.english') }}</q-item-section
+                        >
+                      </q-item>
+                      <q-item dense clickable>
+                        <q-item-section
+                          @click="setLanguage('fr')"
+                          class="tw-mt-5"
+                          color="primary"
+                          >{{ $t('layout.french') }}</q-item-section
+                        >
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </q-item>
+                <q-separator />
+              </q-list>
+            </q-menu>
           </q-btn>
         </div>
       </q-toolbar>
@@ -45,65 +71,64 @@
       <q-list>
         <q-item to="/" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
-            <q-icon name="dashboard"/>
+            <q-icon name="dashboard" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Dashboard</q-item-label>
+            <q-item-label>{{ $t('sidebar.dashboard') }}</q-item-label>
           </q-item-section>
         </q-item>
 
         <q-item to="/add-patient" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
-            <q-icon name="note_add"/>
+            <q-icon name="note_add" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>Add New Patient</q-item-label>
+            <q-item-label>{{ $t('sidebar.addNewPatient') }}</q-item-label>
           </q-item-section>
         </q-item>
 
         <q-item to="/list-patients" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
-            <q-icon name="people"/>
+            <q-icon name="people" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>List Patients</q-item-label>
+            <q-item-label>{{ $t('sidebar.patient_list') }}</q-item-label>
           </q-item-section>
         </q-item>
 
-         <q-item  v-if="store.loggedUser.user_type==='admin'" to="/users" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="people"/>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Utilisateurs</q-item-label>
-          </q-item-section>
-        </q-item>
-
-
-        <q-expansion-item
-          icon="trending_up"
-          label="Statistics"
+        <q-item
+          v-if="store.loggedUser.user_type === 'admin'"
+          to="/users"
+          active-class="q-item-no-link-highlighting"
         >
+          <q-item-section avatar>
+            <q-icon name="people" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ $t('sidebar.users') }}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-expansion-item icon="trending_up" :label="$t('sidebar.statistics')">
           <q-list class="q-pl-lg">
             <q-item to="/MapMarker" active-class="q-item-no-link-highlighting">
               <q-item-section avatar>
-                <q-icon name="people"/>
+                <q-icon name="people" />
               </q-item-section>
               <q-item-section>
-                <q-item-label>Patient</q-item-label>
+                <q-item-label>{{ $t('sidebar.statis_patient') }}</q-item-label>
               </q-item-section>
             </q-item>
             <q-item to="/analytics" active-class="q-item-no-link-highlighting">
               <q-item-section avatar>
-                <q-icon name="streetview"/>
+                <q-icon name="streetview" />
               </q-item-section>
               <q-item-section>
-                <q-item-label>RDT TEST</q-item-label>
+                <q-item-label>{{ $t('sidebar.rdt') }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
         </q-expansion-item>
-
       </q-list>
     </q-drawer>
 
@@ -118,8 +143,9 @@
 // import Messages from './Messages.vue';
 // import {useQuasar} from 'quasar';
 
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref } from 'vue';
 import { useUserStore } from '../stores/userStore';
+import { LocalStorage } from 'quasar';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -127,25 +153,29 @@ export default defineComponent({
   components: {
     // Messages
   },
-  methods:{
-    async logOut(){
-     await this.store.logout()
-     window.location.reload()
-
-    }
+  methods: {
+    async logOut() {
+      await this.store.logout();
+      window.location.reload();
+    },
+    setLanguage(langue) {
+      this.$i18n.locale = langue;
+      LocalStorage.set('anty-locale', langue);
+    },
   },
 
-  setup () {
-    const leftDrawerOpen = ref(false)
+  setup() {
+    const leftDrawerOpen = ref(false);
+
     //  const $q = useQuasar()
 
     return {
       store: useUserStore(),
       leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
-})
+      toggleLeftDrawer() {
+        leftDrawerOpen.value = !leftDrawerOpen.value;
+      },
+    };
+  },
+});
 </script>

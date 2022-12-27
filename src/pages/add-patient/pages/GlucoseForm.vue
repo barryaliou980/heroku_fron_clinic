@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-btn
       @click="openForm"
-      label="Add glucose"
+      :label="$t('add_glucose')"
       class="tw-mt-5"
       color="primary"
     />
@@ -22,6 +22,11 @@
           :hide-pagination="true"
           separator="cell"
         >
+          <template v-slot:header="props">
+            <q-td v-for="head in props.cols" :key="head.name">
+              {{ $t(`${head.field}`) }}
+            </q-td>
+          </template>
           <template v-slot:body="props">
             <q-tr :props="props" :class="flagColor">
               <q-td v-for="col in props.cols" :key="col.name" :props="props">

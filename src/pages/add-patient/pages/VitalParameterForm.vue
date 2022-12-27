@@ -3,7 +3,7 @@
     <q-separator />
     <q-btn
       @click="openTemperature"
-      label="Temperature"
+      :label="$t('temperature')"
       class="tw-mt-5"
       color="primary"
     />
@@ -23,8 +23,13 @@
           :column-defs="pColumns"
           :rows="tempOptions"
           :hide-pagination="true"
-          separator="cell"
+          hide-default-header
         >
+          <template v-slot:header="props">
+            <q-td v-for="head in props.cols" :key="head.name">
+              {{ $t(`${head.field}`) }}
+            </q-td>
+          </template>
           <template v-slot:body="props">
             <q-tr :props="props" :class="flagColorT">
               <q-td
@@ -49,7 +54,7 @@
     <q-separator />
     <q-btn
       @click="openOxygen"
-      label="Oxygene"
+      :label="$t('oxygen')"
       class="tw-mt-5"
       color="primary"
     />
@@ -70,6 +75,11 @@
           :hide-pagination="true"
           separator="cell"
         >
+          <template v-slot:header="props">
+            <q-td v-for="head in props.cols" :key="head.name">
+              {{ $t(`${head.field}`) }}
+            </q-td>
+          </template>
           <template v-slot:body="props">
             <q-tr :props="props" :class="flagColorO">
               <q-td v-for="col in props.cols" :key="col.name" :props="props">
@@ -88,11 +98,16 @@
     </div>
   </div>
   <div class="tw-flex tw-flex-row tw-justify-start tw-space-x-3">
-    <q-btn color="blue" class="tw-flex" label="Next" @click="nextStep" />
+    <q-btn
+      color="blue"
+      class="tw-flex"
+      :label="$t('btnContinue')"
+      @click="nextStep"
+    />
   </div>
   <base-dialog
     v-model:open="showFormDialog"
-    :title="selectedRowId > 0 ? `Edit ${title}` : `Add ${title}`"
+    :title="selectedRowId > 0 ? $t(`Edit_${title}`) : $t(`Add_${title}`)"
     @close="onFormDialogClose"
     :loading="formLoading"
     size="lg"
@@ -101,7 +116,7 @@
   </base-dialog>
 </template>
 
-<script lang="ts" >
+<script lang="ts">
 import { defineAsyncComponent } from 'vue';
 import { useAppStore } from 'src/stores/appStor';
 import { api } from 'src/boot/axios';
@@ -120,7 +135,7 @@ export default {
       temperatures: [
         '35.9 > Hypotermy',
         '36.5 - 37.5 Normal',
-        '37.5 - 38.5 Hypotermia',
+        '37.5 - 38.5 Hypertermia',
         '+ 38 Fever',
       ],
       oxygens: ['95% or + (Normal)', '93-94% (Low)', '92% or less (Very Low)'],

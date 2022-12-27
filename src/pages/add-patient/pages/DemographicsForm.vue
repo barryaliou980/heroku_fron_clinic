@@ -3,7 +3,7 @@
     <q-stepper v-model="step" ref="stepper" color="primary" animated>
       <q-step
         :name="1"
-        title="Demographics and Contact Details"
+        :title="$t('patient.demographicsDetails')"
         icon="settings"
         :done="step > 1"
       >
@@ -11,62 +11,69 @@
           <h1>Information</h1>
           <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-3">
             <base-input
-              label="Name"
+              :label="$t('patient.name')"
               v-model="patient.name"
               :validator="v$.patient.name"
             />
             <base-select
-              label="Gender"
+              :label="$t('patient.gender')"
               v-model="patient.gender"
               :options="GenderOptions"
               @update:model-value="updateIsWoman"
               :validator="v$.patient.gender"
             />
             <base-select
-              label="Pregnant"
+              :label="$t('patient.pregnant')"
               v-model="patient.pregnant"
               :options="YesOrNoOptions"
               :disable="!isWoman"
               :validator="v$.patient.pregnant"
             />
             <base-select
-              label="Do you know date of birth"
+              :label="$t('patient.do_you_know_date_of_birth')"
               v-model="patient.do_you_know_date_of_birth"
               :options="Qoptions"
               :validator="v$.patient.do_you_know_date_of_birth"
-               @update:model-value="updatBirthdayKnow"
-              
-
+              @update:model-value="updatBirthdayKnow"
             />
             <div>
-
-            <base-input  v-if="birthDayStatus===true" filled v-model="patient.date_of_birth" mask="date" :rules="['date']">
-            <template v-slot:append>
-              <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy>
-                  <q-date v-model="patient.date_of_birth" >
-                   <div class="row items-center justify-end q-gutter-sm">
-                    <q-btn label="OK" color="primary" flat  v-close-popup />
-                  </div>
-                  </q-date>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </base-input>
-             <base-input
+              <base-input
+                v-if="birthDayStatus === true"
+                filled
+                v-model="patient.date_of_birth"
+                mask="date"
+                :rules="['date']"
+              >
+                <template v-slot:append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy>
+                      <q-date v-model="patient.date_of_birth">
+                        <div class="row items-center justify-end q-gutter-sm">
+                          <q-btn
+                            label="OK"
+                            color="primary"
+                            flat
+                            v-close-popup
+                          />
+                        </div>
+                      </q-date>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </base-input>
+              <base-input
                 v-else
                 :validator="v$.patient.date_of_birth"
-                 v-model="patient.date_of_birth"
-                 @blur="getAge"
+                v-model="patient.date_of_birth"
+                @blur="getAge"
               />
-         
-            <!-- <base-input
+
+              <!-- <base-input
               v-if="patient.do_you_know_date_of_birth===true"
               :validator="v$.patient.date_of_birth"
               type="date"
               v-model="patient.date_of_birth"
             /> -->
-          
             </div>
 
             <q-uploader
@@ -81,7 +88,7 @@
                   v-if="scope.canAddFiles"
                   type="a"
                   class="full-width"
-                  label="Pick Files"
+                  :label="$t('patient.pickFiles')"
                   icon="camera_enhance"
                 >
                   <q-tooltip>Pick Files</q-tooltip>
@@ -112,17 +119,17 @@
             </q-uploader>
 
             <base-input
-              label="Town"
+              :label="$t('patient.town')"
               v-model="patient.town"
               :validator="v$.patient.town"
             />
             <base-input
-              label="Quartier"
+              :label="$t('patient.quartier')"
               v-model="patient.quartier"
               :validator="v$.patient.quartier"
             />
             <base-input
-              label="Secteur"
+              :label="$t('patient.sector')"
               v-model="patient.sector"
               :validator="v$.patient.sector"
             />
@@ -132,18 +139,18 @@
                 :validator="v$.patient.do_you_have_access_to_telephone"
                 @update:model-value="updateHavePhone"
                 v-model="patient.do_you_have_access_to_telephone"
-                label="Do you have access to a phone?"
+                :label="$t('patient.do_you_have_access_to_telephone')"
               />
             </div>
             <base-select
-              label="Type of phone"
+              :label="$t('patient.phone_type')"
               v-model="patient.phone_type"
               :options="typePhoneOptions"
               :disable="!havePhone"
-              :validator="v$.patient.pregnant"
+              :validator="v$.patient.phone_type"
             />
             <phone-input
-              label="Phone"
+              :label="$t('patient.phone_number')"
               v-model="patient.phone_number"
               :disable="!havePhone"
               :validator="v$.patient.phone_number"
@@ -154,33 +161,33 @@
 
       <q-step
         :name="2"
-        title="Social-Economic Data"
+        :title="$t('patient.socialEconomic')"
         icon="create_new_folder"
         :done="step > 2"
       >
         <div>
           <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-3">
             <base-select
-              label="Level of education"
+              :label="$t('patient.level_of_education')"
               v-model="patient.level_of_education"
               :options="educationLevels"
               :validator="v$.patient.level_of_education"
             />
 
             <base-select
-              label="Profession"
+              :label="$t('patient.profession')"
               v-model="patient.profession"
               :options="professionOptions"
               :validator="v$.patient.profession"
             />
 
             <money-input
-              label="Daily Expenditure"
+              :label="$t('patient.daily_expenditure')"
               v-model="patient.daily_expenditure"
               :validator="v$.patient.daily_expenditure"
             />
             <base-select
-              label="Matrimonial Status"
+              :label="$t('patient.matrimonial_status')"
               v-model="patient.matrimonial_status"
               :options="matrimonialStatusOptions"
               :validator="v$.patient.matrimonial_status"
@@ -191,63 +198,67 @@
               :validator="v$.patient.access_to_drinking_water"
               @update:model-value="updateHavePhone"
               v-model="patient.access_to_drinking_water"
-              label="Do you have access a drinking water?"
+              :label="$t('patient.access_to_drinking_water')"
               :options="cleanWaterOptions"
             />
             <base-select
               :validator="v$.patient.access_to_toilet"
               @update:model-value="updateHavePhone"
               v-model="patient.access_to_toilet"
-              label="Do you have access a toilet ?"
+              :label="$t('patient.access_to_toilet')"
               :options="sanitationOptions"
             />
             <base-select
               :validator="v$.patient.rubbish_collection_services"
               @update:model-value="updateHavePhone"
               v-model="patient.rubbish_collection_services"
-              label="Rubbish collection services ?"
+              :label="$t('patient.rubbish_collection_services')"
               :options="YesOrNoOptions"
             />
 
             <base-select
               :validator="v$.patient.time_to_nearest_health_facility"
               v-model="patient.time_to_nearest_health_facility"
-              label="Time to nearest health facility"
+              :label="$t('patient.time_to_nearest_health_facility')"
               :options="distanceToHealthFacility"
             />
 
             <base-select
               :validator="v$.patient.last_visit_to_doctor"
               v-model="patient.last_visit_to_doctor"
-              label="Last visit to doctor"
+              :label="$t('patient.last_visit_to_doctor')"
               :options="lastDrVisit"
             />
             <base-input
               :validator="v$.patient.hmd_visits_in_last_year"
-              label="How many doctors visits in last 12 months"
+              :label="$t('patient.hmd_visits_in_last_year')"
               v-model="patient.hmd_visits_in_last_year"
             />
           </div>
         </div>
       </q-step>
 
-      <q-step :name="3" title="Willingness to pay" icon="add_comment">
+      <q-step
+        :name="3"
+        :title="$t('patient.willingnesstoPay')"
+        icon="add_comment"
+      >
         <div>
           <div class="tw-grid tw-grid-cols-1 tw-gap-3">
             <base-select
               v-model="patient.would_you_be_willing_to_subscribe"
-              label="Would you be willing to subscribe to Clinic-O's program at the following price ?"
+              :label="$t('patient.would_you_be_willing_to_subscribe')"
               :options="YesOrNoOptions"
             />
             <base-select
               class="tw-full"
               v-model="patient.would_you_like_medical_card"
-              label="In this study, testing service medical ID card will be provided for free, would you like to received a medical ID card from C+O?"
+              :label="$t('patient.would_you_like_medical_card')"
               :options="YesOrNoOptions"
             />
             <base-select
               v-model="patient.testing_services_and_medical_for_free"
-              label="In this study, testing services and medical ID card will be provided for free?"
+              :label="$t('patient.testing_services_and_medical_for_free')"
               :options="YesOrNoOptions"
             />
           </div>
@@ -258,14 +269,14 @@
           <q-btn
             @click.prevent="onSubmit($refs, step)"
             color="blue"
-            :label="step === 3 ? 'Finish' : 'Continue'"
+            :label="step === 3 ? $t('btnFinish') : $t('btnContinue')"
           />
           <q-btn
             v-if="step > 1"
             flat
             color="primary"
             @click="$refs.stepper.previous()"
-            label="Back"
+            :label="$t('btnBack')"
             class="q-ml-sm"
           />
         </q-stepper-navigation>
@@ -289,7 +300,10 @@
         <q-card-actions align="right">
           <q-btn
             flat
-            @click="$emit('next', 'alarms');store.setTabs('alarms')"
+            @click="
+              $emit('next', 'alarms');
+              store.setTabs('alarms');
+            "
             label="OK"
             v-close-popup
           />
@@ -309,10 +323,10 @@ import moment from 'moment';
 import { useAppStore } from 'src/stores/appStor';
 
 export default {
-    emits: [],
+  emits: [],
   data() {
     return {
-      birthDayStatus:true,
+      birthDayStatus: true,
       alert: false,
       selected_file: '',
       image: '',
@@ -393,12 +407,12 @@ export default {
     };
   },
   methods: {
-    async getAge(){
-      let age = moment().year()
-      let year = age - this.patient.date_of_birth
-      let date = new Date(year,0,1)
-      this.patient.date_of_birth = moment(date).format('YYYY/MM/DD'); 
-      this.birthDayStatus=false
+    async getAge() {
+      let age = moment().year();
+      let year = age - this.patient.date_of_birth;
+      let date = new Date(year, 0, 1);
+      this.patient.date_of_birth = moment(date).format('YYYY/MM/DD');
+      this.birthDayStatus = false;
     },
     updateIsWoman(value: string) {
       if (value == 'Female') {
@@ -474,54 +488,55 @@ export default {
           this.patient.date_of_registration = moment(date1).format(
             'YYYY-MM-DD HH:mm:ss'
           );
-           this.patient.date_of_birth = moment(this.patient.date_of_birth).format(
-            'YYYY-MM-DD HH:mm:ss'
-          );
+          this.patient.date_of_birth = moment(
+            this.patient.date_of_birth
+          ).format('YYYY-MM-DD HH:mm:ss');
           // (this.patient.hmd_visits_in_last_year = '12'),
           // (this.patient.do_you_know_date_of_birth = 'Yes');
           // this.patient.photo = 'image ';
           // console.log(this.patient.photo);
-          if(this.store.currentPatient.id===undefined){
-            this.$emit('isLoading', true)
-                const { data } = await api.post('/patients', this.patient);
-                this.$emit('isLoading', false)
-          let photo = this.store.currentPatient.photo;
-          if (this.image instanceof Blob) {
-            this.uploadFile(data.data.id);
-          }
-          this.patient = data.data;
-          this.store.init(data.data);
-          if (this.image instanceof Blob) {
-            this.store.currentPatient.photo = this.imageUploadedUrl;
+          if (this.store.currentPatient.id === undefined) {
+            this.$emit('isLoading', true);
+            const { data } = await api.post('/patients', this.patient);
+            this.$emit('isLoading', false);
+            let photo = this.store.currentPatient.photo;
+            if (this.image instanceof Blob) {
+              this.uploadFile(data.data.id);
+            }
+            this.patient = data.data;
+            this.store.init(data.data);
+            if (this.image instanceof Blob) {
+              this.store.currentPatient.photo = this.imageUploadedUrl;
+            } else {
+              this.store.currentPatient.photo = photo;
+            }
+            console.log('store', this.store);
+            this.alert = true;
+            this.$emit('next', 'alarms');
+            this.store.setTabs('alarms');
           } else {
-            this.store.currentPatient.photo = photo;
+            this.$emit('isLoading', true);
+            const { data } = await api.put(
+              `/patients/${this.store.currentPatient.id}`,
+              this.patient
+            );
+            this.$emit('isLoading', false);
+            let photo = this.store.currentPatient.photo;
+            if (this.image instanceof Blob) {
+              this.uploadFile(data.data.id);
+            }
+            this.patient = data.data;
+            this.store.init(data.data);
+            if (this.image instanceof Blob) {
+              this.store.currentPatient.photo = this.imageUploadedUrl;
+            } else {
+              this.store.currentPatient.photo = photo;
+            }
+            console.log('store', this.store);
+            this.alert = true;
+            this.$emit('next', 'alarms');
+            this.store.setTabs('alarms');
           }
-          console.log('store', this.store);
-          this.alert = true;
-          this.$emit('next', 'alarms');
-          this.store.setTabs('alarms')
-
-          }else{
-            this.$emit('isLoading', true)
-          const { data } = await api.put(`/patients/${this.store.currentPatient.id}`, this.patient);
-          this.$emit('isLoading', false)
-          let photo = this.store.currentPatient.photo;
-          if (this.image instanceof Blob) {
-            this.uploadFile(data.data.id);
-          }
-          this.patient = data.data;
-          this.store.init(data.data);
-          if (this.image instanceof Blob) {
-            this.store.currentPatient.photo = this.imageUploadedUrl;
-          } else {
-            this.store.currentPatient.photo = photo;
-          }
-          console.log('store', this.store);
-          this.alert = true;
-          this.$emit('next', 'alarms');
-          this.store.setTabs('alarms')
-          }
-      
         }
       }
     },
@@ -545,22 +560,20 @@ export default {
       this.image = file[0];
       this.imageUploadedUrl = URL.createObjectURL(this.image);
     },
-    updatBirthdayKnow(value){
-      console.log('Value', value)
-      if(value==='No'){
-        this.birthDayStatus = false
-      }else{
-        this.birthDayStatus= true
+    updatBirthdayKnow(value) {
+      console.log('Value', value);
+      if (value === 'No') {
+        this.birthDayStatus = false;
+      } else {
+        this.birthDayStatus = true;
       }
-
-    }
+    },
   },
   created() {
     this.patient.photo = '';
-    this.patient.do_you_know_date_of_birth = 'Yes'
+    this.patient.do_you_know_date_of_birth = 'Yes';
     this.patient = this.store.currentPatient;
     this.imageUploadedUrl = this.patient.photo;
-    
   },
   setup() {
     return {

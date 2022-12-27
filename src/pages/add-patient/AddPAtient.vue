@@ -15,59 +15,59 @@
           <q-tab
             v-if="store.tabs.includes('mails')"
             name="mails"
-            label="Patient Information"
+            :label="$t('patient.patientInformationTab')"
           />
           <q-tab
             v-if="store.tabs.includes('alarms')"
             name="alarms"
-            label="Vitales Parameters"
+            :label="$t('patient.vitalParametersTab')"
           />
           <q-tab
             v-if="store.tabs.includes('movies')"
             name="movies"
-            label="Symptomes"
+            :label="$t('patient.symptomesTab')"
           />
           <q-tab
             v-if="store.tabs.includes('test_malaria')"
             name="test_malaria"
-            label="Malaria RDT Test"
+            :label="$t('patient.malariaRDTTestTab')"
           />
           <q-tab
             v-if="store.tabs.includes('test_glucose')"
             name="test_glucose"
-            label="Glucose Test"
+            :label="$t('patient.glucoseTestTab')"
           />
           <q-tab
             v-if="store.tabs.includes('test_covid')"
             name="test_covid"
-            label="Covid RDT Test"
+            :label="$t('patient.CovidRDTTestTab')"
           />
           <q-tab
             v-if="store.tabs.includes('malnutrition')"
             name="malnutrition"
-            label="Malnutrition"
+            :label="$t('patient.malnutritionTab')"
           />
           <q-tab
             v-if="store.tabs.includes('blood_pr')"
             name="blood_pr"
-            label="Blood Pressure"
+            :label="$t('patient.bloodPressureTab')"
           />
           <q-tab
             v-if="store.tabs.includes('medical_back')"
             name="medical_back"
-            label="Medical Background"
+            :label="$t('patient.medicalBackgroundTab')"
           />
         </q-tabs>
         <q-separator />
 
         <q-tab-panels v-model="tab" animated>
           <q-tab-panel name="mails">
-            <div class="text-h6">Patient Demographic</div>
+            <div class="text-h6">{{ $t('patient.tabSubName') }}</div>
             <DemographicPage @next="next" @isLoading="isLoading" />
           </q-tab-panel>
 
           <q-tab-panel name="alarms">
-            <div class="text-h6">Vital Parameters</div>
+            <div class="text-h6">{{ $t('patient.vitalParametersTab') }}</div>
             <VitalParameters @next="next" @isLoading="isLoading" />
           </q-tab-panel>
 
@@ -93,17 +93,17 @@
             />
           </q-tab-panel>
           <q-tab-panel name="malnutrition">
-            <div class="text-h6">Malnutrition</div>
+            <div class="text-h6">{{ $t('malnutrition') }}</div>
             <MalnutritionForm @next="next" @isLoading="isLoading" />
           </q-tab-panel>
 
           <q-tab-panel name="blood_pr">
-            <div class="text-h6">Prise de sang</div>
+            <div class="text-h6">{{ $t('take_blood_pressure') }}</div>
             <BloodPresureForm @next="next" @isLoading="isLoading" />
           </q-tab-panel>
 
           <q-tab-panel name="medical_back">
-            <div class="text-h6">Background Medical</div>
+            <div class="text-h6">{{ $t('background_medical') }}</div>
             <BackgroundMedical @next="next" @isLoading="isLoading" />
           </q-tab-panel>
         </q-tab-panels>
@@ -114,7 +114,7 @@
       <q-page-sticky class="tw-pt-16" position="top-right" :offset="[18, 18]">
         <q-btn
           v-show="hideMalariaBtn"
-          :label="disableBtnM === false ? 'Malaria Result' : ''"
+          :label="disableBtnM === false ? $t('malaria_result') : ''"
           v-if="store.activeMalaria"
           :disable="disableBtnM"
           :class="
@@ -130,7 +130,7 @@
             :time="malariaTimer"
             @end="onCountdownEndMalaaria"
             v-slot="{ minutes, seconds }"
-            >Malaria :{{ minutes }}:{{ seconds }}</vue-countdown
+            >{{ $t('rdt_malaria') }} :{{ minutes }}:{{ seconds }}</vue-countdown
           >
         </q-btn>
 
@@ -151,9 +151,9 @@
             :time="covidTimer"
             @end="onCountdownEndCovid"
             v-slot="{ minutes, seconds }"
-            >Covid :{{ minutes }}:{{ seconds }}</vue-countdown
+            >{{ $t('rdt_covid') }} :{{ minutes }}:{{ seconds }}</vue-countdown
           >
-          <p v-else class="tw-text-md">Covid Result</p>
+          <p v-else class="tw-text-md">{{ $t('covid_result') }}</p>
         </q-btn>
       </q-page-sticky>
     </div>
@@ -161,7 +161,7 @@
   <loader-dialog v-model="loading" persistent />
   <base-dialog
     v-model:open="open"
-    :title="resultModatTitle"
+    :title="$t(`${resultModatTitle}`)"
     @close="onFormDialogClose"
     :loading="formLoading"
     size="sm"
@@ -169,7 +169,7 @@
   >
     <div class="tw-mb-4">
       <base-select
-        label="Select the result"
+        :label="$t('select_result')"
         :options="resultOptions"
         v-model="rdtTestResult.result"
         :validator="v$.rdtTestResult.result"
@@ -187,10 +187,10 @@
             v-if="scope.canAddFiles"
             type="a"
             class="full-width"
-            label="Pick Files"
+            :label="$t('patient.pickFiles')"
             icon="camera_enhance"
           >
-            <q-tooltip>Pick Files</q-tooltip>
+            <q-tooltip>{{ $t('patient.pickFiles') }}</q-tooltip>
             <q-uploader-add-trigger></q-uploader-add-trigger>
           </q-btn>
         </template>
@@ -205,7 +205,7 @@
           </q-img>
           <p style="margin: 5% 20%" v-else>
             <q-badge color="red">
-              No image of result selected
+              {{ $t('patient.no_image') }}
               <q-icon name="warning" color="white" class="q-ml-xs" />
             </q-badge>
           </p>
@@ -223,7 +223,7 @@
         color="blue"
         style="margin-left: 30%"
         class="tw-mt-4"
-        label="Save"
+        :label="$t('save')"
       />
     </div>
     <!-- <q-spinner
@@ -347,9 +347,7 @@ export default {
       this.rdtTestResult = {};
       this.rdtTestResult.label = evt;
       this.resultModatTitle =
-        this.rdtTestResult.label == 'covid'
-          ? 'Enter Covid result'
-          : 'Enter malaria result';
+        this.rdtTestResult.label == 'covid' ? 'enter_covid' : 'enter_malaria';
       console.log('Ckiked');
     },
     onFormDialogClose() {

@@ -4,7 +4,7 @@
     <div v-if="isAdult">
       <div class="tw-mt-2">
         <base-select
-          label="Consumption of Tabacco"
+          :label="$t('consumption_of_tabacco')"
           v-model="medical_back.con_tabacco"
           :options="options"
           :validator="v$.medical_back.con_tabacco"
@@ -12,7 +12,7 @@
       </div>
       <base-select
         class="tw-mt-2 tw-mb-1"
-        label="Consumption of Alcohol"
+        :label="$t('consumption_of_alcohol')"
         v-model="medical_back.con_alcohol"
         :options="options"
         :validator="v$.medical_back.con_alcohol"
@@ -20,7 +20,7 @@
     </div>
     <base-select
       class="tw-mt-2 tw-mb-1"
-      label="Which vaccinations do you have"
+      :label="$t('which_vaccinations_do_you_have')"
       v-model="medical_back.which_vaccination"
       :options="options"
       :validator="v$.medical_back.which_vaccination"
@@ -28,7 +28,7 @@
     <q-separator />
     <base-select
       class="tw-mt-4 tw-mb-1"
-      label="Do you have any diagnosed conditions"
+      :label="$t('do_you_have_any_diagnosed_conditions')"
       v-model="medical_back.do_you_have_any_diagn_cond"
       :options="options"
       @update:model-value="resetDiagCon"
@@ -38,22 +38,22 @@
       v-if="medical_back.do_you_have_any_diagn_cond === 'Yes'"
       class="tw-mt-2 tw-w-1/2"
     >
-      <p class="text-h6 tw-ml-10">If Yes</p>
+      <p class="text-h6 tw-ml-10">{{ $t('if_yes') }}</p>
       <base-input
         class="tw-ml-10 tw-m-2"
-        label="What are they for"
+        :label="$t('what_are_they_for')"
         v-model="medical_back.for_diagn_cond"
         :validator="v$.medical_back.for_diagn_cond"
       />
       <base-input
         class="tw-ml-10 tw-m-2"
-        label="When where you diagnosed"
+        :label="$t('when_where_you_diagnosed')"
         v-model="medical_back.where_diagn_cond"
         :validator="v$.medical_back.where_diagn_cond"
       />
       <base-select
         class="tw-ml-10 tw-m-2"
-        label="Are you on Treatment"
+        :label="$t('are_you_on_treatment')"
         v-model="medical_back.are_on_treatment_diagn_cond"
         :options="options"
         :validator="v$.medical_back.are_on_treatment_diagn_cond"
@@ -62,7 +62,7 @@
     <q-separator />
     <base-select
       class="tw-mt-4 tw-mb-1"
-      label="Do you take any vitamins or supplements"
+      :label="$t('do_you_take_any_vitamins_or_supplements')"
       v-model="medical_back.do_you_take_any_vitamins"
       :options="options"
       @update:model-value="resetVitamine"
@@ -72,10 +72,10 @@
       v-if="medical_back.do_you_take_any_vitamins === 'Yes'"
       class="tw-mt-2 tw-w-1/2"
     >
-      <p class="text-h6 tw-ml-10">If Yes</p>
+      <p class="text-h6 tw-ml-10">{{ $t('if_yes') }}</p>
       <base-input
         class="tw-ml-10 tw-m-2"
-        label="Which ones"
+        :label="$t('which_ones')"
         v-model="medical_back.vitamins"
         :validator="v$.medical_back.vitamins"
       />
@@ -83,7 +83,7 @@
     <q-separator />
     <base-select
       class="tw-mt-4 tw-mb-1"
-      label="Are yu physically active"
+      :label="$t('are_you_physically_active')"
       v-model="medical_back.is_physical_activity"
       :options="options"
       :validator="v$.medical_back.is_physical_activity"
@@ -93,34 +93,40 @@
       @click="submit"
       color="primary"
       class="tw-mt-2"
-      label="Save"
+      :label="$t('save')"
       :loading="loadingBtn"
     />
 
     <div class="tw-flex tw-justify-center tw-mt-4">
-      <q-btn @click="validerEndProcess" color="red" label="End the process" />
+      <q-btn
+        @click="validerEndProcess"
+        color="red"
+        :label="$t('end_the_process')"
+      />
     </div>
   </div>
   <q-dialog v-model="open" persistent color="red">
     <q-card>
       <q-card-section>
-        <div class="text-h6">End the process for this patient</div>
+        <div class="text-h6">{{ $t('end_the_process_for_this_patient') }}</div>
       </q-card-section>
       <q-card-section class="q-pt-none"> </q-card-section>
       <q-card-actions align="right">
-        <q-btn label="Valided" color="blue" @click="end_process" />
-        <q-btn label="Cancel" color="red" v-close-popup />
+        <q-btn :label="$t('valided')" color="blue" @click="end_process" />
+        <q-btn :label="$t('canceled')" color="red" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
   <q-dialog v-model="open1" persistent color="red">
     <q-card>
       <q-card-section>
-        <div class="text-h6">Medical background Save successfully</div>
+        <div class="text-h6">
+          {{ $t('medical_background_save_successfully') }}
+        </div>
       </q-card-section>
       <q-card-section class="q-pt-none"> </q-card-section>
       <q-card-actions align="right">
-        <q-btn label="OK" color="blue" v-close-popup />
+        <q-btn :label="$t('ok')" color="blue" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -128,13 +134,12 @@
     <q-card class="tw-bg-red-500 tw-text-white">
       <q-card-section>
         <div class="text-h6 tw-text-center">
-          Vous Pouvez pas terminer le proccess tant que vous ne saisissez pas
-          les resultats
+          {{ $t('you_can_not_end_the_process') }}
         </div>
       </q-card-section>
       <q-card-section class="q-pt-none"> </q-card-section>
       <q-card-actions align="right">
-        <q-btn label="OK" color="blue" v-close-popup />
+        <q-btn :label="$t('ok')" color="blue" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>

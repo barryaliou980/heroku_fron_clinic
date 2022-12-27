@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-btn @click="EntrezBloodPre" color="blue" label="Set Values" />
+    <q-btn @click="EntrezBloodPre" color="blue" :label="$t('set_values')" />
     <table
       v-if="bloodPreResult.id !== undefined"
       class="tw-w-1/2 tw-divide-y tw-mx-4 tw-py-4 tw-divide-gray-300"
@@ -16,19 +16,7 @@
               tw-sm:pl-6
             "
           ></th>
-          <th
-            scope="col"
-            class="
-              tw-px-3
-              tw-py-3.5
-              tw-text-center
-              tw-text-md
-              tw-font-semibold
-              tw-text-gray-900
-            "
-          >
-            Diastol
-          </th>
+
           <th
             scope="col"
             class="
@@ -41,6 +29,20 @@
             "
           >
             Systol
+          </th>
+
+          <th
+            scope="col"
+            class="
+              tw-px-3
+              tw-py-3.5
+              tw-text-center
+              tw-text-md
+              tw-font-semibold
+              tw-text-gray-900
+            "
+          >
+            Diastol
           </th>
         </tr>
       </thead>
@@ -85,56 +87,57 @@
   </div>
   <base-dialog
     v-model:open="showFormDialog"
-    :title="`Take Blood Presure`"
+    :title="$t('take_blood_presure')"
     @close="onFormDialogClose"
     :loading="formLoading"
     size="sm"
     persistent
   >
     <div class="tw-flex tw-justify-left"></div>
-    <p>Arm Right</p>
+    <p>{{ $t('arm_right') }}</p>
     <base-input
       class="tw-m-1"
       type="number"
-      label="Diastol"
-      v-model="bloodPre.bp_dias_right"
-      :validator="v$.bloodPre.bp_dias_right"
-    />
-    <base-input
-      class="tw-m-1"
-      type="number"
-      label="Systol"
+      :label="$t('systol')"
       v-model="bloodPre.bp_sys_right"
       :validator="v$.bloodPre.bp_sys_right"
     />
+
+    <base-input
+      class="tw-m-1"
+      type="number"
+      :label="$t('diastol')"
+      v-model="bloodPre.bp_dias_right"
+      :validator="v$.bloodPre.bp_dias_right"
+    />
+
     <q-separator />
-    <p>Arm Left</p>
+    <p>{{ $t('arm_left') }}</p>
     <base-input
       type="number"
       class="tw-m-1"
-      label="Diastol"
-      v-model="bloodPre.bp_dias_left"
-      :validator="v$.bloodPre.bp_dias_left"
+      :label="$t('systol')"
+      v-model="bloodPre.bp_sys_left"
+      :validator="v$.bloodPre.bp_sys_left"
     />
     <base-input
       type="number"
       class="tw-m-1"
-      label="Systol"
-      v-model="bloodPre.bp_sys_left"
-      :validator="v$.bloodPre.bp_sys_left"
+      :label="$t('diastol')"
+      v-model="bloodPre.bp_dias_left"
+      :validator="v$.bloodPre.bp_dias_left"
     />
 
     <div class="tw-flex tw-justify-end">
       <q-btn
         @click="submit"
         class="tw-mt-4 tw-mr-5"
-        label="Submit"
+        :label="$t('btnSubmit')"
         color="blue"
       />
     </div>
   </base-dialog>
 </template>
-    
 
 <script lang="ts">
 import { useAppStore } from 'src/stores/appStor';

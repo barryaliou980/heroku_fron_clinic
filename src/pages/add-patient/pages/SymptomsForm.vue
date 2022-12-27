@@ -14,13 +14,13 @@
         <div
           class="tw-justify-start tw-items-left tw-text-right text-h5 tw-p-2"
         >
-          Fever
+          {{ $t('fever') }}
           <q-badge class="tw-text-rigth text-h6" :color="flagColorT">
             {{ store.temperature.temperature }}
           </q-badge>
         </div>
         <div class="tw-text-right text-h5 tw-p-2">
-          Oxygen saturation
+          {{ $t('oxygen_saturation') }}
           <q-badge class="text-h6" :color="flagColorO">
             {{ store.oxygen?.oxygen_saturation }}
           </q-badge>
@@ -52,7 +52,7 @@
           </thead>
           <tbody class="tw-divide-y tw-divide-gray-200 tw-bg-white">
             <tr class="tw-divide-x tw-divide-gray-200">
-              <td class="text-h6">Chills</td>
+              <td class="text-h6">{{ $t('chills') }}</td>
               <td class="tw-text-center">
                 <div>
                   <q-btn-toggle
@@ -68,7 +68,7 @@
               </td>
             </tr>
             <tr class="tw-divide-x tw-divide-gray-200">
-              <td class="text-h6">Nausea And Vomiting</td>
+              <td class="text-h6">{{ $t('nausea_and_vomiting') }}</td>
               <td class="tw-text-center">
                 <q-btn-toggle
                   v-model="symptoms.nausea_and_vomiting"
@@ -84,7 +84,7 @@
               </td>
             </tr>
             <tr class="tw-divide-x tw-divide-gray-200">
-              <td class="text-h6">Headaches</td>
+              <td class="text-h6">{{ $t('headaches') }}</td>
               <td class="tw-text-center">
                 <q-btn-toggle
                   v-model="symptoms.headaches"
@@ -98,7 +98,7 @@
               </td>
             </tr>
             <tr class="tw-divide-x tw-divide-gray-200">
-              <td class="text-h6">Muscle or Join Pain</td>
+              <td class="text-h6">{{ $t('muscle_or_join_pain') }}</td>
               <td class="tw-text-center">
                 <q-btn-toggle
                   v-model="symptoms.muscle_or_join_pain"
@@ -114,7 +114,7 @@
               </td>
             </tr>
             <tr class="tw-divide-x tw-divide-gray-200">
-              <td class="text-h6">Symptoms.sore_throa</td>
+              <td class="text-h6">{{ $t('symptoms_sore_throa') }}</td>
               <td class="tw-text-center">
                 <q-btn-toggle
                   v-model="symptoms.sore_throa"
@@ -128,7 +128,7 @@
               </td>
             </tr>
             <tr class="tw-divide-x tw-divide-gray-200">
-              <td class="text-h6">Cough</td>
+              <td class="text-h6">{{ $t('cough') }}</td>
               <td class="tw-text-center">
                 <q-btn-toggle
                   v-model="symptoms.cough"
@@ -142,7 +142,7 @@
               </td>
             </tr>
             <tr class="tw-divide-x tw-divide-gray-200">
-              <td class="text-h6">Fatigue</td>
+              <td class="text-h6">{{ $t('fatigue') }}</td>
               <td class="tw-text-center">
                 <q-btn-toggle
                   v-model="symptoms.fatigue"
@@ -156,7 +156,7 @@
               </td>
             </tr>
             <tr class="tw-divide-x tw-divide-gray-200">
-              <td class="text-h6">Loss of sense of Smell</td>
+              <td class="text-h6">{{ $t('loss_of_sense_of_smell') }}</td>
               <td class="tw-text-center">
                 <q-btn-toggle
                   v-model="symptoms.loss_of_sense_of_smell"
@@ -172,7 +172,7 @@
               </td>
             </tr>
             <tr class="tw-divide-x tw-divide-gray-200">
-              <td class="text-h6">Difficulty Breathing</td>
+              <td class="text-h6">{{ $t('difficulty_breathing') }}</td>
               <td class="tw-text-center">
                 <q-btn-toggle
                   v-model="symptoms.difficulty_breathing"
@@ -188,7 +188,7 @@
               </td>
             </tr>
             <tr class="tw-divide-x tw-divide-gray-200">
-              <td class="text-h6">Diarrhoea</td>
+              <td class="text-h6">{{ $t('diarrhoea') }}</td>
               <td class="tw-text-center">
                 <q-btn-toggle
                   v-model="symptoms.diarrhoea"
@@ -222,23 +222,23 @@
             "
           >
             <q-card-section v-if="malaria === true || covid === true">
-              <div class="text-h6">This patient must do the RD-Test of :</div>
+              <div class="text-h6">{{ $t('msg_must_be_testing') }}</div>
             </q-card-section>
             <q-card-section v-else>
-              <div class="text-h6">This patient should not be tested</div>
+              <div class="text-h6">{{ $t('msg_not_be_testing') }}</div>
             </q-card-section>
 
             <q-card-section class="q-pt-none">
               <p v-if="covid === true" class="text-h6">
-                Covid <q-icon name="check" />
+                {{ $t('rdt_covid') }} <q-icon name="check" />
               </p>
               <p v-if="malaria === true" class="text-h6">
-                Malaria <q-icon name="check" />
+                {{ $t('rdt_malaria') }} <q-icon name="check" />
               </p>
             </q-card-section>
             <q-card-actions align="right">
-              <q-btn label="Valided" color="blue" @click="submit" />
-              <q-btn label="Cancel" color="red" v-close-popup />
+              <q-btn :label="$t('valided')" color="blue" @click="submit" />
+              <q-btn :label="$t('canceled')" color="red" v-close-popup />
             </q-card-actions>
           </q-card>
         </q-dialog>
