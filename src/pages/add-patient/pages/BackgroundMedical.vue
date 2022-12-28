@@ -21,15 +21,16 @@
     <base-select
       class="tw-mt-2 tw-mb-1"
       :label="$t('which_vaccinations_do_you_have')"
-      v-model="medical_back.which_vaccination"
-      :options="options"
-      :validator="v$.medical_back.which_vaccination"
+       v-model="vacins"
+      :options="vacinationsOptions"
+       use-chips
+       multiple
     />
     <q-separator />
     <base-select
       class="tw-mt-4 tw-mb-1"
       :label="$t('do_you_have_any_diagnosed_conditions')"
-      v-model="medical_back.do_you_have_any_diagn_cond"
+       v-model="medical_back.do_you_have_any_diagn_cond"
       :options="options"
       @update:model-value="resetDiagCon"
       :validator="v$.medical_back.do_you_have_any_diagn_cond"
@@ -39,17 +40,21 @@
       class="tw-mt-2 tw-w-1/2"
     >
       <p class="text-h6 tw-ml-10">{{ $t('if_yes') }}</p>
-      <base-input
-        class="tw-ml-10 tw-m-2"
-        :label="$t('what_are_they_for')"
-        v-model="medical_back.for_diagn_cond"
-        :validator="v$.medical_back.for_diagn_cond"
+      <base-select
+         class="tw-ml-10 tw-m-2"
+         :label="$t('what_are_they_for')"
+        v-model="diags"
+
+         use-chips
+         multiple
+        :options="wtafOptions"
       />
-      <base-input
+      <base-select
         class="tw-ml-10 tw-m-2"
         :label="$t('when_where_you_diagnosed')"
         v-model="medical_back.where_diagn_cond"
         :validator="v$.medical_back.where_diagn_cond"
+         :options="whenOptions"
       />
       <base-select
         class="tw-ml-10 tw-m-2"
@@ -73,11 +78,13 @@
       class="tw-mt-2 tw-w-1/2"
     >
       <p class="text-h6 tw-ml-10">{{ $t('if_yes') }}</p>
-      <base-input
+      <base-select
         class="tw-ml-10 tw-m-2"
         :label="$t('which_ones')"
-        v-model="medical_back.vitamins"
-        :validator="v$.medical_back.vitamins"
+        v-model="vitamins"
+        use-chips
+         multiple
+       :options="vitaminOptions"
       />
     </div>
     <q-separator />
@@ -152,18 +159,23 @@ import { MedicalBackground } from '../../../components/models';
 import { api } from 'src/boot/axios';
 import { required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import { ref } from 'vue';
 
 export default {
   emits: [],
   data() {
     return {
+      vitaminOptions:['No vitamin history','Vitamin A','Vitamin B','VItamin C','Vitamin D','Vitamin E'],
+      whenOptions:['Moins d`un an', '1 an' ,'2 ans', '3 ans', 'Plus de 3 ans' ],
+      wtafOptions:['Hyper Tension', 'Diabete'],
+      vacinationsOptions:['Not known','Covid','Polio','Flue','Meningitis','Hepatitis A','Hepatitis B','HPV','Tetanus','Chickenpox'],
       loadingBtn: false,
       open: false,
       open1: false,
       open2: false,
       vacinationOptions: ['Non', 'Yes'],
       options: ['Yes', 'No'],
-      medical_back: {} as MedicalBackground,
+      medical_back: {},
       rows: [],
     };
   },
@@ -180,7 +192,6 @@ export default {
     async testBackrournd2() {
       if (await this.v$.medical_back.do_you_have_any_diagn_cond.$validate()) {
         if (this.medical_back.do_you_have_any_diagn_cond === 'Yes') {
-          console.log('Cond', this.medical_back.do_you_have_any_diagn_cond);
           if (
             (await this.v$.medical_back.for_diagn_cond.$validate()) &&
             this.v$.medical_back.where_diagn_cond.$validate() &&
@@ -257,6 +268,18 @@ export default {
       }
     },
     async submit() {
+      console.log('daig', this.diags)
+      console.log('vaccins', this.vacins)
+      if(this.vacins!=null){
+        this.medical_back.which_vaccination =this.vacins.toString()
+      }
+      if(this.diags!=null){
+        this.medical_back.for_diagn_cond = this.diags.toString()
+      }
+      if(this.vitamins!=null){
+        this.medical_back.vitamins = this.vitamins.toString()
+      }
+      console.log('MEDICAL', this.medical_back)
       const result_1 = await this.testBackrournd1();
       const result_2 = await this.testBackrournd2();
       const result_3 = await this.testBackrournd3();
@@ -333,6 +356,13 @@ export default {
   },
   created() {
     this.medical_back = this.store.medicalBackground;
+    if(this.store.medicalBackground.which_vaccination!=undefined){
+      this.vacins=this.store.medicalBackground.which_vaccination.split(',')
+    }
+    if(this.store.medicalBackground.vitamins!=undefined){
+      this.vitamins=this.store.medicalBackground.vitamins.split(',')
+    }
+    
   },
   validations() {
     return {
@@ -354,6 +384,9 @@ export default {
     return {
       store: useAppStore(),
       v$: useVuelidate(),
+      vacins:ref(null),
+      diags:ref(null),
+      vitamins:ref(null),
     };
   },
 };
