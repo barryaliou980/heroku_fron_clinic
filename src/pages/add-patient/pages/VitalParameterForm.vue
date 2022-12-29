@@ -44,7 +44,7 @@
                   <q-btn color="deep-orange" icon="delete" />
                 </div>
 
-                <p v-else>{{ col.value }}</p>
+                <p v-else>{{ $t(`${col.value}`) }}</p>
               </q-td>
             </q-tr>
           </template>
@@ -89,7 +89,7 @@
                   <q-btn color="deep-orange" icon="delete" />
                 </div>
 
-                <p v-else>{{ col.value }}</p>
+                <p v-else>{{ $t(`${col.value}`) }}</p>
               </q-td>
             </q-tr>
           </template>

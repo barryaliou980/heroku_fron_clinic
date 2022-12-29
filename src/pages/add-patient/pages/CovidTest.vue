@@ -51,7 +51,7 @@
 
       <q-step
         :name="2"
-        :title="$t('instruction_scnd_covid')"
+        :title="$t('malaria_scnd_instr_covid')"
         icon="create_new_folder"
         :done="step > 2"
       >
@@ -75,7 +75,7 @@
       <q-step
         :done="step > 3"
         :name="3"
-        title="Verser 3 gouttes dans la cassette"
+        :title="$t('malaria_third_instr_covid')"
         icon="add_comment"
       >
         <div class="text-center">
@@ -99,7 +99,7 @@
       <q-step
         :done="step > 4"
         :name="4"
-        title="Attendre 15 min"
+        :title="$t('malaria_fourth_instr_covid')"
         icon="add_comment"
       >
         <div class="text-center">
@@ -115,7 +115,7 @@
             flat
             @click="step = 3"
             color="primary"
-            label="Precedent"
+            :label="$t('btnBack')"
             class="q-ml-sm"
           />
         </q-stepper-navigation>
@@ -176,12 +176,10 @@ export default {
     },
   },
   created() {
-    console.log('bobo', this.store);
     this.rdtCovid = this.store.covidResult;
     if (Object.keys(this.rdtCovid).length != 0) {
       this.rdtFlag();
       this.open = false;
-      console.log('rdt covid', this.rdtCovid);
     }
   },
   setup() {

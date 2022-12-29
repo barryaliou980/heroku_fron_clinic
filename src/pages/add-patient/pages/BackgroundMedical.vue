@@ -8,7 +8,18 @@
           v-model="medical_back.con_tabacco"
           :options="options"
           :validator="v$.medical_back.con_tabacco"
-        />
+          :display-value="
+            medical_back.con_tabacco ? $t(`${medical_back.con_tabacco}`) : ''
+          "
+        >
+          <template v-slot:option="scope">
+            <q-item v-bind="scope.itemProps">
+              <q-item-section>
+                <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
+        </base-select>
       </div>
       <base-select
         class="tw-mt-2 tw-mb-1"
@@ -16,53 +27,120 @@
         v-model="medical_back.con_alcohol"
         :options="options"
         :validator="v$.medical_back.con_alcohol"
-      />
+        :display-value="
+          medical_back.con_alcohol ? $t(`${medical_back.con_alcohol}`) : ''
+        "
+      >
+        <template v-slot:option="scope">
+          <q-item v-bind="scope.itemProps">
+            <q-item-section>
+              <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </base-select>
     </div>
     <base-select
       class="tw-mt-2 tw-mb-1"
       :label="$t('which_vaccinations_do_you_have')"
-       v-model="vacins"
+      v-model="vacins"
       :options="vacinationsOptions"
-       use-chips
-       multiple
-    />
+      use-chips
+      multiple
+      :display-value="vacins ? $t(`${vacins}`) : ''"
+    >
+      <template v-slot:option="scope">
+        <q-item v-bind="scope.itemProps">
+          <q-item-section>
+            <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
+    </base-select>
     <q-separator />
     <base-select
       class="tw-mt-4 tw-mb-1"
       :label="$t('do_you_have_any_diagnosed_conditions')"
-       v-model="medical_back.do_you_have_any_diagn_cond"
+      v-model="medical_back.do_you_have_any_diagn_cond"
       :options="options"
       @update:model-value="resetDiagCon"
       :validator="v$.medical_back.do_you_have_any_diagn_cond"
-    />
+      :display-value="
+        medical_back.do_you_have_any_diagn_cond
+          ? $t(`${medical_back.do_you_have_any_diagn_cond}`)
+          : ''
+      "
+    >
+      <template v-slot:option="scope">
+        <q-item v-bind="scope.itemProps">
+          <q-item-section>
+            <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
+    </base-select>
     <div
       v-if="medical_back.do_you_have_any_diagn_cond === 'Yes'"
       class="tw-mt-2 tw-w-1/2"
     >
       <p class="text-h6 tw-ml-10">{{ $t('if_yes') }}</p>
       <base-select
-         class="tw-ml-10 tw-m-2"
-         :label="$t('what_are_they_for')"
+        class="tw-ml-10 tw-m-2"
+        :label="$t('what_are_they_for')"
         v-model="diags"
-
-         use-chips
-         multiple
+        use-chips
+        multiple
         :options="wtafOptions"
-      />
+        :display-value="diags ? $t(`${diags}`) : ''"
+      >
+        <template v-slot:option="scope">
+          <q-item v-bind="scope.itemProps">
+            <q-item-section>
+              <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </base-select>
       <base-select
         class="tw-ml-10 tw-m-2"
         :label="$t('when_where_you_diagnosed')"
         v-model="medical_back.where_diagn_cond"
         :validator="v$.medical_back.where_diagn_cond"
-         :options="whenOptions"
-      />
+        :options="whenOptions"
+        :display-value="
+          medical_back.where_diagn_cond
+            ? $t(`${medical_back.where_diagn_cond}`)
+            : ''
+        "
+      >
+        <template v-slot:option="scope">
+          <q-item v-bind="scope.itemProps">
+            <q-item-section>
+              <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </base-select>
       <base-select
         class="tw-ml-10 tw-m-2"
         :label="$t('are_you_on_treatment')"
         v-model="medical_back.are_on_treatment_diagn_cond"
         :options="options"
         :validator="v$.medical_back.are_on_treatment_diagn_cond"
-      />
+        :display-value="
+          medical_back.are_on_treatment_diagn_cond
+            ? $t(`${medical_back.are_on_treatment_diagn_cond}`)
+            : ''
+        "
+      >
+        <template v-slot:option="scope">
+          <q-item v-bind="scope.itemProps">
+            <q-item-section>
+              <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </base-select>
     </div>
     <q-separator />
     <base-select
@@ -72,20 +150,42 @@
       :options="options"
       @update:model-value="resetVitamine"
       :validator="v$.medical_back.do_you_take_any_vitamins"
-    />
+      :display-value="
+        medical_back.do_you_take_any_vitamins
+          ? $t(`${medical_back.do_you_take_any_vitamins}`)
+          : ''
+      "
+    >
+      <template v-slot:option="scope">
+        <q-item v-bind="scope.itemProps">
+          <q-item-section>
+            <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
+    </base-select>
     <div
       v-if="medical_back.do_you_take_any_vitamins === 'Yes'"
       class="tw-mt-2 tw-w-1/2"
     >
-      <p class="text-h6 tw-ml-10">{{ $t('if_yes') }}</p>
+      <!-- <p class="text-h6 tw-ml-10">{{ $t('if_yes') }}</p> -->
       <base-select
         class="tw-ml-10 tw-m-2"
         :label="$t('which_ones')"
         v-model="vitamins"
         use-chips
-         multiple
-       :options="vitaminOptions"
-      />
+        multiple
+        :options="vitaminOptions"
+        :display-value="vitamins ? $t(`${vitamins}`) : ''"
+      >
+        <template v-slot:option="scope">
+          <q-item v-bind="scope.itemProps">
+            <q-item-section>
+              <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </base-select>
     </div>
     <q-separator />
     <base-select
@@ -94,7 +194,20 @@
       v-model="medical_back.is_physical_activity"
       :options="options"
       :validator="v$.medical_back.is_physical_activity"
-    />
+      :display-value="
+        medical_back.is_physical_activity
+          ? $t(`${medical_back.is_physical_activity}`)
+          : ''
+      "
+    >
+      <template v-slot:option="scope">
+        <q-item v-bind="scope.itemProps">
+          <q-item-section>
+            <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
+    </base-select>
 
     <q-btn
       @click="submit"
@@ -165,15 +278,39 @@ export default {
   emits: [],
   data() {
     return {
-      vitaminOptions:['No vitamin history','Vitamin A','Vitamin B','VItamin C','Vitamin D','Vitamin E'],
-      whenOptions:['Moins d`un an', '1 an' ,'2 ans', '3 ans', 'Plus de 3 ans' ],
-      wtafOptions:['Hyper Tension', 'Diabete'],
-      vacinationsOptions:['Not known','Covid','Polio','Flue','Meningitis','Hepatitis A','Hepatitis B','HPV','Tetanus','Chickenpox'],
+      vitaminOptions: [
+        'No vitamin history',
+        'Vitamin A',
+        'Vitamin B',
+        'VItamin C',
+        'Vitamin D',
+        'Vitamin E',
+      ],
+      whenOptions: [
+        'Less than a year',
+        '1 year',
+        '2 years',
+        '3 years',
+        'More than 3 years',
+      ],
+      wtafOptions: ['Hypertensionn', 'Diabetes'],
+      vacinationsOptions: [
+        'Not known',
+        'Covid',
+        'Polio',
+        'Flue',
+        'Meningitis',
+        'Hepatitis A',
+        'Hepatitis B',
+        'HPV',
+        'Tetanus',
+        'Chickenpox',
+      ],
       loadingBtn: false,
       open: false,
       open1: false,
       open2: false,
-      vacinationOptions: ['Non', 'Yes'],
+      vacinationOptions: ['No', 'Yes'],
       options: ['Yes', 'No'],
       medical_back: {},
       rows: [],
@@ -268,18 +405,18 @@ export default {
       }
     },
     async submit() {
-      console.log('daig', this.diags)
-      console.log('vaccins', this.vacins)
-      if(this.vacins!=null){
-        this.medical_back.which_vaccination =this.vacins.toString()
+      console.log('daig', this.diags);
+      console.log('vaccins', this.vacins);
+      if (this.vacins != null) {
+        this.medical_back.which_vaccination = this.vacins.toString();
       }
-      if(this.diags!=null){
-        this.medical_back.for_diagn_cond = this.diags.toString()
+      if (this.diags != null) {
+        this.medical_back.for_diagn_cond = this.diags.toString();
       }
-      if(this.vitamins!=null){
-        this.medical_back.vitamins = this.vitamins.toString()
+      if (this.vitamins != null) {
+        this.medical_back.vitamins = this.vitamins.toString();
       }
-      console.log('MEDICAL', this.medical_back)
+      console.log('MEDICAL', this.medical_back);
       const result_1 = await this.testBackrournd1();
       const result_2 = await this.testBackrournd2();
       const result_3 = await this.testBackrournd3();
@@ -338,7 +475,7 @@ export default {
       return true;
     },
     end_process() {
-      this.$emit('endProcess')
+      this.$emit('endProcess');
       this.store.resetStore();
       this.$router.replace({ name: 'admin.list.patient' });
     },
@@ -356,13 +493,12 @@ export default {
   },
   created() {
     this.medical_back = this.store.medicalBackground;
-    if(this.store.medicalBackground.which_vaccination!=undefined){
-      this.vacins=this.store.medicalBackground.which_vaccination.split(',')
+    if (this.store.medicalBackground.which_vaccination != undefined) {
+      this.vacins = this.store.medicalBackground.which_vaccination.split(',');
     }
-    if(this.store.medicalBackground.vitamins!=undefined){
-      this.vitamins=this.store.medicalBackground.vitamins.split(',')
+    if (this.store.medicalBackground.vitamins != undefined) {
+      this.vitamins = this.store.medicalBackground.vitamins.split(',');
     }
-    
   },
   validations() {
     return {
@@ -384,9 +520,9 @@ export default {
     return {
       store: useAppStore(),
       v$: useVuelidate(),
-      vacins:ref(null),
-      diags:ref(null),
-      vitamins:ref(null),
+      vacins: ref(null),
+      diags: ref(null),
+      vitamins: ref(null),
     };
   },
 };
