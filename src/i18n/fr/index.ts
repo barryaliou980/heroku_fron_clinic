@@ -45,7 +45,7 @@ export default {
 
             level_of_education: 'Niveau d\'éducation',
             profession: 'Profession',
-            daily_expenditure: 'Daily expenditure',
+            daily_expenditure: 'Dépenses quotidiennes',
             matrimonial_status: 'Situation matrimoniale',
             access_to_drinking_water: 'Accès à l\'eau potable',
             access_to_toilet: 'Accès aux toilettes',
@@ -53,11 +53,11 @@ export default {
             time_to_nearest_health_facility: 'Temps jusqu\'à l\'établissement de santé le plus proche',
             last_visit_to_doctor: 'Dernière visite chez le médecin',
             hmd_visits_in_last_year: 'Combien de visites chez le médecin l\'année dernière',
-            would_you_be_willing_to_subscribe: 'Accepteriez-vous de vous inscrire au programme de Clinic-O au prix suivant ?',
+            would_you_be_willing_to_subscribe: 'Pour beneficier de nos services combien seriez vous prêt à payer entre 120 000 GNF - 300 000 GNF ?',
 
 
-            would_you_like_medical_card: 'Dans cette étude, la carte d\'identité médicale du service de test sera fournie gratuitement, souhaitez-vous recevoir une carte d\'identité médicale de C+O ?',
-            testing_services_and_medical_for_free: 'Dans cette étude, les services de test et la carte d\'identité médicale seront fournis gratuitement ?',
+            would_you_like_medical_card: 'Souhaitez-vous recevoir une carte médicale ?',
+            testing_services_and_medical_for_free: 'Où souhaitez-vous recevoir la carte médicale ?',
             // matrimonial_status: 'matrimonial_status',
             // access_to_drinking_water: 'access_to_drinking_water',
             // access_to_toilet: 'access_to_toilet',
@@ -171,11 +171,11 @@ export default {
         'Informal sector':        'Secteur informel',
         'Retired':        'À la retraite',
         'Unemployed':        'Sans emploi',
-        'Less than $2':'Moins de 2 $',
-        '$2-$4':        '$2-$4',
-        '$4-$6':        '$4-$6',
-        '$6-$10':        '$6-$10',
-        'More than $10':        'Plus de 10 $',
+        'Less than $2':'Moins de 2$',
+        '$2-$4':        '$2 - $4',
+        '$4-$6':        '$4 - $6',
+        '$6-$10':        '$6 - $10',
+        'More than $10':        'Plus de 10$',
         'Married':'Marié(e)' ,
         'Divorced':'Divorcé(e)' ,
         'Widow':'Veuve/' ,
@@ -260,6 +260,9 @@ export default {
         'do_you_need_another_test':'Voulez-faire une nouvelle consultation ?',
         'patient_has_result_to_save':'Ce patient a des resultat non Saisi',
         'are_canceled':'En continuons vous aller ecraser les anciens test',
+        'atTheHeadOfTheDistrict':'Chef quartier/Sous-prefet',
+        'atTheHeadOfTheDepartment':'Chef Secteur/Chef district'
+        
 
 
   

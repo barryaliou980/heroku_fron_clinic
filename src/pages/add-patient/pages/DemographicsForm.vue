@@ -145,7 +145,7 @@
               :validator="v$.patient.quartier"
             />
             <base-select
-              :options="secteurs"
+              :options="patient.quartier == 'Soyah' ? sectorS : sectorO"
               label="Secteur"
               v-model="patient.sector"
               :validator="v$.patient.sector"
@@ -233,11 +233,31 @@
               </template>
             </base-select>
 
-            <money-input
+            <base-select
+              :label="$t('patient.daily_expenditure')"
+              v-model="patient.daily_expenditure"
+              :options="dailyIncomeOptions"
+              :validator="v$.patient.daily_expenditure"
+              :display-value="
+                patient.daily_expenditure
+                  ? $t(`${patient.daily_expenditure}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
+
+            <!-- <money-input
               :label="$t('patient.daily_expenditure')"
               v-model="patient.daily_expenditure"
               :validator="v$.patient.daily_expenditure"
-            />
+            /> -->
             <base-select
               :label="$t('patient.matrimonial_status')"
               v-model="patient.matrimonial_status"
@@ -375,7 +395,14 @@
       >
         <div>
           <div class="tw-grid tw-grid-cols-1 tw-gap-3">
-            <base-select
+            <money-input
+              min="120000"
+              max="300000"
+              :label="$t('patient.would_you_be_willing_to_subscribe')"
+              v-model="patient.would_you_be_willing_to_subscribe"
+              :validator="v$.patient.would_you_be_willing_to_subscribe"
+            />
+            <!-- <base-select
               v-model="patient.would_you_be_willing_to_subscribe"
               :label="$t('patient.would_you_be_willing_to_subscribe')"
               :options="YesOrNoOptions"
@@ -392,7 +419,7 @@
                   </q-item-section>
                 </q-item>
               </template>
-            </base-select>
+            </base-select> -->
             <base-select
               class="tw-full"
               v-model="patient.would_you_like_medical_card"
@@ -415,7 +442,7 @@
             <base-select
               v-model="patient.testing_services_and_medical_for_free"
               :label="$t('patient.testing_services_and_medical_for_free')"
-              :options="YesOrNoOptions"
+              :options="receivedAtOptions"
               :display-value="
                 patient.testing_services_and_medical_for_free
                   ? $t(`${patient.testing_services_and_medical_for_free}`)
@@ -495,7 +522,8 @@ export default {
   emits: [],
   data() {
     return {
-      sPrefectures: ['Soyah'],
+      sPrefectures: ['Soyah', 'Oure Kaba'],
+      receivedAtOptions: ['atTheHeadOfTheDistrict', 'atTheHeadOfTheDepartment'],
       secteurs: [
         'Soyah Centre',
         'Berteyah',
@@ -504,6 +532,30 @@ export default {
         'Kenten',
         'Bhoully',
         'Fodeyah',
+      ],
+      sectorS: [
+        'Soyah Centre',
+        'Berteyah',
+        'Farenta',
+        'Nôbé',
+        'Kenten',
+        'Bhoully',
+        'Fodeyah',
+      ],
+      sectorO: [
+        'Kaba Centre',
+        'Dian-Dian',
+        'Kouloundala',
+        'Sitakötö',
+        'Banékötö',
+        'Sogoroya',
+        'Sébékötö',
+        'Portofita',
+        'Séléya',
+        'Alphaya',
+        'Bantamaya',
+        'Kolimö',
+        'Yomaya Limban',
       ],
       birthDayStatus: true,
       alert: false,

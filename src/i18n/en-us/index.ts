@@ -53,11 +53,11 @@ export default {
             time_to_nearest_health_facility: 'Time to nearest health facility',
             last_visit_to_doctor: 'Last visit to doctor',
             hmd_visits_in_last_year: 'How many doctor visits in last year',
-            would_you_be_willing_to_subscribe: 'Would you be willing to subscribe to Clinic-O\'s program at the following price ?',
+            would_you_be_willing_to_subscribe: 'To benefit from our services how much would you be willing to pay between 120 000 GNF - 300 000 GNF ?',
 
 
-            would_you_like_medical_card: 'In this study, testing service medical ID card will be provided for free, would you like to received a medical ID card from C+O?',
-            testing_services_and_medical_for_free: 'In this study, testing services and medical ID card will be provided for free?',
+            would_you_like_medical_card: 'Would you like to receive an ID card ?',
+            testing_services_and_medical_for_free: 'Where would you want to receive the ID card ?',
             // matrimonial_status: 'matrimonial_status',
             // access_to_drinking_water: 'access_to_drinking_water',
             // access_to_toilet: 'access_to_toilet',
@@ -261,5 +261,8 @@ export default {
         'do_you_need_another_test':'Voulez-faire une nouvelle consultation ?',
         'patient_has_result_to_save':'Ce patient a des resultat non Saisi',
         'are_canceled':'En continuons vous aller ecraser les anciens test',
+
+        'atTheHeadOfTheDistrict':'At The Head Of The District',
+        'atTheHeadOfTheDepartment':'at The Head Of The Department'
 
 }

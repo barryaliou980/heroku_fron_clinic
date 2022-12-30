@@ -55,26 +55,26 @@
         class="tw-divide-y tw-divide-gray-200"
       >
         <tr class="tw-divide-x tw-divide-gray-200">
-          <td class="text-h6">Arm Left</td>
+          <td class="text-h6">{{ $t('arm_right') }}</td>
+          <td class="tw-text-center text-bold">
+            {{ bloodPreResult.bp_sys_right }}
+          </td>
           <td class="tw-text-center text-bold">
             <div>
               {{ bloodPreResult.bp_dias_right }}
             </div>
           </td>
-          <td class="tw-text-center text-bold">
-            <div>
-              {{ bloodPreResult.bp_sys_right }}
-            </div>
-          </td>
         </tr>
         <tr class="tw-divide-x tw-divide-gray-200">
-          <td class="text-h6">Arm Right</td>
-          <td class="tw-text-center text-bold">
-            {{ bloodPreResult.bp_dias_left }}
-          </td>
+          <td class="text-h6">{{ $t('arm_left') }}</td>
           <td class="tw-text-center text-bold">
             <div>
               {{ bloodPreResult.bp_sys_left }}
+            </div>
+          </td>
+          <td class="tw-text-center text-bold">
+            <div>
+              {{ bloodPreResult.bp_dias_left }}
             </div>
           </td>
         </tr>
@@ -82,7 +82,7 @@
     </table>
     <q-separator class="tw-mt-2" />
     <div class="tw-flex tw-justify-left tw-mt-16">
-      <q-btn @click="next" label="Next" color="blue" />
+      <q-btn @click="next" :label="$t('btnContinue')" color="blue" />
     </div>
   </div>
   <base-dialog

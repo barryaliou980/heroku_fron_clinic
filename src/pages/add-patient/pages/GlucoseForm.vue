@@ -58,11 +58,16 @@
         type="number"
         :validator="v$.glucose"
       />
-      <q-btn class="tw-mt-3" @click="submit" color="blue" label="Submit" />
+      <q-btn
+        class="tw-mt-3"
+        @click="submit"
+        color="blue"
+        :label="$t('btnSubmit')"
+      />
     </base-dialog>
   </div>
 
-  <q-btn @click="next" color="blue" label="Next" />
+  <q-btn @click="next" color="blue" :label="$t('btnContinue')" />
 </template>
 
 <script lag="ts">
