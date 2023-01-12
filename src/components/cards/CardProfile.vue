@@ -62,7 +62,7 @@
       </q-btn>
 
       <q-btn
-        v-if="malariaResult.id!=undefined||JSON.stringify(malariaResult) === '{}' || malariaResult.rdt_result!=null"
+        v-if="malariaResult.id != undefined && malariaResult.rdt_result != null"
         class="tw-w-2/3 tw-mb-0.5"
         :color="
           malariaResult.rdt_result
@@ -94,7 +94,7 @@
       </q-btn>
 
       <q-btn
-        v-if="covidResult.id!= undefined || JSON.stringify(covidResult) === '{}' || covidResult.rdt_result!=null"
+        v-if="covidResult.id != undefined && covidResult.rdt_result !=null"
         class="tw-w-2/3 tw-mb-0.5"
         :color="
           covidResult.rdt_result
@@ -430,6 +430,7 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
+   <loader-dialog v-model="loading" persistent />
 </template>
 
 <script >
@@ -447,6 +448,7 @@ export default {
   props: ['row'],
   data() {
     return {
+      loading:false,
       openConfirm:false,
       resultModatTitle: '',
       openResult:false,
