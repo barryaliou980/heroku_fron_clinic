@@ -301,7 +301,6 @@
     :title="`Historique ${vitalTitle}`"
     @close="openVital = false"
     :loading="formLoading"
-    size="sm"
     persistent
     class="tw-text-left"
   >
