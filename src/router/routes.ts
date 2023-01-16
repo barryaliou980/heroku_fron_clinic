@@ -46,6 +46,11 @@ const routes: RouteRecordRaw[] = [
         name: 'admin.statistics',
         component: () => import('pages/statistics/StatisticIndex.vue'),
       },
+      {
+        path: 'card',
+        name: 'admin.card',
+        component: () => import('../pages/add-patient/pages/QrCard.vue'),
+      },
     ],
   },
 

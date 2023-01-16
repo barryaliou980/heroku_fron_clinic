@@ -3,6 +3,10 @@ export default {
     btnContinue:'Suivant',
     btnBack:'Precedent',
     btnSubmit:'Validez',
+    printing:'Cartes des patients',
+    printing_with_filter:'Impression avec un filtre',
+    filtered:'Recherchez',
+    printed:'Imprimer',
     layout: {
     appName: "healtFiCo",
     logout:'Se déconnecter',
@@ -20,6 +24,7 @@ export default {
     statistics:'Statistiques',
     statis_patient:'Patients',
     rdt:'RDT TEST',
+    print:'Imprimer'
   },
   patient:{
             patientInformationTab:'Informations sur les patients',

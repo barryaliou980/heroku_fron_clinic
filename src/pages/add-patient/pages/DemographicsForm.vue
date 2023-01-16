@@ -524,15 +524,6 @@ export default {
     return {
       sPrefectures: ['Soyah', 'Oure Kaba'],
       receivedAtOptions: ['atTheHeadOfTheDistrict', 'atTheHeadOfTheDepartment'],
-      secteurs: [
-        'Soyah Centre',
-        'Berteyah',
-        'Farenta',
-        'Nôbé',
-        'Kenten',
-        'Bhoully',
-        'Fodeyah',
-      ],
       sectorS: [
         'Soyah Centre',
         'Berteyah',
