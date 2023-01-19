@@ -26,6 +26,9 @@ export default {
     rdt:'RDT TEST',
     print:'Imprimer'
   },
+  patient_uid:"Identifiant",
+  phone_number: 'Numéro de téléphone',
+  name: 'Nom complet',
   patient:{
             patientInformationTab:'Informations sur les patients',
             tabSubName: 'Informations demographiques',
@@ -92,6 +95,7 @@ export default {
   date_of_checking:'Date',
   fever:'Fièvre',
   chills:'Des frissons',
+  sore_throa:'Mal de gorge',
   nausea_and_vomiting:'Nausée et vomissements',
   headaches:'Maux de tête',
   muscle_or_join_pain:'Douleur musculaire/articulaire',

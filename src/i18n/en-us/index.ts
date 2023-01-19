@@ -26,6 +26,9 @@ export default {
     rdt:'RDT TEST',
     print:'Print'
   },
+  patient_uid:"ID",
+  phone_number: 'Phone number',
+  name: 'Name',
   patient:{
             patientInformationTab:'Patient Information',
             tabSubName: 'Patient Demographic',
@@ -92,6 +95,7 @@ export default {
   date_of_checking:'Date of checking',
   fever:'Fever',
   chills:'Chills',
+  sore_throa:'Sore Throat',
   nausea_and_vomiting:'Nausea And Vomiting',
   headaches:'Headaches',
   muscle_or_join_pain:'Muscle or Join Pain',
@@ -268,6 +272,7 @@ export default {
         'are_canceled':'En continuons vous aller ecraser les anciens test',
 
         'atTheHeadOfTheDistrict':'At The Head Of The District',
-        'atTheHeadOfTheDepartment':'at The Head Of The Department'
+        'atTheHeadOfTheDepartment':'at The Head Of The Department',
+        'Patient : ' : 'Total Patients' 
 
 }
