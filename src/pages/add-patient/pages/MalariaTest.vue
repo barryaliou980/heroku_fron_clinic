@@ -175,10 +175,7 @@ export default {
       }
     },
     instruction() {
-      console.log(
-        'Age',
-        moment().diff(this.store.currentPatient.date_of_birth, 'years')
-      );
+
       if (
         moment().diff(this.store.currentPatient.date_of_birth, 'years') < 5 ||
         this.store.currentPatient?.pregnant == 'Yes'

@@ -15,7 +15,7 @@ declare module '@vue/runtime-core' {
 // for each client)
 
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: 'https://backend.laclinico.com/api',
 });
 
 const backendImagePath = 'https://backend.laclinico.com/files/';

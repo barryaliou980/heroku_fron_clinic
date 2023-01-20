@@ -6,6 +6,7 @@
         :title="$t('patient.demographicsDetails')"
         icon="settings"
         :done="step > 1"
+        :contracted="false"
       >
         <div>
           <h1>Information</h1>
