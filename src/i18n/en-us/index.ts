@@ -29,6 +29,20 @@ export default {
   patient_uid:"ID",
   phone_number: 'Phone number',
   name: 'Name',
+  Patients: "Patients",
+  Pregnant: "Pregnant",
+  Children: "Children",
+  "Vital Parameters": "Vital Parameters",
+  Glucose: "Glucose",
+  "Blood Pressure" : "Blood Pressure ",
+  Malnutrition: "Malnutrition",
+  Covid: "Covid",
+  Positif: "Positif",
+  Negatif: "Negatif",
+  Indeterminate: "Indeterminate",
+  Invalid: "Invalid",
+  "Did not": "Did not",
+  Malaria:"Malaria",
   patient:{
             patientInformationTab:'Patient Information',
             tabSubName: 'Patient Demographic',
@@ -273,6 +287,5 @@ export default {
 
         'atTheHeadOfTheDistrict':'At The Head Of The District',
         'atTheHeadOfTheDepartment':'at The Head Of The Department',
-        'Patient : ' : 'Total Patients' 
 
 }

@@ -14,7 +14,11 @@
             <template v-slot:default-header="prop">
               <div class="row items-center">
                 <div class="text-weight-bold text-primary">
-                  {{ $t(prop.node.label) }}
+                  {{
+                    $t(prop.node.label.split(':')[0]) +
+                    ' : ' +
+                    prop.node.label.split(':')[1]
+                  }}
                 </div>
               </div>
             </template>
@@ -30,8 +34,18 @@
           >
             <template v-slot:default-header="prop">
               <div class="row items-center">
-                <div class="text-weight-bold text-primary">
-                  {{ prop.node.label }}
+                <div
+                  v-if="prop.node.label.split(':').length == 2"
+                  class="text-weight-bold text-primary"
+                >
+                  {{
+                    $t(prop.node.label.split(':')[0]) +
+                    ' : ' +
+                    prop.node.label.split(':')[1]
+                  }}
+                </div>
+                <div v-else class="text-weight-bold text-primary">
+                  {{ $t(prop.node.label.split(':')[0]) }}
                 </div>
               </div>
             </template>
@@ -48,7 +62,11 @@
             <template v-slot:default-header="prop">
               <div class="row items-center">
                 <div class="text-weight-bold text-primary">
-                  {{ prop.node.label }}
+                  {{
+                    $t(prop.node.label.split(':')[0]) +
+                    ' : ' +
+                    prop.node.label.split(':')[1]
+                  }}
                 </div>
               </div>
             </template>
@@ -59,7 +77,11 @@
             <template v-slot:default-header="prop">
               <div class="row items-center">
                 <div class="text-weight-bold text-primary">
-                  {{ prop.node.label }}
+                  {{
+                    $t(prop.node.label.split(':')[0]) +
+                    ' : ' +
+                    prop.node.label.split(':')[1]
+                  }}
                 </div>
               </div>
             </template>
@@ -109,7 +131,7 @@
                       v-else-if="col.name === 'temperature'"
                     >
                       <span>{{
-                        props.row.symptom.temperature.temperature
+                        $t(props.row.symptom.temperature.temperature)
                       }}</span>
                     </div>
                     <div
@@ -121,7 +143,7 @@
                       v-else-if="col.name === 'oxygen'"
                     >
                       <span>{{
-                        props.row.symptom.oxygen.oxygen_saturation
+                        $t(props.row.symptom.oxygen.oxygen_saturation)
                       }}</span>
                     </div>
 
@@ -129,20 +151,20 @@
                       :class="flagColor(props.row.symptom.chills)"
                       v-else-if="col.name === 'chills'"
                     >
-                      <span>{{ props.row.symptom.chills }}</span>
+                      <span>{{ $t(props.row.symptom.chills) }}</span>
                     </div>
                     <div
                       :class="flagColorSymptome(props.row.symptom.cough)"
                       v-else-if="col.name === 'cough'"
                     >
-                      <span>{{ props.row.symptom.cough }}</span>
+                      <span>{{ $t(props.row.symptom.cough) }}</span>
                     </div>
 
                     <div
                       :class="flagColorSymptome(props.row.symptom.diarrhoea)"
                       v-else-if="col.name === 'diarrhoea'"
                     >
-                      <span>{{ props.row.symptom.diarrhoea }}</span>
+                      <span>{{ $t(props.row.symptom.diarrhoea) }}</span>
                     </div>
 
                     <div
@@ -153,19 +175,21 @@
                       "
                       v-else-if="col.name === 'difficulty_breathing'"
                     >
-                      <span>{{ props.row.symptom.difficulty_breathing }}</span>
+                      <span>{{
+                        $t(props.row.symptom.difficulty_breathing)
+                      }}</span>
                     </div>
                     <div
                       :class="flagColorSymptome(props.row.symptom.fatigue)"
                       v-else-if="col.name === 'fatigue'"
                     >
-                      <span>{{ props.row.symptom.fatigue }}</span>
+                      <span>{{ $t(props.row.symptom.fatigue) }}</span>
                     </div>
                     <div
                       :class="flagColorSymptome(props.row.symptom.headaches)"
                       v-else-if="col.name === 'headaches'"
                     >
-                      <span>{{ props.row.symptom.headaches }}</span>
+                      <span>{{ $t(props.row.symptom.headaches) }}</span>
                     </div>
                     <div
                       :class="
@@ -176,7 +200,7 @@
                       v-else-if="col.name === 'loss_of_sense_of_smell'"
                     >
                       <span>{{
-                        props.row.symptom.loss_of_sense_of_smell
+                        $t(props.row.symptom.loss_of_sense_of_smell)
                       }}</span>
                     </div>
                     <div
@@ -185,7 +209,9 @@
                       "
                       v-else-if="col.name === 'muscle_or_join_pain'"
                     >
-                      <span>{{ props.row.symptom.muscle_or_join_pain }}</span>
+                      <span>{{
+                        $t(props.row.symptom.muscle_or_join_pain)
+                      }}</span>
                     </div>
                     <div
                       :class="
@@ -193,13 +219,15 @@
                       "
                       v-else-if="col.name === 'nausea_and_vomiting'"
                     >
-                      <span>{{ props.row.symptom.nausea_and_vomiting }}</span>
+                      <span>{{
+                        $t(props.row.symptom.nausea_and_vomiting)
+                      }}</span>
                     </div>
                     <div
                       :class="flagColorSymptome(props.row.symptom.sore_throa)"
                       v-else-if="col.name === 'sore_throa'"
                     >
-                      <span>{{ props.row.symptom.sore_throa }}</span>
+                      <span>{{ $t(props.row.symptom.sore_throa) }}</span>
                     </div>
 
                     <p v-else>{{ props.row.patient_id }}</p>
@@ -225,13 +253,13 @@ export default {
     return {
       persons: [
         {
-          label: 'Patients : 0',
+          label: 'Patients:0',
           children: [
             {
-              label: 'Male : 0',
+              label: 'Males : 0',
             },
             {
-              label: 'Female : 0',
+              label: 'Females : 0',
               children: [
                 {
                   label: 'Pregnant : 0',
@@ -242,10 +270,10 @@ export default {
               label: 'Children : 0',
               children: [
                 {
-                  label: 'Male : 0',
+                  label: 'Males : 0',
                 },
                 {
-                  label: 'Female : 0',
+                  label: 'Females : 0',
                 },
               ],
             },
@@ -425,51 +453,51 @@ export default {
   },
   methods: {
     statPersons(dataStatistics) {
-      this.persons[0].label = 'Patient : ' + dataStatistics.totalPatient;
-      this.persons[0].children[0].label = 'Male : ' + dataStatistics.mens;
-      this.persons[0].children[1].label = 'Female : ' + dataStatistics.women;
+      this.persons[0].label = 'Patient: ' + dataStatistics.totalPatient;
+      this.persons[0].children[0].label = 'Males: ' + dataStatistics.mens;
+      this.persons[0].children[1].label = 'Females: ' + dataStatistics.women;
       this.persons[0].children[1].children[0].label =
-        'Pregnant : ' + dataStatistics.pregnant;
+        'Pregnant: ' + dataStatistics.pregnant;
 
       this.persons[0].children[2].label =
-        'Children : ' + dataStatistics.total_child;
+        'Children: ' + dataStatistics.total_child;
       this.persons[0].children[2].children[0].label =
-        'Male : ' + dataStatistics.total_child_boys;
+        'Males: ' + dataStatistics.total_child_boys;
       this.persons[0].children[2].children[1].label =
-        'Female : ' + dataStatistics.total_child_girls;
+        'Females: ' + dataStatistics.total_child_girls;
     },
     statVitals(dataStatistics) {
-      this.vitals[0].children[0].label = 'Glucose : ' + dataStatistics.glucose;
+      this.vitals[0].children[0].label = 'Glucose: ' + dataStatistics.glucose;
       this.vitals[0].children[1].label =
-        'Blood Pressure : ' + dataStatistics.bloodPressure;
+        'Blood Pressure: ' + dataStatistics.bloodPressure;
       this.vitals[0].children[2].label =
-        'Malnutrition : ' + dataStatistics.malnutrition;
+        'Malnutrition: ' + dataStatistics.malnutrition;
     },
     statCovid(dataStatistics) {
-      this.covid[0].label = 'Covid : ' + dataStatistics.total_covid;
+      this.covid[0].label = 'Covid: ' + dataStatistics.total_covid;
       this.covid[0].children[0].label =
-        'Positif : ' + dataStatistics.covid.positif;
+        'Positif: ' + dataStatistics.covid.positif;
       this.covid[0].children[1].label =
-        'Negatif : ' + dataStatistics.covid.negatif;
+        'Negatif: ' + dataStatistics.covid.negatif;
       this.covid[0].children[2].label =
-        'Indeterminate : ' + dataStatistics.covid.indeterminate;
+        'Indeterminate: ' + dataStatistics.covid.indeterminate;
       this.covid[0].children[3].label =
-        'Invalid : ' + dataStatistics.covid.invalid;
+        'Invalid: ' + dataStatistics.covid.invalid;
       this.covid[0].children[4].label =
-        'Did not : ' + dataStatistics.covid.didnot;
+        'Did not: ' + dataStatistics.covid.didnot;
     },
     statMararia(dataStatistics) {
-      this.malaria[0].label = 'Covid : ' + dataStatistics.total_malaria;
+      this.malaria[0].label = 'Malaria: ' + dataStatistics.total_malaria;
       this.malaria[0].children[0].label =
-        'Positif : ' + dataStatistics.malaria.positif;
+        'Positif: ' + dataStatistics.malaria.positif;
       this.malaria[0].children[1].label =
-        'Negatif : ' + dataStatistics.malaria.negatif;
+        'Negatif: ' + dataStatistics.malaria.negatif;
       this.malaria[0].children[2].label =
-        'Indeterminate : ' + dataStatistics.malaria.indeterminate;
+        'Indeterminate: ' + dataStatistics.malaria.indeterminate;
       this.malaria[0].children[3].label =
-        'Invalid : ' + dataStatistics.malaria.invalid;
+        'Invalid: ' + dataStatistics.malaria.invalid;
       this.malaria[0].children[4].label =
-        'Did not : ' + dataStatistics.malaria.didnot;
+        'Did not: ' + dataStatistics.malaria.didnot;
     },
     flagColor(flag) {
       if (Number(flag) === 0) {
@@ -499,6 +527,8 @@ export default {
   async mounted() {
     const response = await api.get('/stats');
     const dataStatistics = response.data.data;
+
+    console.log('bobo', dataStatistics);
 
     this.patientCovid = dataStatistics.patientCovid;
     console.log(dataStatistics.patientCovid[0]);
