@@ -1,9 +1,25 @@
 
 <template>
   <q-card>
-    <q-card-section>
-      <div class="text-h6 text-grey-8">Patients List</div>
-    </q-card-section>
+    <div class="row">
+      <q-card-section class="col-10">
+        <div class="text-h6 text-grey-8">{{ $t('sidebar.patient_list') }}</div>
+      </q-card-section>
+
+      <q-card-section class="col-2">
+        <div class="text-h6 text-grey-8">
+          <q-btn
+            text-color="black"
+            glossy
+            unelevated
+            icon="print"
+            :label="$t('sidebar.print')"
+            to="/card"
+          />
+        </div>
+      </q-card-section>
+    </div>
+
     <q-separator />
     <q-card-section class="q-pa-none tw-px-4 tw-py-4">
       <q-table grid :rows="data" :filter="filter">

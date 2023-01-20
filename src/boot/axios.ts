@@ -20,6 +20,7 @@ const api = axios.create({
 
 const backendImagePath = 'https://backend.laclinico.com/files/';
 const backendRDTPath = 'https://backend.laclinico.com/rdt/';
+const backendqrCodePath = 'https://backend.laclinico.com/qrCode/';
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -33,4 +34,4 @@ export default boot(({ app }) => {
   //       so you can easily perform requests against your app's API
 });
 
-export { api, backendImagePath, backendRDTPath };
+export { api, backendImagePath, backendRDTPath, backendqrCodePath };

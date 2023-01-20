@@ -17,26 +17,58 @@
               :validator="v$.patient.name"
             />
             <base-select
+              filled
               :label="$t('patient.gender')"
               v-model="patient.gender"
               :options="GenderOptions"
               @update:model-value="updateIsWoman"
               :validator="v$.patient.gender"
-            />
+              :display-value="patient.gender ? $t(`${patient.gender}`) : ''"
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
             <base-select
               :label="$t('patient.pregnant')"
               v-model="patient.pregnant"
               :options="YesOrNoOptions"
               :disable="!isWoman"
               :validator="v$.patient.pregnant"
-            />
+              :display-value="patient.pregnant ? $t(`${patient.pregnant}`) : ''"
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
             <base-select
               :label="$t('patient.do_you_know_date_of_birth')"
               v-model="patient.do_you_know_date_of_birth"
               :options="Qoptions"
               :validator="v$.patient.do_you_know_date_of_birth"
               @update:model-value="updatBirthdayKnow"
-            />
+              :display-value="
+                patient.do_you_know_date_of_birth
+                  ? $t(`${patient.do_you_know_date_of_birth}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
             <div>
               <base-input
                 v-if="birthDayStatus === true"
@@ -68,13 +100,6 @@
                 v-model="patient.date_of_birth"
                 @blur="getAge"
               />
-
-              <!-- <base-input
-              v-if="patient.do_you_know_date_of_birth===true"
-              :validator="v$.patient.date_of_birth"
-              type="date"
-              v-model="patient.date_of_birth"
-            /> -->
             </div>
 
             <q-uploader
@@ -92,22 +117,11 @@
                   :label="$t('patient.pickFiles')"
                   icon="camera_enhance"
                 >
-                  <q-tooltip>Pick Files</q-tooltip>
+                  <q-tooltip>{{ $t(`${imageUploadedUrl}`) }}</q-tooltip>
                   <q-uploader-add-trigger></q-uploader-add-trigger>
                 </q-btn>
               </template>
-              <!-- <template v-slot:header="scope">
-                <q-btn
-                  v-if="scope.canAddFiles"
-                  type="a"
-                  icon-right="camera"
-                  label="Click here to take picture"
-                  dense
-                  flat
-                >
-                  <q-uploader-add-trigger></q-uploader-add-trigger>
-                </q-btn>
-              </template> -->
+
               <template v-slot:list="scope">
                 <q-img
                   :src="imageUploadedUrl"
@@ -132,7 +146,7 @@
               :validator="v$.patient.quartier"
             />
             <base-select
-              :options="secteurs"
+              :options="patient.quartier == 'Soyah' ? sectorS : sectorO"
               label="Secteur"
               v-model="patient.sector"
               :validator="v$.patient.sector"
@@ -152,7 +166,18 @@
               :options="typePhoneOptions"
               :disable="!havePhone"
               :validator="v$.patient.phone_type"
-            />
+              :display-value="
+                patient.phone_type ? $t(`${patient.phone_type}`) : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
             <phone-input
               :label="$t('patient.phone_number')"
               v-model="patient.phone_number"
@@ -176,26 +201,83 @@
               v-model="patient.level_of_education"
               :options="educationLevels"
               :validator="v$.patient.level_of_education"
-            />
+              :display-value="
+                patient.level_of_education
+                  ? $t(`${patient.level_of_education}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
 
             <base-select
               :label="$t('patient.profession')"
               v-model="patient.profession"
               :options="professionOptions"
               :validator="v$.patient.profession"
-            />
+              :display-value="
+                patient.profession ? $t(`${patient.profession}`) : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
 
-            <money-input
+            <base-select
+              :label="$t('patient.daily_expenditure')"
+              v-model="patient.daily_expenditure"
+              :options="dailyIncomeOptions"
+              :validator="v$.patient.daily_expenditure"
+              :display-value="
+                patient.daily_expenditure
+                  ? $t(`${patient.daily_expenditure}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
+
+            <!-- <money-input
               :label="$t('patient.daily_expenditure')"
               v-model="patient.daily_expenditure"
               :validator="v$.patient.daily_expenditure"
-            />
+            /> -->
             <base-select
               :label="$t('patient.matrimonial_status')"
               v-model="patient.matrimonial_status"
               :options="matrimonialStatusOptions"
               :validator="v$.patient.matrimonial_status"
-            />
+              :display-value="
+                patient.matrimonial_status
+                  ? $t(`${patient.matrimonial_status}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
             <div />
             <div />
             <base-select
@@ -204,35 +286,100 @@
               v-model="patient.access_to_drinking_water"
               :label="$t('patient.access_to_drinking_water')"
               :options="cleanWaterOptions"
-            />
+              :display-value="
+                patient.access_to_drinking_water
+                  ? $t(`${patient.access_to_drinking_water}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
             <base-select
               :validator="v$.patient.access_to_toilet"
               @update:model-value="updateHavePhone"
               v-model="patient.access_to_toilet"
               :label="$t('patient.access_to_toilet')"
               :options="sanitationOptions"
-            />
+              :display-value="
+                patient.access_to_toilet
+                  ? $t(`${patient.access_to_toilet}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
             <base-select
               :validator="v$.patient.rubbish_collection_services"
               @update:model-value="updateHavePhone"
               v-model="patient.rubbish_collection_services"
               :label="$t('patient.rubbish_collection_services')"
               :options="YesOrNoOptions"
-            />
+              :display-value="
+                patient.rubbish_collection_services
+                  ? $t(`${patient.rubbish_collection_services}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
 
             <base-select
               :validator="v$.patient.time_to_nearest_health_facility"
               v-model="patient.time_to_nearest_health_facility"
               :label="$t('patient.time_to_nearest_health_facility')"
               :options="distanceToHealthFacility"
-            />
+              :display-value="
+                patient.time_to_nearest_health_facility
+                  ? $t(`${patient.time_to_nearest_health_facility}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
 
             <base-select
               :validator="v$.patient.last_visit_to_doctor"
               v-model="patient.last_visit_to_doctor"
               :label="$t('patient.last_visit_to_doctor')"
               :options="lastDrVisit"
-            />
+              :display-value="
+                patient.last_visit_to_doctor
+                  ? $t(`${patient.last_visit_to_doctor}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
             <base-input
               :validator="v$.patient.hmd_visits_in_last_year"
               :label="$t('patient.hmd_visits_in_last_year')"
@@ -249,22 +396,68 @@
       >
         <div>
           <div class="tw-grid tw-grid-cols-1 tw-gap-3">
-            <base-select
+            <money-input
+              min="120000"
+              max="300000"
+              :label="$t('patient.would_you_be_willing_to_subscribe')"
+              v-model="patient.would_you_be_willing_to_subscribe"
+              :validator="v$.patient.would_you_be_willing_to_subscribe"
+            />
+            <!-- <base-select
               v-model="patient.would_you_be_willing_to_subscribe"
               :label="$t('patient.would_you_be_willing_to_subscribe')"
               :options="YesOrNoOptions"
-            />
+              :display-value="
+                patient.would_you_be_willing_to_subscribe
+                  ? $t(`${patient.would_you_be_willing_to_subscribe}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select> -->
             <base-select
               class="tw-full"
               v-model="patient.would_you_like_medical_card"
               :label="$t('patient.would_you_like_medical_card')"
               :options="YesOrNoOptions"
-            />
+              :display-value="
+                patient.would_you_like_medical_card
+                  ? $t(`${patient.would_you_like_medical_card}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
             <base-select
               v-model="patient.testing_services_and_medical_for_free"
               :label="$t('patient.testing_services_and_medical_for_free')"
-              :options="YesOrNoOptions"
-            />
+              :options="receivedAtOptions"
+              :display-value="
+                patient.testing_services_and_medical_for_free
+                  ? $t(`${patient.testing_services_and_medical_for_free}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
           </div>
         </div>
       </q-step>
@@ -330,8 +523,9 @@ export default {
   emits: [],
   data() {
     return {
-      sPrefectures: ['Soyah'],
-      secteurs: [
+      sPrefectures: ['Soyah', 'Oure Kaba'],
+      receivedAtOptions: ['atTheHeadOfTheDistrict', 'atTheHeadOfTheDepartment'],
+      sectorS: [
         'Soyah Centre',
         'Berteyah',
         'Farenta',
@@ -339,6 +533,21 @@ export default {
         'Kenten',
         'Bhoully',
         'Fodeyah',
+      ],
+      sectorO: [
+        'Kaba Centre',
+        'Dian-Dian',
+        'Kouloundala',
+        'Sitakötö',
+        'Banékötö',
+        'Sogoroya',
+        'Sébékötö',
+        'Portofita',
+        'Séléya',
+        'Alphaya',
+        'Bantamaya',
+        'Kolimö',
+        'Yomaya Limban',
       ],
       birthDayStatus: true,
       alert: false,
@@ -498,9 +707,6 @@ export default {
         if (step < 3) {
           ref.stepper.next();
         } else {
-          // console.log(files);
-          // this.uploadFile();
-
           const date1 = new Date();
           this.patient.date_of_registration = moment(date1).format(
             'YYYY-MM-DD HH:mm:ss'
@@ -508,10 +714,7 @@ export default {
           this.patient.date_of_birth = moment(
             this.patient.date_of_birth
           ).format('YYYY-MM-DD HH:mm:ss');
-          // (this.patient.hmd_visits_in_last_year = '12'),
-          // (this.patient.do_you_know_date_of_birth = 'Yes');
-          // this.patient.photo = 'image ';
-          // console.log(this.patient.photo);
+
           if (this.store.currentPatient.id === undefined) {
             this.$emit('isLoading', true);
             const { data } = await api.post('/patients', this.patient);
@@ -592,6 +795,7 @@ export default {
     if (this.store.currentPatient.id) {
       this.patient = this.store.currentPatient;
       this.imageUploadedUrl = this.patient.photo;
+      console.log('bobo', this.imageUploadedUrl);
     }
   },
   setup() {

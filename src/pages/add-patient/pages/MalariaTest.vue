@@ -75,7 +75,7 @@
       <q-step
         :done="step > 3"
         :name="3"
-        :title="$t('malaria_start_instr')"
+        :title="$t('malaria_third_instr')"
         icon="add_comment"
       >
         <div>
@@ -86,7 +86,7 @@
         </div>
 
         <q-stepper-navigation>
-          <q-btn color="primary" label="Suivant" @click="step = 4" />
+          <q-btn color="primary" :label="$t('btnContinue')" @click="step = 4" />
           <q-btn
             flat
             @click="step = 2"
@@ -100,7 +100,7 @@
       <q-step
         :done="step > 4"
         :name="4"
-        title="Mettre le sang dans la cassette"
+        :title="$t('malaria_fourth_instr')"
         icon="add_comment"
       >
         <div>
@@ -111,21 +111,17 @@
         </div>
 
         <q-stepper-navigation>
-          <q-btn color="primary" label="Suivant" @click="step = 5" />
+          <q-btn color="primary" :label="$t('btnContinue')" @click="step = 5" />
           <q-btn
             flat
             @click="step = 3"
             color="primary"
-            label="precedent"
+            :label="$t('btnBack')"
             class="q-ml-sm"
           />
         </q-stepper-navigation>
       </q-step>
-      <q-step
-        :name="5"
-        title="Mettre le tampon et Attendre le Minuteur "
-        icon="add_comment"
-      >
+      <q-step :name="5" :title="$t('malaria_fifth_instr')" icon="add_comment">
         <div>
           <q-img
             src="../../../assets/5-malaria.png"
@@ -138,12 +134,12 @@
         </div>
 
         <q-stepper-navigation>
-          <q-btn color="primary" label="ok" @click="open = false" />
+          <q-btn color="primary" :label="$t('OK')" @click="open = false" />
           <q-btn
             flat
             @click="step = 4"
             color="primary"
-            label="precedent"
+            :label="$t('btnBack')"
             class="q-ml-sm"
           />
         </q-stepper-navigation>

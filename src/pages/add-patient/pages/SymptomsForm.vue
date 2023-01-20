@@ -16,13 +16,13 @@
         >
           {{ $t('fever') }}
           <q-badge class="tw-text-rigth text-h6" :color="flagColorT">
-            {{ store.temperature.temperature }}
+            {{ $t(`${store.temperature.temperature}`) }}
           </q-badge>
         </div>
         <div class="tw-text-right text-h5 tw-p-2">
           {{ $t('oxygen_saturation') }}
           <q-badge class="text-h6" :color="flagColorO">
-            {{ store.oxygen?.oxygen_saturation }}
+            {{ $t(`${store.oxygen?.oxygen_saturation}`) }}
           </q-badge>
         </div>
         <table class="tw-w-1/2 tw-divide-y tw-mx-4 tw-py-4 tw-divide-gray-300">
@@ -60,8 +60,8 @@
                     glossy
                     :toggle-color="symptoms.chills === 'Yes' ? 'blue' : 'red'"
                     :options="[
-                      { label: 'Yes', value: 'Yes' },
-                      { label: 'No', value: 'No' },
+                      { label: $t('Yes'), value: 'Yes' },
+                      { label: $t('No'), value: 'No' },
                     ]"
                   />
                 </div>
@@ -77,8 +77,8 @@
                     symptoms.nausea_and_vomiting === 'Yes' ? 'blue' : 'red'
                   "
                   :options="[
-                    { label: 'Yes', value: 'Yes' },
-                    { label: 'No', value: 'No' },
+                    { label: $t('Yes'), value: 'Yes' },
+                    { label: $t('No'), value: 'No' },
                   ]"
                 />
               </td>
@@ -91,8 +91,8 @@
                   glossy
                   :toggle-color="symptoms.headaches === 'Yes' ? 'blue' : 'red'"
                   :options="[
-                    { label: 'Yes', value: 'Yes' },
-                    { label: 'No', value: 'No' },
+                    { label: $t('Yes'), value: 'Yes' },
+                    { label: $t('No'), value: 'No' },
                   ]"
                 />
               </td>
@@ -107,8 +107,8 @@
                     symptoms.muscle_or_join_pain === 'Yes' ? 'blue' : 'red'
                   "
                   :options="[
-                    { label: 'Yes', value: 'Yes' },
-                    { label: 'No', value: 'No' },
+                    { label: $t('Yes'), value: 'Yes' },
+                    { label: $t('No'), value: 'No' },
                   ]"
                 />
               </td>
@@ -121,8 +121,8 @@
                   glossy
                   :toggle-color="symptoms.sore_throa === 'Yes' ? 'blue' : 'red'"
                   :options="[
-                    { label: 'Yes', value: 'Yes' },
-                    { label: 'No', value: 'No' },
+                    { label: $t('Yes'), value: 'Yes' },
+                    { label: $t('No'), value: 'No' },
                   ]"
                 />
               </td>
@@ -135,8 +135,8 @@
                   glossy
                   :toggle-color="symptoms.cough === 'Yes' ? 'blue' : 'red'"
                   :options="[
-                    { label: 'Yes', value: 'Yes' },
-                    { label: 'No', value: 'No' },
+                    { label: $t('Yes'), value: 'Yes' },
+                    { label: $t('No'), value: 'No' },
                   ]"
                 />
               </td>
@@ -149,8 +149,8 @@
                   glossy
                   :toggle-color="symptoms.fatigue === 'Yes' ? 'blue' : 'red'"
                   :options="[
-                    { label: 'Yes', value: 'Yes' },
-                    { label: 'No', value: 'No' },
+                    { label: $t('Yes'), value: 'Yes' },
+                    { label: $t('No'), value: 'No' },
                   ]"
                 />
               </td>
@@ -165,8 +165,8 @@
                     symptoms.loss_of_sense_of_smell === 'Yes' ? 'blue' : 'red'
                   "
                   :options="[
-                    { label: 'Yes', value: 'Yes' },
-                    { label: 'No', value: 'No' },
+                    { label: $t('Yes'), value: 'Yes' },
+                    { label: $t('No'), value: 'No' },
                   ]"
                 />
               </td>
@@ -181,8 +181,8 @@
                     symptoms.difficulty_breathing === 'Yes' ? 'blue' : 'red'
                   "
                   :options="[
-                    { label: 'Yes', value: 'Yes' },
-                    { label: 'No', value: 'No' },
+                    { label: $t('Yes'), value: 'Yes' },
+                    { label: $t('No'), value: 'No' },
                   ]"
                 />
               </td>
@@ -196,8 +196,8 @@
                   glossy
                   :toggle-color="symptoms.diarrhoea === 'Yes' ? 'blue' : 'red'"
                   :options="[
-                    { label: 'Yes', value: 'Yes' },
-                    { label: 'No', value: 'No' },
+                    { label: $t('Yes'), value: 'Yes' },
+                    { label: $t('No'), value: 'No' },
                   ]"
                 />
               </td>
@@ -210,7 +210,7 @@
         <q-btn
           color="blue"
           class="tw-mt-5"
-          label="Submit"
+          :label="$t('btnSubmit')"
           @click="openDialog"
         />
         <q-dialog v-model="open" persistent color="red">

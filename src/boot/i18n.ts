@@ -7,7 +7,7 @@ const storedLang = LocalStorage.getItem('anty-locale');
 
 
 export const i18n = createI18n({
-    locale: `${LocalStorage.getItem('anty-locale')}`,
+    locale: storedLang !== null ? `${storedLang}` : 'en',
     messages
   })
 

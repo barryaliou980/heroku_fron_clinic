@@ -6,7 +6,16 @@
       :options="optionData"
       v-model="state.formData.value"
       :validator="v$.formData.value"
-    />
+      :display-value="state.formData.value ? $t(`${state.formData.value}`) : ''"
+    >
+      <template v-slot:option="scope">
+        <q-item v-bind="scope.itemProps">
+          <q-item-section>
+            <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
+    </base-select>
     <p v-if="state.formData.createdAt">Created on: state.formData.createdAt</p>
     <p v-if="state.formData.updatedAt">
       Last Updated: state.formData.updatedAt=

@@ -104,7 +104,11 @@
 
           <q-tab-panel name="medical_back">
             <div class="text-h6">{{ $t('background_medical') }}</div>
-            <BackgroundMedical @endProcess="endProcess" @next="next" @isLoading="isLoading" />
+            <BackgroundMedical
+              @endProcess="endProcess"
+              @next="next"
+              @isLoading="isLoading"
+            />
           </q-tab-panel>
         </q-tab-panels>
       </q-card>
@@ -171,7 +175,18 @@
         :options="resultOptions"
         v-model="rdtTestResult.result"
         :validator="v$.rdtTestResult.result"
-      />
+        :display-value="
+          rdtTestResult.result ? $t(`${rdtTestResult.result}`) : ''
+        "
+      >
+        <template v-slot:option="scope">
+          <q-item v-bind="scope.itemProps">
+            <q-item-section>
+              <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </base-select>
 
       <q-uploader
         color="teal"
