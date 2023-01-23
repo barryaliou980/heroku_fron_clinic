@@ -126,24 +126,24 @@
                     </div>
                     <div
                       :class="
-                        flagColor(props.row.symptom.temperature.vital_flag)
+                        flagColor(props.row.patient.temperature[0].vital_flag)
                       "
                       v-else-if="col.name === 'temperature'"
                     >
                       <span>{{
-                        $t(props.row.symptom.temperature.temperature)
+                        $t(props.row.patient.temperature[0].temperature)
                       }}</span>
                     </div>
                     <div
                       :class="
                         col.name === 'oxygen'
-                          ? flagColor(props.row.symptom.oxygen.vital_flag)
+                          ? flagColor(props.row.patient.oxygen[0].vital_flag)
                           : ''
                       "
                       v-else-if="col.name === 'oxygen'"
                     >
                       <span>{{
-                        $t(props.row.symptom.oxygen.oxygen_saturation)
+                        $t(props.row.patient.oxygen[0].oxygen_saturation)
                       }}</span>
                     </div>
 
@@ -528,10 +528,9 @@ export default {
     const response = await api.get('/stats');
     const dataStatistics = response.data.data;
 
-    console.log('bobo', dataStatistics);
-
     this.patientCovid = dataStatistics.patientCovid;
-    console.log(dataStatistics.patientCovid[0]);
+
+    console.log('smart', this.patientCovid[0]);
 
     this.statPersons(dataStatistics);
     this.statVitals(dataStatistics);
