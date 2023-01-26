@@ -62,9 +62,21 @@
         <div>{{ $t('t-blood-pressure') }}</div>
         <q-tooltip> {{ $t('t-blood-pressure') }} </q-tooltip>
       </q-btn>
+      <q-btn
+         v-if="malariaResult.id != undefined && malariaResult.rdt_result == null"
+        @click="setRDTResult('malaria')"
+        class="tw-w-2/3 tw-mb-0.5"
+        color="#000"
+        style="color: #ffb3b3"
+        square
+        outline
+        icon="personal_injury"
+      >
+        {{ $t('result') }}
+      </q-btn>
 
       <q-btn
-        v-if="malariaResult.id != undefined && malariaResult.rdt_result != null"
+        v-else
         class="tw-w-2/3 tw-mb-0.5"
         :color="
           malariaResult.rdt_result
@@ -84,9 +96,9 @@
           }}
         </q-tooltip>
       </q-btn>
-      <q-btn
-        v-else
-        @click="setRDTResult('malaria')"
+ <q-btn
+    v-if="covidResult.id != undefined && covidResult.rdt_result ==null"
+        @click="setRDTResult('covid')"
         class="tw-w-2/3 tw-mb-0.5"
         color="#000"
         style="color: #ffb3b3"
@@ -98,7 +110,7 @@
       </q-btn>
 
       <q-btn
-        v-if="covidResult.id != undefined && covidResult.rdt_result !=null"
+       v-else
         class="tw-w-2/3 tw-mb-0.5"
         :color="
           covidResult.rdt_result
@@ -118,18 +130,7 @@
           }}
         </q-tooltip>
       </q-btn>
-      <q-btn
-        v-else
-        @click="setRDTResult('covid')"
-        class="tw-w-2/3 tw-mb-0.5"
-        color="#000"
-        style="color: #ffb3b3"
-        square
-        outline
-        icon="personal_injury"
-      >
-        {{ $t('result') }}
-      </q-btn>
+
     </q-card-actions>
   </q-card>
   <base-dialog
@@ -271,7 +272,7 @@
   <base-dialog
     v-model:open="openRDt"
     :title="`Historique ${rdtTitle}`"
-    @close="openMalaria = false"
+    @close="onCloseR"
     :loading="formLoading"
     size="sm"
     persistent
@@ -291,7 +292,8 @@
             {{ $t(`${head.field}`) }}
           </q-td>
         </template>
-        <template v-slot:body="props">
+
+        <!-- <template v-slot:body="props">
           <q-tr :props="props" :class="rdtflagColor(props.row.rdt_result)">
             <q-td v-for="col in props.cols" :key="col.name" :props="props">
               <p>
@@ -299,7 +301,20 @@
               </p>
             </q-td>
           </q-tr>
-        </template>
+        </template> -->
+
+        <template #body-cell-actions="props">
+              <q-td  :props="props" class="tw-text-center">
+                <template v-if="props.rowIndex===0 ">
+                   <q-btn
+                   @click="openUpdateModalC(props.row)"
+                    v-if="inUpdateR==false" round color="primary" icon="edit" />
+                   <q-btn
+                     @click="onUpdateRdt"
+                     v-else round color="green" icon="save" />
+                  </template>
+              </q-td>
+            </template>
       </base-table>
       <q-separator class="tw-mt-2" />
       <div class="tw-flex tw-justify-end">
@@ -315,7 +330,7 @@
   <base-dialog
     v-model:open="openVital"
     :title="`Historique ${vitalTitle}`"
-    @close="openVital = false"
+    @close="onCloseV"
     :loading="formLoading"
     persistent
     class="tw-text-left"
@@ -328,13 +343,15 @@
         :hide-pagination="true"
         separator="cell"
         hide-default-header
+        class="tw-h-32"
       >
         <template v-slot:header="props">
           <q-td v-for="head in props.cols" :key="head.name">
             {{ $t(`${head.field}`) }}
           </q-td>
         </template>
-        <template v-slot:body="props">
+
+        <!-- <template v-slot:body="props">
           <q-tr :props="props" :class="flagColorO(props.row.vital_flag)">
             <q-td v-for="col in props.cols" :key="col.name" :props="props">
               <p>
@@ -343,15 +360,123 @@
                 }}
               </p>
             </q-td>
+
+
           </q-tr>
-        </template>
-        <!-- <q-tr class="tw-bg-red-500">
+        </template> -->
+            <template #body-cell-actions="props">
+              <q-td  :props="props" class="tw-text-center">
+                <template v-if="props.rowIndex===0 ">
+                   <q-btn
+                   @click="openUpdateModal(props.row)"
+                    v-if="inUpdate==false" round color="primary" icon="edit" />
+                   <q-btn
+                     @click="onUpdateVital"
+                     v-else round color="green" icon="save" />
+                  </template>
+              </q-td>
+            </template>
+             <template #body-cell-glucose_level="props">
+               <div class="tw-flex tw-justify-center tw-h-10"  v-if="props.rowIndex===0 && inUpdate==true ">
+                  <q-input
+                    filled
+                    square
+                    clearable
+                    v-model="updateForm.value"
+                    type="number"
+                    style="height:3px"
+                    class="tw-w-1/2 tw-h-10 tw-text-center"
+                    />
+                  </div>
+              <q-td v-else :props="props" class="tw-text-center">
+                   {{props.row.glucose_level}}
+              </q-td>
+            </template>
+               <template #body-cell-arm_circumference="props">
+               <div class="tw-flex tw-justify-center tw-h-10"  v-if="props.rowIndex===0 && inUpdate==true ">
+                  <q-input
+                    filled
+                    square
+                    clearable
+                    v-model="updateForm.value"
+                    type="number"
+                    style="height:3px"
+                    class="tw-w-1/2 tw-h-10 tw-text-center"
+                    />
+                  </div>
+              <q-td v-else :props="props" class="tw-text-center">
+                   {{props.row.arm_circumference}}
+              </q-td>
+            </template>
+                <template #body-cell-bp_sys_right="props">
+               <q-td class="tw-justify-center tw-h-10"  v-if="props.rowIndex===0 && inUpdate==true ">
+                  <q-input
+                    filled
+                    square
+                    v-model="updateForm.bp_sys_right"
+
+                    style="height:3px"
+                    class=" tw-h-10 tw-text-center"
+                    />
+                  </q-td>
+              <q-td v-else :props="props" class="tw-text-center">
+                   {{props.row.bp_sys_right}}
+              </q-td>
+            </template>
+                <template #body-cell-bp_dias_right="props">
+               <q-td class="tw-justify-center tw-h-10"  v-if="props.rowIndex===0 && inUpdate==true ">
+                  <q-input
+                    filled
+                    square
+
+                    v-model="updateForm.bp_dias_right"
+
+                    style="height:3px"
+                    class="tw-h-10 tw-text-center"
+                    />
+                  </q-td>
+              <q-td v-else :props="props" class="tw-text-center">
+                   {{props.row.bp_dias_right}}
+              </q-td>
+            </template>
+                <template #body-cell-bp_sys_left="props">
+               <q-td class="tw-justify-center tw-h-10"  v-if="props.rowIndex===0 && inUpdate==true ">
+                  <q-input
+                    filled
+                    square
+
+                    v-model="updateForm.bp_sys_left"
+
+                    style="height:3px"
+                    class="tw-h-10 tw-text-center"
+                    />
+                  </q-td>
+              <q-td v-else :props="props" class="tw-text-center">
+                   {{props.row.bp_sys_left}}
+              </q-td>
+            </template>
+                <template #body-cell-bp_dias_left="props">
+               <q-td class="tw-justify-center tw-h-10"  v-if="props.rowIndex===0 && inUpdate==true ">
+                  <q-input
+                    filled
+                    square
+
+                    v-model="updateForm.bp_dias_left"
+
+                    style="height:3px"
+                    class="tw-h-10 tw-text-center"
+                    />
+                  </q-td>
+              <q-td v-else :props="props" class="tw-text-center">
+                   {{props.row.bp_dias_left}}
+              </q-td>
+            </template>
+
             <template #body-cell-created_at="props">
                 <q-td :props="props">
                     {{dateFormat(props)}}
                 </q-td>
               </template>
-          </q-tr> -->
       </base-table>
       <p class="text-center" v-else>{{ $t('no_historique') }}</p>
       <q-separator class="tw-mt-2" />
@@ -412,9 +537,11 @@
           </q-btn>
         </template>
         <template v-slot:list="scope">
+        <!-- Pour ajouter une image par default lors de l'autee -->
+        <!--    :src="typeof rdtTestResult.image === 'string'?`${path1}${rdtTestResult.image}`:imageUploadedUrl" -->
           <q-img
             v-if="typeof rdtTestResult.image !== 'undefined'"
-            :src="imageUploadedUrl"
+          :src="imageUploadedUrl"
             :alt="scope.name"
             spinner-color="white"
             style="height: 180px; max-width: auto"
@@ -481,12 +608,20 @@ import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { useAppStore } from 'src/stores/appStor';
 import { api } from 'src/boot/axios';
+import { backendRDTPath } from 'src/boot/axios';
 
 export default {
   name: 'CardProfile',
   props: ['row'],
   data() {
     return {
+      updateForm:{
+        value:''
+      },
+      inUpdateR:false,
+      updateRow:{},
+      updateRowR:{},
+      inUpdate:false,
       loading:false,
       openConfirm:false,
       resultModatTitle: '',
@@ -496,6 +631,7 @@ export default {
       openMalaria: false,
       default_image: '/src/assets/default.png',
       path: backendImagePath,
+      path1: backendRDTPath,
       open: false,
       formLoading: false,
       bloodPressure: {},
@@ -524,6 +660,15 @@ export default {
     };
   },
   methods: {
+    onCloseV(){
+      this.openVital=false
+      this.open=false
+      this.inUpdate=false
+    },
+    onCloseR(){
+      this.openRDt = false
+      this.inUpdateR=false
+    },
     newConsul() {
       if (
         (JSON.stringify(this.malariaResult) === '{}' ||
@@ -541,7 +686,9 @@ export default {
       this.imageUploadedUrl = URL.createObjectURL(this.rdtTestResult.image);
       this.msgValidation = '';
     },
+
     setRDTResult(evt) {
+      this.inUpdateR=false
       this.openResult = true;
       this.rdtTestResult = {};
       this.rdtTestResult.label = evt;
@@ -554,20 +701,24 @@ export default {
     async submit() {
       if (await this.v$.rdtTestResult.$validate()) {
         let result;
-        if (this.rdtTestResult.label === 'covid') {
+        if (this.inUpdateR==false&& this.rdtTestResult.label === 'covid') {
           result = this.covidResult;
-        } else if (this.rdtTestResult.label === 'malaria') {
+        } else if (this.inUpdateR==false&&this.rdtTestResult.label === 'malaria') {
           result = this.covidResult;
+        }else if(this.inUpdateR==true&&this.rdtTestResult.label === 'malaria'){
+          result = this.updateRowR;
         }
         const fileData = new FormData();
         this.loading = true;
         this.saveBtn = true;
         fileData.append('rdt_image', this.rdtTestResult.image);
         fileData.append('patient_id', result.patient_id);
-        fileData.append('rdt_type', this.rdtTestResult.label);
+        fileData.append('rdt_type',result.rdt_type);
         fileData.append('rdt_result', this.rdtTestResult.result);
         fileData.append('symptome_id', result.symptome_id);
         fileData.append('id', result.id);
+        console.log('Result ', result)
+         console.log('Form ', this.rdtTestResult)
 
         api
           .post('/rdt', fileData, {
@@ -668,7 +819,7 @@ export default {
           align: 'left',
         },
 
-        // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
+        { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
       ];
       this.rdtData = this.malarias;
       this.rdtTitle = 'Malaria';
@@ -695,7 +846,7 @@ export default {
           align: 'left',
         },
 
-        // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
+        { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
       ];
       this.rdtData = this.covids;
       this.rdtTitle = 'Covid';
@@ -722,7 +873,7 @@ export default {
           align: 'left',
         },
 
-        // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
+        { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
       ];
       this.vitalData = this.glucoses;
       this.vitalTitle = 'Glucose';
@@ -766,20 +917,8 @@ export default {
           label: 'Dias Arm Left',
           align: 'left',
         },
-        // {
-        //   field: 'bp_dias_avarage',
-        //   name: 'bp_dias_avarage',
-        //   label: 'Dias average',
-        //   align: 'left',
-        // },
-        // {
-        //   field: 'bp_sys_avarage',
-        //   name: 'bp_sys_avarage',
-        //   label: 'Sys average',
-        //   align: 'left',
-        // },
 
-        // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
+         { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
       ];
       this.vitalData = this.bloodPressures;
       this.vitalTitle = 'Blood Pressure';
@@ -806,12 +945,89 @@ export default {
           align: 'left',
         },
 
-        // { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
+        { name: 'actions', align: 'right', field: 'actions', Label: 'Action' },
       ];
       this.vitalData = this.malnutritions;
       this.vitalTitle = 'Malnutrition';
       this.openVital = true;
     },
+    openUpdateModal(row){
+
+        this.updateRow = row
+       if(row.vital_type==='glucose'){
+         this.inUpdate= true
+
+        this.updateForm.value =row.glucose_level
+       }else if(row.vital_type==='malnutrition'){
+         this.inUpdate= true
+        this.updateForm.value =row.arm_circumference
+       } else if(row.vital_type==='bloodPressure'){
+         this.inUpdate= true
+         this.updateForm.bp_sys_right=row.bp_sys_right
+         this.updateForm.bp_dias_right=row.bp_dias_right
+         this.updateForm.bp_sys_left=row.bp_sys_left
+         this.updateForm.bp_dias_left= row.bp_dias_left
+       }
+    },
+    openUpdateModalC(row){
+    console.log('row', row.rdt_image)
+      this.rdtTestResult = {};
+
+    if(row.rdt_type=='covid'){
+      this.updateRowR=row
+      this.inUpdateR=true
+      this.rdtTestResult.label =row.rdt_type
+      this.rdtTestResult.result=row.rdt_result
+        this.rdtTestResult.image=row.rdt_image
+      this.resultModatTitle= 'Update Covid result'
+    }else if(row.rdt_type=='malaria'){
+      this.updateRowR=row
+      this.inUpdateR=true
+      this.rdtTestResult.label =row.rdt_type
+      this.rdtTestResult.result=row.rdt_result
+      this.rdtTestResult.image=row.rdt_image
+      this.resultModatTitle= 'Update Malaria result'
+    }
+    this.openRDt = false
+    this.openResult = true;
+    console.log('Image', typeof this.rdtTestResult.image === 'string')
+
+    },
+    async onUpdateVital(){
+         this.inUpdate = false
+         let formData;
+         if(this.updateRow.vital_type==='glucose'){
+           formData = {
+          id: this.updateRow.id,
+          patient_id: this.updateRow.patient_id,
+          vital_type: 'glucose',
+          glucose_level: this.updateForm.value,
+        };
+
+        }else if(this.updateRow.vital_type==='malnutrition'){
+          formData = {
+          id: this.updateRow.id,
+           patient_id: this.updateRow.patient_id,
+          vital_type: 'malnutrition',
+          arm_circumference: this.updateForm.value,
+          }
+         }else if(this.updateRow.vital_type==='bloodPressure'){
+          formData= {
+            id: this.updateRow.id,
+            patient_id: this.updateRow.patient_id,
+            bp_sys_right:(this.updateForm.bp_sys_right).toString(),
+            bp_dias_right:(this.updateForm.bp_dias_right).toString(),
+            bp_sys_left: (this.updateForm.bp_sys_left).toString(),
+            bp_dias_left: (this.updateForm.bp_dias_left).toString(),
+            vital_type : 'bloodPressure'
+          }
+
+         }
+        await api.post('/vitals', formData);
+         this.openVital=false
+         window.location.reload();
+    }
+
   },
   validations() {
     return {
