@@ -1,6 +1,9 @@
 import { boot } from 'quasar/wrappers';
 import axios, { AxiosInstance } from 'axios';
-
+import { useUserStore } from '../stores/userStore';
+import { LocalStorage } from 'quasar';
+const store = useUserStore();
+console.log("Bbob", store);
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $axios: AxiosInstance;
@@ -14,22 +17,36 @@ declare module '@vue/runtime-core' {
 // "export default () => {}" function below (which runs individually
 // for each client)
 
-const api = axios.create({
-  baseURL: 'https://backend.laclinico.com/api',
-});
-
-const backendImagePath = 'https://backend.laclinico.com/files/';
-const backendRDTPath = 'https://backend.laclinico.com/rdt/';
-const backendqrCodePath = 'https://backend.laclinico.com/qrCode/';
-
-
 // const api = axios.create({
-//   baseURL: 'http://127.0.0.1:8000/api',
+//   baseURL: 'https://backend.laclinico.com/api',
 // });
 
-// const backendImagePath = 'http://127.0.0.1:8000/files/';
-// const backendRDTPath = 'http://127.0.0.1:8000/rdt/';
-// const backendqrCodePath = 'http://127.0.0.1:8000/qrCode/';
+// const backendImagePath = 'https://backend.laclinico.com/files/';
+// const backendRDTPath = 'https://backend.laclinico.com/rdt/';
+// const backendqrCodePath = 'https://backend.laclinico.com/qrCode/';
+
+
+
+const api = axios.create({
+  baseURL: 'https://api.laclinico.com/api',
+  withCredentials: false
+});
+
+api.interceptors.request.use(
+  config => {
+     if(LocalStorage.getItem('token')) {
+        config.headers['Authorization'] = `Bearer ${LocalStorage.getItem('token')}`;
+     }
+     return config;
+  },
+  error => {
+     Promise.reject(error);
+  }
+);
+
+const backendImagePath = 'https://api.laclinico.com/files/';
+const backendRDTPath = 'https://api.laclinico.com/rdt/';
+const backendqrCodePath = 'https://api.laclinico.com/qrCode/';
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
@@ -42,5 +59,6 @@ export default boot(({ app }) => {
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
 });
+
 
 export { api, backendImagePath, backendRDTPath, backendqrCodePath };

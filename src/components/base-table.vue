@@ -38,7 +38,7 @@
                   <slot
                      name="action-start"
                      :row="props.row"
-                 
+
                   />
                   <q-btn
                      class="tw-font-semibold"
@@ -47,7 +47,7 @@
                      color="black"
                      label="Edit"
                      border
-                    
+
                   />
                   <q-btn
                      class="tw-font-semibold"
@@ -66,7 +66,7 @@
          </q-table>
 
       </template>
-      
+
 <script lang="ts" setup>
 import { reactive, watch, watchEffect } from 'vue';
 import { useQuasar } from 'quasar';
