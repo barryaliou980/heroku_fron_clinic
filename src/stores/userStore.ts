@@ -7,12 +7,16 @@ export const useUserStore = defineStore('userStore', {
       isLogged: false,
       loggedUser: {} as User,
       users: [] as User[],
+      token: null
     };
   },
 
   getters: {
     fullName: ({ loggedUser }) =>
       `${loggedUser.firstName} ${loggedUser.lastName}`,
+      userToken(state) {
+        return state.token;
+   }
   },
 
   actions: {
@@ -23,6 +27,7 @@ export const useUserStore = defineStore('userStore', {
       this.isLogged = false;
       this.loggedUser = {} as User;
       this.users = [] as User[];
+      this.token = null;
     },
   },
   persist: {

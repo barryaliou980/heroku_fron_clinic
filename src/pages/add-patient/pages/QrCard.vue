@@ -198,16 +198,6 @@ export default {
       patients: [],
       backendQrCodePath: backendqrCodePath,
       backendPhotoPath: backendImagePath,
-      fullName: 'Thierno Mamadou bobo barry',
-
-      // logoURL:
-      //   window.request_data.kiviCarePluginURL +
-      //   'assets/images/ClinicO_Logo.svg',
-
-      imagePreview: '../../../src/assets/test.jpg',
-      // imagePreview: '../../../src/assets/test1.jpeg',
-      qrImage: '../../../src/assets/3428.png',
-      // image: pluginBASEURL + "assets/images/rectangle_6_copie_6.png",
       image: '../../../src/assets/cadre-et-crocher.png',
       clinicOImage: '../../../src/assets/clinic_o.png',
       sPrefectures: ['Soyah', 'Oure Kaba'],
