@@ -145,7 +145,6 @@ export default {
   },
   methods: {
     addUser(row = null) {
-      console.log('Store', this.store.loggedUser.user_type);
       if (row.id === undefined) {
         console.log(' null', row.id);
         this.formData = {};

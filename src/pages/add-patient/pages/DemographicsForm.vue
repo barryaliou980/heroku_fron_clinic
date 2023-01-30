@@ -515,7 +515,7 @@ import { ref, defineAsyncComponent } from 'vue';
 import { Patient } from '../../../components/models';
 import { api, backendImagePath } from 'src/boot/axios';
 import { useVuelidate } from '@vuelidate/core';
-import { required ,numeric,minLength} from '@vuelidate/validators';
+import { required, numeric, minLength } from '@vuelidate/validators';
 import moment from 'moment';
 import { useAppStore } from 'src/stores/appStor';
 
@@ -604,7 +604,7 @@ export default {
   validations() {
     return {
       patient: {
-        name: { required,minLength: minLength(3)},
+        name: { required, minLength: minLength(3) },
         gender: { required },
         do_you_know_date_of_birth: { required },
         date_of_birth: { required },
@@ -625,7 +625,7 @@ export default {
         rubbish_collection_services: { required },
         time_to_nearest_health_facility: { required },
         last_visit_to_doctor: { required },
-        hmd_visits_in_last_year: { required ,numeric},
+        hmd_visits_in_last_year: { required, numeric },
         would_you_be_willing_to_subscribe: { required },
         would_you_like_medical_card: { required },
         testing_services_and_medical_for_free: { required },
@@ -693,7 +693,6 @@ export default {
       return false;
     },
     async onSubmit(ref: any, step: number) {
-      console.log('store', this.store.currentPatient);
       let result;
       if (step === 1) {
         result = await this.testStep1();
@@ -730,7 +729,6 @@ export default {
             } else {
               this.store.currentPatient.photo = photo;
             }
-            console.log('store', this.store);
             this.alert = true;
             this.$emit('next', 'alarms');
             this.store.setTabs('alarms');
@@ -752,7 +750,6 @@ export default {
             } else {
               this.store.currentPatient.photo = photo;
             }
-            console.log('store', this.store);
             this.alert = true;
             this.$emit('next', 'alarms');
             this.store.setTabs('alarms');
