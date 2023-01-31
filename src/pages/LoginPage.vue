@@ -93,7 +93,7 @@ async function onLogin() {
           token: data.data.token,
         });
         // console.log('slim', data.data.token);
-        // LocalStorage.set('token', data.data.token);
+        LocalStorage.set('token', data.data.token);
         // console.log('slim + 1', LocalStorage.getItem('token'));
         router.push({ name: 'admin.dashboard' });
       } else {
