@@ -27,7 +27,7 @@ declare module '@vue/runtime-core' {
 
 
 const api = axios.create({
-  baseURL: 'https://api.laclinico.com/api',
+  baseURL: 'http://127.0.0.1:8000/api',
   withCredentials: false
 });
 
@@ -43,9 +43,9 @@ api.interceptors.request.use(
   }
 );
 
-const backendImagePath = 'https://api.laclinico.com/files/';
-const backendRDTPath = 'https://api.laclinico.com/rdt/';
-const backendqrCodePath = 'https://api.laclinico.com/qrCode/';
+const backendImagePath = 'http://127.0.0.1:8000/files/';
+const backendRDTPath = 'http://127.0.0.1:8000/rdt/';
+const backendqrCodePath = 'http://127.0.0.1:8000/qrCode/';
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api

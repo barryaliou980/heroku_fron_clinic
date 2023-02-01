@@ -29,13 +29,30 @@
           </base-select>
         </div>
         <div>
-          <base-input
+          <q-input
             filled
-            v-model="filters.dateOfFiltre"
-            type="date"
-            mask="date"
-            :rules="['date']"
-          />
+            :model-value="
+              filters.dateRange != null
+                ? `${filters.dateRange.from} - ${filters.dateRange.to}`
+                : '-'
+            "
+          >
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy
+                  cover
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-date v-model="filters.dateRange" range>
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
         </div>
         <div>
           <q-btn
@@ -114,6 +131,10 @@ export default {
   data() {
     return {
       filters: {},
+      dateRange: {
+        from: '',
+        to: '',
+      },
       statitisticData: [],
       users: [],
     };
@@ -134,7 +155,6 @@ export default {
             response.data.status !== undefined &&
             response.data.status === 'success'
           ) {
-            console.log('bobo barry', response.data.data);
             this.statitisticData = response.data.data;
           }
         })
