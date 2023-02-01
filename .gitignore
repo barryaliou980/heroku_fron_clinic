@@ -2,6 +2,10 @@
 .thumbs.db
 node_modules
 
+# axios
+/src/boot/axios.ts
+
+
 # Quasar core related directories
 .quasar
 /dist

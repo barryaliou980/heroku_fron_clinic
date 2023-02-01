@@ -188,7 +188,7 @@
         </template>
       </base-select>
 
-      <q-uploader
+      <!-- <q-uploader
         color="teal"
         style="max-width: 300px; margin-left: 9%"
         v-model="rdtTestResult.image"
@@ -229,7 +229,7 @@
           {{ msgValidation }}
         </q-badge>
       </div>
-
+-->
       <q-btn
         @click="submit"
         :disabled="saveBtn"
@@ -399,11 +399,11 @@ export default {
       this.disableBtnC = false;
       console.log('end');
     },
-    file_selected: function (file) {
-      this.rdtTestResult.image = file[0];
-      this.imageUploadedUrl = URL.createObjectURL(this.rdtTestResult.image);
-      this.msgValidation = '';
-    },
+    // file_selected: function (file) {
+    //   this.rdtTestResult.image = file[0];
+    //   this.imageUploadedUrl = URL.createObjectURL(this.rdtTestResult.image);
+    //   this.msgValidation = '';
+    // },
     next(tabName: string) {
       console.log('name', tabName);
       this.tab = tabName;
@@ -452,18 +452,23 @@ export default {
         const fileData = new FormData();
         this.loading = true;
         this.saveBtn = true;
-        fileData.append('rdt_image', this.rdtTestResult.image);
+        // fileData.append('rdt_image', this.rdtTestResult.image);
         fileData.append('patient_id', this.store.currentPatient?.id);
         fileData.append('rdt_type', this.rdtTestResult.label);
         fileData.append('rdt_result', this.rdtTestResult.result);
         fileData.append('symptome_id', this.store.symptom?.id);
 
         api
-          .post('/rdt', fileData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          })
+          .post(
+            '/rdt',
+            fileData
+
+            // {
+            //   headers: {
+            //     'Content-Type': 'multipart/form-data',
+            //   },
+            // }
+          )
           .then((response) => {
             this.open = false;
             this.loading = false;
@@ -511,7 +516,7 @@ export default {
     return {
       rdtTestResult: {
         result: { required },
-        image: { required },
+        // image: { required },
       },
     };
   },

@@ -81,22 +81,20 @@ const validationRules = {
 const v$ = useVuelidate(validationRules, state);
 
 async function onLogin() {
-  console.log('State', state.formData);
   if (await v$.value.$validate()) {
     state.loading = true;
     // await api.get('/sanctum/csrf-cookie');
     try {
       const { data } = await api.post('/v1/login', { ...state.formData });
-      console.log('DEATa', data);
       if (data.data.user.id) {
         userStore.$patch({
           loggedUser: data.data.user,
           isLogged: true,
           token: data.data.token,
         });
-        console.log('slim', data.data.token);
+        // console.log('slim', data.data.token);
         LocalStorage.set('token', data.data.token);
-        console.log('slim + 1', LocalStorage.getItem('token'));
+        // console.log('slim + 1', LocalStorage.getItem('token'));
         router.push({ name: 'admin.dashboard' });
       } else {
         $q.notify({
