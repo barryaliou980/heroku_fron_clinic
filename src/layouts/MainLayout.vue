@@ -109,7 +109,16 @@
           </q-item-section>
         </q-item>
 
-        <q-expansion-item icon="trending_up" :label="$t('sidebar.statistics')">
+        <q-item to="/statistics" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="trending_up" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ $t('sidebar.statistics') }}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <!-- <q-expansion-item icon="trending_up" :label="$t('sidebar.statistics')">
           <q-list class="q-pl-lg">
             <q-item to="/MapMarker" active-class="q-item-no-link-highlighting">
               <q-item-section avatar>
@@ -128,7 +137,7 @@
               </q-item-section>
             </q-item>
           </q-list>
-        </q-expansion-item>
+        </q-expansion-item> -->
       </q-list>
     </q-drawer>
 

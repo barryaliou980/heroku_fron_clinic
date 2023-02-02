@@ -42,14 +42,14 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/TestAccueil.vue'),
       },
       {
-        path: 'statistics',
-        name: 'admin.statistics',
-        component: () => import('pages/statistics/StatisticIndex.vue'),
-      },
-      {
         path: 'card',
         name: 'admin.card',
         component: () => import('../pages/add-patient/pages/QrCard.vue'),
+      },
+      {
+        path: 'statistics',
+        name: 'admin.stats',
+        component: () => import('../pages/statistics/pages/PatientStatistic.vue'),
       },
     ],
   },
