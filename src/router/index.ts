@@ -41,7 +41,6 @@ export default route(function (/* { store, ssrContext } */) {
     if (to.name != 'login') {
       const userStore = useUserStore();
       // you are not logged
-      console.log('store', userStore);
       if (!userStore.isLogged) {
         return { name: 'login' };
       }

@@ -3,7 +3,6 @@ import axios, { AxiosInstance } from 'axios';
 import { useUserStore } from '../stores/userStore';
 import { LocalStorage } from 'quasar';
 const store = useUserStore();
-console.log("Bbob", store);
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $axios: AxiosInstance;
@@ -28,7 +27,7 @@ declare module '@vue/runtime-core' {
 
 
 const api = axios.create({
-  baseURL: 'https://backend.laclinico.com/api',
+  baseURL: 'http://127.0.0.1:8000/api',
   withCredentials: false
 });
 
@@ -44,9 +43,9 @@ api.interceptors.request.use(
   }
 );
 
-const backendImagePath = 'https://backend.laclinico.com/files/';
-const backendRDTPath = 'https://backend.laclinico.com/rdt/';
-const backendqrCodePath = 'https://backend.laclinico.com/qrCode/';
+const backendImagePath = 'http://127.0.0.1:8000/files/';
+const backendRDTPath = 'http://127.0.0.1:8000/rdt/';
+const backendqrCodePath = 'http://127.0.0.1:8000/qrCode/';
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
