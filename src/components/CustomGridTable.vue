@@ -21,6 +21,47 @@
     </div>
 
     <q-separator />
+
+    <div class="row">
+      <q-card-section class="col-12">
+        <div>
+          <q-input
+            filled
+            :model-value="
+              filters.dateRange != null
+                ? `${filters.dateRange.from} - ${filters.dateRange.to}`
+                : '-'
+            "
+          >
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy
+                  cover
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-date v-model="filters.dateRange" range>
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+        </div>
+        <div>
+          <q-btn
+            style="width: 100%; height: 75%"
+            color="white"
+            text-color="black"
+            :label="$t('filtered')"
+            @click="find()"
+            :loading="loadingBtn"
+          />
+        </div>
+      </q-card-section>
+    </div>
     <q-card-section class="q-pa-none tw-px-4 tw-py-4">
       <q-table grid :rows="data" :filter="filter">
         <template v-slot:item="props">
@@ -57,6 +98,7 @@
 
 
 <script>
+import { api } from 'src/boot/axios';
 import { ref } from 'vue';
 import { defineComponent } from 'vue';
 import CardProfile from './cards/CardProfile.vue';
@@ -66,9 +108,31 @@ export default defineComponent({
   props: ['data'],
   data() {
     return {
+      loadingBtn: false,
       filter: ref(''),
       show_filter: false,
+      filters: {},
+      dateRange: {
+        from: '',
+        to: '',
+      },
     };
+  },
+  methods: {
+    find() {
+      this.loadingBtn = true;
+      api
+        .post('filter', this.filters)
+        .then((response) => {
+          if (response.data.length > 0) {
+            this.loadingBtn = false;
+            this.$emit('find', response.data);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   components: { CardProfile },
 });

@@ -73,7 +73,7 @@
               <base-input
                 v-if="birthDayStatus === true"
                 filled
-                    :validator="v$.patient.date_of_birth"
+                :validator="v$.patient.date_of_birth"
                 v-model="patient.date_of_birth"
                 mask="date"
                 :rules="['date']"
@@ -81,7 +81,11 @@
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
                     <q-popup-proxy>
-                      <q-date v-model="patient.date_of_birth">
+                      <q-date
+                        :navigation-max-year-month="maxDate()"
+                        minimal
+                        v-model="patient.date_of_birth"
+                      >
                         <div class="row items-center justify-end q-gutter-sm">
                           <q-btn
                             label="OK"
@@ -516,9 +520,10 @@ import { ref, defineAsyncComponent } from 'vue';
 import { Patient } from '../../../components/models';
 import { api, backendImagePath } from 'src/boot/axios';
 import { useVuelidate } from '@vuelidate/core';
-import { required ,maxValue,numeric,minLength} from '@vuelidate/validators';
+import { required, maxValue, numeric, minLength } from '@vuelidate/validators';
 import moment from 'moment';
 import { useAppStore } from 'src/stores/appStor';
+import { date } from 'quasar';
 
 export default {
   emits: [],
@@ -589,6 +594,8 @@ export default {
       cleanWaterOptions: ['Well water', 'Tap water', 'Mineral water'],
       sanitationOptions: ['Indoor toilet', 'Outdoor toilet'],
       distanceToHealthFacility: [
+        'Less than 1 hour',
+        '1 - 2 hours',
         'Less than 2 hours',
         '2 - 4 hours',
         '4 -8 hours',
@@ -605,10 +612,13 @@ export default {
   validations() {
     return {
       patient: {
-        name: { required,minLength: minLength(5)},
+        name: { required, minLength: minLength(5) },
         gender: { required },
         do_you_know_date_of_birth: { required },
-        date_of_birth: { required, maxValue:value => value <= moment().format('YYYY/MM/DD')},
+        date_of_birth: {
+          required,
+          maxValue: (value) => value <= moment().format('YYYY/MM/DD'),
+        },
 
         photo: { required },
         town: { required },
@@ -634,6 +644,10 @@ export default {
     };
   },
   methods: {
+    maxDate() {
+      const d = date.formatDate(Date.now(), 'YYYY/MM/DD');
+      return d;
+    },
     async getAge() {
       let age = moment().year();
       let year = age - this.patient.date_of_birth;
