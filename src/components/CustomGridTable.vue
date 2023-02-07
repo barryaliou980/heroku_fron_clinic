@@ -121,13 +121,14 @@ export default defineComponent({
   methods: {
     find() {
       this.loadingBtn = true;
+      this.$emit('find', []);
       api
         .post('filter', this.filters)
         .then((response) => {
           if (response.data.length > 0) {
-            this.loadingBtn = false;
             this.$emit('find', response.data);
           }
+          this.loadingBtn = false;
         })
         .catch((error) => {
           console.log(error);
