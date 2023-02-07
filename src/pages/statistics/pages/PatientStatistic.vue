@@ -61,6 +61,7 @@
             text-color="black"
             :label="$t('filtered')"
             @click="find()"
+            :loading="loadingBtn"
           />
         </div>
       </div>
@@ -130,6 +131,7 @@ import moment from 'moment';
 export default {
   data() {
     return {
+      loadingBtn: false,
       filters: {},
       dateRange: {
         from: '',
@@ -148,6 +150,7 @@ export default {
       }
     },
     find() {
+      this.loadingBtn = true;
       api
         .post('find', this.filters)
         .then((response) => {
@@ -155,6 +158,7 @@ export default {
             response.data.status !== undefined &&
             response.data.status === 'success'
           ) {
+            this.loadingBtn = false;
             this.statitisticData = response.data.data;
           }
         })

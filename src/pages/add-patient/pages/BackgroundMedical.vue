@@ -405,8 +405,6 @@ export default {
       }
     },
     async submit() {
-      console.log('daig', this.diags);
-      console.log('vaccins', this.vacins);
       if (this.vacins != null) {
         this.medical_back.which_vaccination = this.vacins.toString();
       }
@@ -416,7 +414,7 @@ export default {
       if (this.vitamins != null) {
         this.medical_back.vitamins = this.vitamins.toString();
       }
-      console.log('MEDICAL', this.medical_back);
+
       const result_1 = await this.testBackrournd1();
       const result_2 = await this.testBackrournd2();
       const result_3 = await this.testBackrournd3();
