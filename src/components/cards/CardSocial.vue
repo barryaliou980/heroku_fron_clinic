@@ -287,9 +287,31 @@ export default {
           children: [
             {
               label: 'glucose : 0',
+              children: [
+                {
+                  label: 'Normal : 0',
+                },
+                {
+                  label: 'Low : 0',
+                },
+                {
+                  label: 'Very Low : 0',
+                },
+              ],
             },
             {
               label: 'bloodPressure : 0',
+              children: [
+                {
+                  label: 'Normal : 0',
+                },
+                {
+                  label: 'Low : 0',
+                },
+                {
+                  label: 'Very Low : 0',
+                },
+              ],
             },
             {
               label: 'malnutrition : 0',
@@ -468,8 +490,28 @@ export default {
     },
     statVitals(dataStatistics) {
       this.vitals[0].children[0].label = 'Glucose: ' + dataStatistics.glucose;
+
+      this.vitals[0].children[0].children[0].label =
+        'Normal: ' + dataStatistics.glDetails[0];
+
+      this.vitals[0].children[0].children[1].label =
+        'Low: ' + dataStatistics.glDetails[1];
+
+      this.vitals[0].children[0].children[2].label =
+        'Very Low: ' + dataStatistics.glDetails[2];
+
       this.vitals[0].children[1].label =
         'Blood Pressure: ' + dataStatistics.bloodPressure;
+
+      this.vitals[0].children[1].children[0].label =
+        'Normal: ' + dataStatistics.bpDetails[0];
+
+      this.vitals[0].children[1].children[1].label =
+        'Low: ' + dataStatistics.bpDetails[1];
+
+      this.vitals[0].children[1].children[2].label =
+        'Very Low: ' + dataStatistics.bpDetails[2];
+
       this.vitals[0].children[2].label =
         'Malnutrition: ' + dataStatistics.malnutrition;
     },
