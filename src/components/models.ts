@@ -33,6 +33,7 @@ export interface Patient {
   profession: string;
   daily_expenditure: string;
   matrimonial_status: string;
+  type_of_consultation: string;
   access_to_drinking_water: string;
   access_to_toilet: string;
   rubbish_collection_services: string;

@@ -17,39 +17,6 @@
               :validator="v$.patient.name"
             />
             <base-select
-              filled
-              :label="$t('patient.gender')"
-              v-model="patient.gender"
-              :options="GenderOptions"
-              @update:model-value="updateIsWoman"
-              :validator="v$.patient.gender"
-              :display-value="patient.gender ? $t(`${patient.gender}`) : ''"
-            >
-              <template v-slot:option="scope">
-                <q-item v-bind="scope.itemProps">
-                  <q-item-section>
-                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </template>
-            </base-select>
-            <base-select
-              :label="$t('patient.pregnant')"
-              v-model="patient.pregnant"
-              :options="YesOrNoOptions"
-              :disable="!isWoman"
-              :validator="v$.patient.pregnant"
-              :display-value="patient.pregnant ? $t(`${patient.pregnant}`) : ''"
-            >
-              <template v-slot:option="scope">
-                <q-item v-bind="scope.itemProps">
-                  <q-item-section>
-                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </template>
-            </base-select>
-            <base-select
               :label="$t('patient.do_you_know_date_of_birth')"
               v-model="patient.do_you_know_date_of_birth"
               :options="Qoptions"
@@ -106,6 +73,39 @@
                 @blur="getAge"
               />
             </div>
+            <base-select
+              filled
+              :label="$t('patient.gender')"
+              v-model="patient.gender"
+              :options="GenderOptions"
+              @update:model-value="updateIsWoman"
+              :validator="v$.patient.gender"
+              :display-value="patient.gender ? $t(`${patient.gender}`) : ''"
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
+            <base-select
+              :label="$t('patient.pregnant')"
+              v-model="patient.pregnant"
+              :options="YesOrNoOptions"
+              :disable="!isWoman || pregnantStatus"
+              :validator="v$.patient.pregnant"
+              :display-value="patient.pregnant ? $t(`${patient.pregnant}`) : ''"
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
 
             <q-uploader
               color="teal"
@@ -222,6 +222,7 @@
             </base-select>
 
             <base-select
+              :disable="disabledByAge"
               :label="$t('patient.profession')"
               v-model="patient.profession"
               :options="professionOptions"
@@ -240,6 +241,7 @@
             </base-select>
 
             <base-select
+              :disable="disabledByAge"
               :label="$t('patient.daily_expenditure')"
               v-model="patient.daily_expenditure"
               :options="dailyIncomeOptions"
@@ -265,6 +267,7 @@
               :validator="v$.patient.daily_expenditure"
             /> -->
             <base-select
+              :disable="disabledByAge"
               :label="$t('patient.matrimonial_status')"
               v-model="patient.matrimonial_status"
               :options="matrimonialStatusOptions"
@@ -283,7 +286,25 @@
                 </q-item>
               </template>
             </base-select>
-            <div />
+            <base-select
+              :label="$t('patient.type_of_consultation')"
+              v-model="patient.type_of_consultation"
+              :options="typeOfConsultation"
+              :validator="v$.patient.type_of_consultation"
+              :display-value="
+                patient.type_of_consultation
+                  ? $t(`${patient.type_of_consultation}`)
+                  : ''
+              "
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
             <div />
             <base-select
               :validator="v$.patient.access_to_drinking_water"
@@ -306,6 +327,7 @@
               </template>
             </base-select>
             <base-select
+              :disable="disabledByAge"
               :validator="v$.patient.access_to_toilet"
               @update:model-value="updateHavePhone"
               v-model="patient.access_to_toilet"
@@ -326,6 +348,7 @@
               </template>
             </base-select>
             <base-select
+              :disable="disabledByAge"
               :validator="v$.patient.rubbish_collection_services"
               @update:model-value="updateHavePhone"
               v-model="patient.rubbish_collection_services"
@@ -401,17 +424,12 @@
       >
         <div>
           <div class="tw-grid tw-grid-cols-1 tw-gap-3">
-            <money-input
-              min="120000"
-              max="300000"
-              :label="$t('patient.would_you_be_willing_to_subscribe')"
-              v-model="patient.would_you_be_willing_to_subscribe"
-              :validator="v$.patient.would_you_be_willing_to_subscribe"
-            />
-            <!-- <base-select
+            <base-select
+              :disable="disabledByAge"
+              class="tw-full"
               v-model="patient.would_you_be_willing_to_subscribe"
               :label="$t('patient.would_you_be_willing_to_subscribe')"
-              :options="YesOrNoOptions"
+              :options="howMuchCanYouPaye"
               :display-value="
                 patient.would_you_be_willing_to_subscribe
                   ? $t(`${patient.would_you_be_willing_to_subscribe}`)
@@ -425,8 +443,18 @@
                   </q-item-section>
                 </q-item>
               </template>
-            </base-select> -->
+            </base-select>
+
+            <!-- <money-input
+              :disable="disabledByAge"
+              min="120000"
+              max="300000"
+              :label="$t('patient.would_you_be_willing_to_subscribe')"
+              v-model="patient.would_you_be_willing_to_subscribe"
+              :validator="v$.patient.would_you_be_willing_to_subscribe"
+            /> -->
             <base-select
+              :disable="disabledByAge"
               class="tw-full"
               v-model="patient.would_you_like_medical_card"
               :label="$t('patient.would_you_like_medical_card')"
@@ -529,6 +557,8 @@ export default {
   emits: [],
   data() {
     return {
+      disabledByAge: false,
+      pregnantStatus: true,
       sPrefectures: ['Soyah', 'Oure Kaba'],
       receivedAtOptions: ['atTheHeadOfTheDistrict', 'atTheHeadOfTheDepartment'],
       sectorS: [
@@ -590,6 +620,8 @@ export default {
         '$6-$10',
         'More than $10',
       ],
+      howMuchCanYouPaye: ['$0 - $10', '$10 - $20', '$20 - $30'],
+      typeOfConsultation: ['Teleconsultation', 'Homecare', 'Mass consultation'],
       matrimonialStatusOptions: ['Married', 'Divorced', 'Widow', 'Single'],
       cleanWaterOptions: ['Well water', 'Tap water', 'Mineral water'],
       sanitationOptions: ['Indoor toilet', 'Outdoor toilet'],
@@ -631,6 +663,7 @@ export default {
         profession: { required },
         daily_expenditure: { required },
         matrimonial_status: { required },
+        type_of_consultation: { required },
         access_to_drinking_water: { required },
         access_to_toilet: { required },
         rubbish_collection_services: { required },
@@ -648,6 +681,14 @@ export default {
       const d = date.formatDate(Date.now(), 'YYYY/MM/DD');
       return d;
     },
+    disabledFields() {
+      this.disabledByAge =
+        moment().diff(this.patient.date_of_birth, 'years') < 18;
+    },
+    disabledPregnant() {
+      this.pregnantStatus =
+        moment().diff(this.patient.date_of_birth, 'years') <= 13;
+    },
     async getAge() {
       let age = moment().year();
       let year = age - this.patient.date_of_birth;
@@ -657,6 +698,7 @@ export default {
     },
     updateIsWoman(value: string) {
       if (value == 'Female') {
+        this.disabledPregnant();
         this.isWoman = true;
         this.patient.pregnant = 'No';
       } else {
@@ -681,31 +723,51 @@ export default {
       return false;
     },
     async testStep2() {
-      if (
-        (await this.v$.patient.level_of_education.$validate()) &&
-        (await this.v$.patient.profession.$validate()) &&
-        (await this.v$.patient.daily_expenditure.$validate()) &&
-        (await this.v$.patient.matrimonial_status.$validate()) &&
-        (await this.v$.patient.access_to_drinking_water.$validate()) &&
-        (await this.v$.patient.access_to_toilet.$validate()) &&
-        (await this.v$.patient.rubbish_collection_services.$validate()) &&
-        (await this.v$.patient.time_to_nearest_health_facility.$validate()) &&
-        (await this.v$.patient.last_visit_to_doctor.$validate()) &&
-        (await this.v$.patient.hmd_visits_in_last_year.$validate())
-      ) {
-        return true;
+      if (!this.disabledByAge) {
+        if (
+          (await this.v$.patient.level_of_education.$validate()) &&
+          (await this.v$.patient.profession.$validate()) &&
+          (await this.v$.patient.daily_expenditure.$validate()) &&
+          (await this.v$.patient.matrimonial_status.$validate()) &&
+          (await this.v$.patient.type_of_consultation.$validate()) &&
+          (await this.v$.patient.access_to_drinking_water.$validate()) &&
+          (await this.v$.patient.access_to_toilet.$validate()) &&
+          (await this.v$.patient.rubbish_collection_services.$validate()) &&
+          (await this.v$.patient.time_to_nearest_health_facility.$validate()) &&
+          (await this.v$.patient.last_visit_to_doctor.$validate()) &&
+          (await this.v$.patient.hmd_visits_in_last_year.$validate())
+        ) {
+          return true;
+        }
+      } else {
+        if (
+          (await this.v$.patient.level_of_education.$validate()) &&
+          (await this.v$.patient.access_to_drinking_water.$validate()) &&
+          (await this.v$.patient.time_to_nearest_health_facility.$validate()) &&
+          (await this.v$.patient.type_of_consultation.$validate()) &&
+          (await this.v$.patient.last_visit_to_doctor.$validate()) &&
+          (await this.v$.patient.hmd_visits_in_last_year.$validate())
+        ) {
+          return true;
+        }
       }
-      return false;
     },
     async testStep3() {
-      if (
-        (await this.v$.patient.would_you_be_willing_to_subscribe.$validate()) &&
-        (await this.v$.patient.would_you_like_medical_card.$validate()) &&
-        (await this.v$.patient.testing_services_and_medical_for_free.$validate())
-      ) {
-        return true;
+      if (!this.disabledByAge) {
+        if (
+          (await this.v$.patient.would_you_be_willing_to_subscribe.$validate()) &&
+          (await this.v$.patient.would_you_like_medical_card.$validate()) &&
+          (await this.v$.patient.testing_services_and_medical_for_free.$validate())
+        ) {
+          return true;
+        }
+      } else {
+        if (
+          await this.v$.patient.testing_services_and_medical_for_free.$validate()
+        ) {
+          return true;
+        }
       }
-      return false;
     },
     async onSubmit(ref: any, step: number) {
       let result;
@@ -802,12 +864,13 @@ export default {
     },
   },
   created() {
+    this.disabledFields();
+    this.disabledPregnant();
     this.patient.photo = '';
     this.patient.do_you_know_date_of_birth = 'Yes';
     if (this.store.currentPatient.id) {
       this.patient = this.store.currentPatient;
       this.imageUploadedUrl = this.patient.photo;
-      console.log('bobo', this.imageUploadedUrl);
     }
   },
   setup() {

@@ -72,6 +72,7 @@ export default {
             profession: 'Profession',
             daily_expenditure: 'Dépenses quotidiennes',
             matrimonial_status: 'Situation matrimoniale',
+            type_of_consultation: 'Type de consultation',
             access_to_drinking_water: 'Accès à l\'eau potable',
             access_to_toilet: 'Accès aux toilettes',
             rubbish_collection_services: 'Services de ramassage des ordures',
@@ -214,7 +215,10 @@ export default {
         'Indoor toilet':'WC intérieur',
         'Outdoor toilet':'WC extérieur',
 
-        '35.9 > Hypotermy':'35.9 > ​​Hypotermie',
+        '35.9 > Hypotermy': '35.9 > ​​Hypotermie',
+        '35.9 - 37.5 Normal': '35.9 - 37.5 Normale',
+        '+ 37.5 Fever' : '+ 37.5 Fièvre',
+
         '36.5 - 37.5 Normal':        '36,5 - 37,5 normale',
         '37.5 - 38.5 Hypertermia':        '37,5 - 38,5 Hypertermie',
         '+ 38 Fever':        '+ 38 Fièvre',
@@ -280,7 +284,10 @@ export default {
         'patient_has_result_to_save':'Ce patient a des resultat non Saisi',
         'are_canceled':'En continuons vous aller ecraser les anciens test',
         'atTheHeadOfTheDistrict':'Chef quartier/Sous-prefet',
-        'atTheHeadOfTheDepartment':'Chef Secteur/Chef district'
+        'atTheHeadOfTheDepartment':'Chef Secteur/Chef district',
+        'Teleconsultation' : 'Téléconsultation',
+        'Homecare': 'Soins à domicile',
+        'Mass consultation' :'Consultation de masse'
         
 
 
