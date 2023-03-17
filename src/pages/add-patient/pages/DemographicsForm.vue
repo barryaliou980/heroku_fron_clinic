@@ -327,7 +327,6 @@
               </template>
             </base-select>
             <base-select
-              :disable="disabledByAge"
               :validator="v$.patient.access_to_toilet"
               @update:model-value="updateHavePhone"
               v-model="patient.access_to_toilet"
@@ -348,7 +347,6 @@
               </template>
             </base-select>
             <base-select
-              :disable="disabledByAge"
               :validator="v$.patient.rubbish_collection_services"
               @update:model-value="updateHavePhone"
               v-model="patient.rubbish_collection_services"
@@ -425,7 +423,6 @@
         <div>
           <div class="tw-grid tw-grid-cols-1 tw-gap-3">
             <base-select
-              :disable="disabledByAge"
               class="tw-full"
               v-model="patient.would_you_be_willing_to_subscribe"
               :label="$t('patient.would_you_be_willing_to_subscribe')"
@@ -437,7 +434,10 @@
               "
             >
               <template v-slot:option="scope">
-                <q-item v-bind="scope.itemProps">
+                <q-item
+                  v-bind="scope.itemProps"
+                  :disable="disabledByAge && scope.opt != '$12 - $10'"
+                >
                   <q-item-section>
                     <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
                   </q-item-section>
@@ -454,7 +454,6 @@
               :validator="v$.patient.would_you_be_willing_to_subscribe"
             /> -->
             <base-select
-              :disable="disabledByAge"
               class="tw-full"
               v-model="patient.would_you_like_medical_card"
               :label="$t('patient.would_you_like_medical_card')"
@@ -466,7 +465,10 @@
               "
             >
               <template v-slot:option="scope">
-                <q-item v-bind="scope.itemProps">
+                <q-item
+                  v-bind="scope.itemProps"
+                  :disable="disabledByAge && scope.opt != 'Yes'"
+                >
                   <q-item-section>
                     <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
                   </q-item-section>
@@ -620,7 +622,7 @@ export default {
         '$6-$10',
         'More than $10',
       ],
-      howMuchCanYouPaye: ['$0 - $10', '$10 - $20', '$20 - $30'],
+      howMuchCanYouPaye: ['$0', '$12 - $10', '$20 - $30'],
       typeOfConsultation: ['Teleconsultation', 'Homecare', 'Mass consultation'],
       matrimonialStatusOptions: ['Married', 'Divorced', 'Widow', 'Single'],
       cleanWaterOptions: ['Well water', 'Tap water', 'Mineral water'],
@@ -744,6 +746,8 @@ export default {
           (await this.v$.patient.level_of_education.$validate()) &&
           (await this.v$.patient.access_to_drinking_water.$validate()) &&
           (await this.v$.patient.time_to_nearest_health_facility.$validate()) &&
+          (await this.v$.patient.access_to_toilet.$validate()) &&
+          (await this.v$.patient.rubbish_collection_services.$validate()) &&
           (await this.v$.patient.type_of_consultation.$validate()) &&
           (await this.v$.patient.last_visit_to_doctor.$validate()) &&
           (await this.v$.patient.hmd_visits_in_last_year.$validate())
@@ -763,7 +767,9 @@ export default {
         }
       } else {
         if (
-          await this.v$.patient.testing_services_and_medical_for_free.$validate()
+          (await this.v$.patient.would_you_be_willing_to_subscribe.$validate()) &&
+          (await this.v$.patient.would_you_like_medical_card.$validate()) &&
+          (await this.v$.patient.testing_services_and_medical_for_free.$validate())
         ) {
           return true;
         }
