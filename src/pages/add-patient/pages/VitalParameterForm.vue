@@ -8,10 +8,7 @@
       color="primary"
     />
     <div
-      class="
-        tw-border-b tw-border-gray-200 tw-bg-white tw-px-4 tw-py-5
-        sm:tw-px-6
-      "
+      class="tw-border-b tw-border-gray-200 tw-bg-white tw-px-4 tw-py-5 sm:tw-px-6"
     >
       <div class="md:tw-w-1/2">
         <base-table
@@ -59,10 +56,7 @@
       color="primary"
     />
     <div
-      class="
-        tw-border-b tw-border-gray-200 tw-bg-white tw-px-4 tw-py-5
-        sm:tw-px-6
-      "
+      class="tw-border-b tw-border-gray-200 tw-bg-white tw-px-4 tw-py-5 sm:tw-px-6"
     >
       <div class="md:tw-w-1/2">
         <base-table
@@ -132,12 +126,7 @@ export default {
     return {
       optionData: [],
       title: '',
-      temperatures: [
-        '35.9 > Hypotermy',
-        '36.5 - 37.5 Normal',
-        '37.5 - 38.5 Hypertermia',
-        '+ 38 Fever',
-      ],
+      temperatures: ['35.9 > Hypotermy', '35.9 - 37.5 Normal', '+ 37.5 Fever'],
       oxygens: ['95% or + (Normal)', '93-94% (Low)', '92% or less (Very Low)'],
       showFormDialog: false,
       selectedRowId: 0,

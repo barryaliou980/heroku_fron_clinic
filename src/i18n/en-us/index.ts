@@ -70,6 +70,7 @@ export default {
             profession: 'profession',
             daily_expenditure: 'Daily expenditure',
             matrimonial_status: 'Matrimonial status',
+            type_of_consultation: 'Type of consultation',
             access_to_drinking_water: 'Access to drinking water',
             access_to_toilet: 'Access to toilet',
             rubbish_collection_services: 'Rubbish collection services',
@@ -213,8 +214,10 @@ export default {
         'Indoor toilet':'Indoor toilet',
         'Outdoor toilet':'Outdoor toilet',
 
+        '35.9 > Hypotermy': '35.9 > Hypotermy',
+        '35.9 - 37.5 Normal': '35.9 - 37.5 Normal',
+        '+ 37.5 Fever' : '+ 37.5 Fever',
 
-        '35.9 > Hypotermy':'35.9 > Hypotermy',
         '36.5 - 37.5 Normal':        '36.5 - 37.5 Normal',
         '37.5 - 38.5 Hypertermia':        '37.5 - 38.5 Hypertermia',
         '+ 38 Fever':        '+ 38 Fever',
@@ -281,5 +284,8 @@ export default {
 
         'atTheHeadOfTheDistrict':'At The Head Of The District',
         'atTheHeadOfTheDepartment':'at The Head Of The Department',
+        'Teleconsultation' : 'Teleconsultation',
+        'Homecare': 'Homecare',
+        'Mass consultation' :'Mass consultation'
 
 }
