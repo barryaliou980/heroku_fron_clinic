@@ -118,26 +118,14 @@
           </q-item-section>
         </q-item>
 
-        <!-- <q-expansion-item icon="trending_up" :label="$t('sidebar.statistics')">
-          <q-list class="q-pl-lg">
-            <q-item to="/MapMarker" active-class="q-item-no-link-highlighting">
-              <q-item-section avatar>
-                <q-icon name="people" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{ $t('sidebar.statis_patient') }}</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item to="/analytics" active-class="q-item-no-link-highlighting">
-              <q-item-section avatar>
-                <q-icon name="streetview" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{ $t('sidebar.rdt') }}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </q-expansion-item> -->
+        <q-item to="/consultations" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="supervised_user_circle" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ $t('sidebar.consultations') }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 
