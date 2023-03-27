@@ -25,7 +25,8 @@ export default {
     statistics:'Statistiques',
     statis_patient:'Patients',
     rdt:'RDT TEST',
-    print:'Imprimer'
+    print:'Imprimer',
+    consultations: 'Consultations',
   },
   patient_uid:"Identifiant",
   phone_number: 'Numéro de téléphone',
@@ -178,6 +179,17 @@ export default {
   Female:'Femme',
   Yes:'Oui',
   No:'Non',
+
+  type_consult:'Type de consultation',
+  date_of_consult:'Date de la consultation',
+  ahead:'Responsable',
+  location_of_consult:'Lieux',
+  participants:'Participants',
+  people_attending:'Personnes touchées',
+  home_attending:'Maisons touchées',
+  add_consultation:'Ajouter une consultation',
+
+
   'Smart phone': 'Téléphone intelligent',
   'Feature phone':'Téléphone simple',
 
