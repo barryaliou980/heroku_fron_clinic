@@ -137,6 +137,8 @@ export default {
   start_the_test:'Start the test',
   add_glucose:'Add glucose',
   glucose_level:'Glucose level',
+  do_you_have_the_disease_d: 'Has a doctor told you that you have the disease',
+  clinic_O_is_first:'Clinic + O is the first to alert this patient with this disease',
   take_blood_pressure:'Take Blood Pressure',
   set_values:'Set values',
   set_value:'Set value',

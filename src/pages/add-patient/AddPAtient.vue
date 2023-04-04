@@ -169,7 +169,27 @@
     size="sm"
     persistent
   >
-    <div class="tw-mb-4">
+    <div class="tw-grid tw-grid-cols-1 tw-gap-3">
+      <base-select
+        class="tw-full"
+        v-model="do_you_have_the_disease"
+        :label="$t('do_you_have_the_disease_d')"
+        :options="Qoptions"
+        :display-value="
+          do_you_have_the_disease ? $t(`${do_you_have_the_disease}`) : ''
+        "
+        :validator="v$.do_you_have_the_disease"
+        @update:model-value="weFirst(rdtTestResult.result, $event)"
+      >
+        <template v-slot:option="scope">
+          <q-item v-bind="scope.itemProps">
+            <q-item-section>
+              <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </template>
+      </base-select>
+
       <base-select
         :label="$t('select_result')"
         :options="resultOptions"
@@ -178,6 +198,7 @@
         :display-value="
           rdtTestResult.result ? $t(`${rdtTestResult.result}`) : ''
         "
+        @update:model-value="weFirst($event, do_you_have_the_disease)"
       >
         <template v-slot:option="scope">
           <q-item v-bind="scope.itemProps">
@@ -190,7 +211,7 @@
 
       <q-uploader
         color="teal"
-        style="max-width: 300px; margin-left: 9%"
+        style="width: 100%"
         v-model="rdtTestResult.image"
         multiple
         @added="file_selected"
@@ -224,6 +245,10 @@
           </p>
         </template>
       </q-uploader>
+
+      <div class="text-center">
+        <q-badge v-if="msgShow" color="red" :label="$t('clinic_O_is_first')" />
+      </div>
       <div v-if="msgValidation">
         <q-badge style="margin: 4% 32%; font-size: 1em" color="red">
           {{ msgValidation }}
@@ -239,13 +264,6 @@
         :label="$t('save')"
       />
     </div>
-    <!-- <q-spinner
-      style="margin-left: 70%; margin-top: -15%"
-      v-if="loading"
-      color="primary"
-      size="4em"
-      :thickness="10"
-    /> -->
   </base-dialog>
   <q-dialog v-model="leaveStatut" persistent color="red">
     <q-card>
@@ -308,8 +326,8 @@
     </q-card>
   </base-dialog>
 </template>
-
-<script lang="ts">
+  
+  <script lang="ts">
 import { ref, defineAsyncComponent } from 'vue';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
@@ -319,6 +337,7 @@ import { useAppStore } from 'src/stores/appStor';
 import { api } from 'src/boot/axios';
 import { store } from 'quasar/wrappers';
 import { useQuasar } from 'quasar';
+import Compressor from 'compressorjs';
 
 export default {
   components: {
@@ -362,6 +381,9 @@ export default {
       imageUploadedUrl: '',
       timerCount: 300,
       rdtTestResult: {} as RdTestResult,
+      do_you_have_the_disease: null,
+      msgShow: false,
+      Qoptions: ['Yes', 'No'],
       resultOptions: ['positif', 'negatif', 'indeterminate', 'invalid'],
       disableBtnM: true,
       disableBtnC: true,
@@ -373,6 +395,14 @@ export default {
     };
   },
   methods: {
+    weFirst(rdtResult, disease) {
+      console.log('smart', rdtResult + ' - ' + disease);
+      if (rdtResult == 'positif' && disease == 'No') {
+        this.msgShow = true;
+      } else {
+        this.msgShow = false;
+      }
+    },
     endProcess() {
       this.isEndProcess = true;
     },
@@ -448,42 +478,106 @@ export default {
         });
     },
     async submit() {
-      if (await this.v$.rdtTestResult.$validate()) {
-        const fileData = new FormData();
+      if (
+        (await this.v$.rdtTestResult.$validate()) &&
+        (await this.v$.do_you_have_the_disease.$validate())
+      ) {
+        const currentPatientId = this.store.currentPatient?.id;
+        const rdt_type = this.rdtTestResult.label;
+        const rdt_result = this.rdtTestResult.result;
+        const symptome_id = this.store.symptom?.id;
         this.loading = true;
         this.saveBtn = true;
-        fileData.append('rdt_image', this.rdtTestResult.image);
-        fileData.append('patient_id', this.store.currentPatient?.id);
-        fileData.append('rdt_type', this.rdtTestResult.label);
-        fileData.append('rdt_result', this.rdtTestResult.result);
-        fileData.append('symptome_id', this.store.symptom?.id);
 
-        api
-          .post('/rdt', fileData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          })
-          .then((response) => {
-            this.open = false;
-            this.loading = false;
-            this.saveBtn = false;
-            if (response.data.data.rdt_type === 'covid') {
-              this.hideCovidBtn = false;
-              this.store.setCovidResult(response.data.data);
-              this.store.setActiveCovid(false);
-              console.log('covid', response.data);
-              this.loading = false;
-            } else if (response.data.data.rdt_type === 'malaria') {
-              this.hideMalariaBtn = false;
-              this.store.setMalariaResult(response.data.data);
-              this.store.setActiveMalaria(false);
-              console.log('covid', response.data);
-              this.loading = false;
-            }
-          });
+        new Compressor(this.rdtTestResult.image, {
+          quality: 0.6,
+
+          // The compression process is asynchronous,
+          // which means you have to access the `result` in the `success` hook function.
+          success(result) {
+            const fileData = new FormData();
+            fileData.append('rdt_image', result, result.name);
+            fileData.append('patient_id', currentPatientId);
+            fileData.append('rdt_type', rdt_type);
+            fileData.append('rdt_result', rdt_result);
+            fileData.append('symptome_id', symptome_id);
+
+            api.post('/rdt', fileData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            });
+          },
+          error(err) {
+            console.log(err.message);
+          },
+        });
+        this.updateStoreRdt(currentPatientId, rdt_type, symptome_id);
       }
     },
+    updateStoreRdt(patient_id, type, symptome_id) {
+      const fileData = new FormData();
+
+      fileData.append('patient_id', patient_id);
+      fileData.append('rdt_type', type);
+      fileData.append('symptome_id', symptome_id);
+
+      api.post('/result', fileData).then((response) => {
+        this.open = false;
+        this.loading = false;
+        this.saveBtn = false;
+        if (response.data.data.rdt_type === 'covid') {
+          this.hideCovidBtn = false;
+          this.store.setCovidResult(response.data.data);
+          this.store.setActiveCovid(false);
+          console.log('covid', response.data);
+          this.loading = false;
+        } else if (response.data.data.rdt_type === 'malaria') {
+          this.hideMalariaBtn = false;
+          this.store.setMalariaResult(response.data.data);
+          this.store.setActiveMalaria(false);
+          console.log('covid', response.data);
+          this.loading = false;
+        }
+      });
+    },
+    // async submit() {
+    //   if (await this.v$.rdtTestResult.$validate()) {
+    //     const fileData = new FormData();
+    //     this.loading = true;
+    //     this.saveBtn = true;
+    //     fileData.append('rdt_image', this.rdtTestResult.image);
+    //     fileData.append('patient_id', this.store.currentPatient?.id);
+    //     fileData.append('rdt_type', this.rdtTestResult.label);
+    //     fileData.append('rdt_result', this.rdtTestResult.result);
+    //     fileData.append('symptome_id', this.store.symptom?.id);
+
+    //     api
+    //       .post('/rdt', fileData, {
+    //         headers: {
+    //           'Content-Type': 'multipart/form-data',
+    //         },
+    //       })
+    //       .then((response) => {
+    //         this.open = false;
+    //         this.loading = false;
+    //         this.saveBtn = false;
+    //         if (response.data.data.rdt_type === 'covid') {
+    //           this.hideCovidBtn = false;
+    //           this.store.setCovidResult(response.data.data);
+    //           this.store.setActiveCovid(false);
+    //           console.log('covid', response.data);
+    //           this.loading = false;
+    //         } else if (response.data.data.rdt_type === 'malaria') {
+    //           this.hideMalariaBtn = false;
+    //           this.store.setMalariaResult(response.data.data);
+    //           this.store.setActiveMalaria(false);
+    //           console.log('covid', response.data);
+    //           this.loading = false;
+    //         }
+    //       });
+    //   }
+    // },
     isLoading(status: boolean) {
       this.loading = status;
     },
@@ -509,6 +603,7 @@ export default {
   },
   validations() {
     return {
+      do_you_have_the_disease: { required },
       rdtTestResult: {
         result: { required },
         image: { required },
@@ -568,3 +663,4 @@ export default {
   },
 };
 </script>
+  

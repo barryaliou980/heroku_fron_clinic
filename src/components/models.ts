@@ -96,6 +96,7 @@ export interface BloodPresure {
   updated_at?: Date;
   vital_flag?: string;
   vital_type?: string;
+  do_you_have_the_disease?:string;
 }
 export interface User {
   id: number;

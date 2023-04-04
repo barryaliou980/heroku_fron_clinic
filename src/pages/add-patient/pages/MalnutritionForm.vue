@@ -9,10 +9,7 @@
 
     <q-separator />
     <div
-      class="
-        tw-border-b tw-border-gray-200 tw-bg-white tw-px-4 tw-py-5
-        sm:tw-px-6
-      "
+      class="tw-border-b tw-border-gray-200 tw-bg-white tw-px-4 tw-py-5 sm:tw-px-6"
     >
       <div class="md:tw-w-1/2">
         <base-table
@@ -51,12 +48,43 @@
       size="sm"
       persistent
     >
-      <base-input
-        :label="$t('set_value')"
-        v-model="malnutrition"
-        type="number"
-        :validator="v$.malnutrition"
-      />
+      <div class="tw-grid tw-grid-cols-1 tw-gap-3">
+        <base-select
+          class="tw-full"
+          v-model="do_you_have_the_disease"
+          :label="$t('do_you_have_the_disease_d')"
+          :options="Qoptions"
+          :display-value="
+            do_you_have_the_disease ? $t(`${do_you_have_the_disease}`) : ''
+          "
+          :validator="v$.do_you_have_the_disease"
+          @update:model-value="weFirst($event, malnutrition)"
+        >
+          <template v-slot:option="scope">
+            <q-item v-bind="scope.itemProps">
+              <q-item-section>
+                <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
+        </base-select>
+        <base-input
+          :label="$t('set_value')"
+          v-model="malnutrition"
+          type="number"
+          :validator="v$.malnutrition"
+          @update:model-value="weFirst($event, do_you_have_the_disease)"
+        />
+      </div>
+
+      <div class="text-center">
+        <q-badge
+          v-if="msgShow"
+          color="secondary"
+          :label="$t('clinic_O_is_first')"
+        />
+      </div>
+
       <q-btn
         class="tw-mt-3"
         @click="submit"
@@ -74,6 +102,7 @@ import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { useAppStore } from 'src/stores/appStor';
 import { api } from 'src/boot/axios';
+import moment from 'moment';
 
 export default {
   emits: [],
@@ -81,9 +110,13 @@ export default {
     return {
       malnutrition: null,
       malnutritions: [],
+      do_you_have_the_disease: null,
+      showMsg: false,
       showFormDialog: false,
+
       formLoading: false,
       title: 'Malnutrition',
+      Qoptions: ['Yes', 'No'],
       columns: [
         {
           field: 'arm_circumference',
@@ -108,6 +141,23 @@ export default {
     };
   },
   methods: {
+    weFirst(arm_circumference, disease) {
+      if (this.store?.currentPatient?.id !== undefined) {
+        let now = moment().year();
+        let age = moment(this.store.currentPatient.date_of_birth).year();
+        let year = now - age;
+        if (year < 5 && arm_circumference < 125 && disease == 'No') {
+          this.msgShow = true;
+        } else if (
+          this.store.currentPatient.pregnant == 'Yes' &&
+          arm_circumference < 230
+        ) {
+          this.msgShow = true;
+        } else {
+          this.msgShow = false;
+        }
+      }
+    },
     openForm() {
       this.showFormDialog = true;
     },
@@ -115,11 +165,16 @@ export default {
       this.showFormDialog = false;
     },
     async submit() {
-      if (this.v$.malnutrition.$validate()) {
+      if (
+        (await this.v$.malnutrition.$validate()) &&
+        (await this.v$.do_you_have_the_disease.$validate())
+      ) {
         let formData = {
+          id: this.store.malnutrition?.id,
           patient_id: this.store?.currentPatient?.id,
           vital_type: 'malnutrition',
           arm_circumference: this.malnutrition,
+          do_you_have_the_disease: this.do_you_have_the_disease,
         };
         if (this.store.malnutrition.id === undefined) {
           this.$emit('isLoading', true);
@@ -131,16 +186,15 @@ export default {
           this.showFormDialog = false;
         } else {
           this.$emit('isLoading', true);
-          const { data } = await api.put(
-            `/vitals/${this.store.malnutrition.id}`,
-            formData
-          );
+          const { data } = await api.post('/vitals', formData);
           this.$emit('isLoading', false);
           this.malnutritions = [data.data];
           this.store.setMalnutrition(data.data);
           console.log('submit', data.data);
           this.showFormDialog = false;
         }
+        this.arm_circumference = null;
+        this.do_you_have_the_disease = null;
         if (this.store.malnutrition?.id !== undefined) {
           this.malnutritions = [this.store.malnutrition];
         }
@@ -156,14 +210,9 @@ export default {
   validations() {
     return {
       malnutrition: { required },
+      do_you_have_the_disease: { required },
     };
   },
-  // updated() {
-  //   if( this.store.malnutrition?.id !== undefined){
-  //     this.malnutritions = [this.store.malnutrition]
-  //   }
-  //  ;
-  // },
   computed: {
     flagColor() {
       if (Number(this.store.malnutrition?.vital_flag) === 0) {

@@ -139,6 +139,8 @@ export default {
   start_the_test:'Demarrez le test',
   add_glucose:'Ajouter la glucose',
   glucose_level:'Niveau de glucose',
+  do_you_have_the_disease_d: 'Un médecin vous a-t-il dit que vous avez la maladie',
+  clinic_O_is_first:'Clinic + O est la première à alerter ce patient de cette maladie',
   take_blood_pressure:'Prendre la tension artérielle',
   set_values:'Saisir les valeurs',
   set_value:'Saisir la valeur',
