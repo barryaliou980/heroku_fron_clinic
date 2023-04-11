@@ -198,8 +198,8 @@ export default {
       patients: [],
       backendQrCodePath: backendqrCodePath,
       backendPhotoPath: backendImagePath,
-      image: '../../../src/assets/cadre-et-crocher.png',
-      clinicOImage: '../../../src/assets/clinic_o.png',
+      image: 'cadre-et-crocher.png',
+      clinicOImage: 'clinic_o.png',
       sPrefectures: ['Soyah', 'Oure Kaba'],
       sectorS: [
         'Soyah Centre',
