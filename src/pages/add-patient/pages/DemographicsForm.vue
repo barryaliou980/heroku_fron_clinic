@@ -52,6 +52,7 @@
                         :navigation-max-year-month="maxDate()"
                         minimal
                         v-model="patient.date_of_birth"
+                        @update:model-value="disabledFields($event)"
                       >
                         <div class="row items-center justify-end q-gutter-sm">
                           <q-btn
@@ -71,6 +72,7 @@
                 :validator="v$.patient.date_of_birth"
                 v-model="patient.date_of_birth"
                 @blur="getAge"
+                @update:model-value="disabledFields($event)"
               />
             </div>
             <base-select
@@ -261,11 +263,6 @@
               </template>
             </base-select>
 
-            <!-- <money-input
-              :label="$t('patient.daily_expenditure')"
-              v-model="patient.daily_expenditure"
-              :validator="v$.patient.daily_expenditure"
-            /> -->
             <base-select
               :disable="disabledByAge"
               :label="$t('patient.matrimonial_status')"
@@ -436,7 +433,7 @@
               <template v-slot:option="scope">
                 <q-item
                   v-bind="scope.itemProps"
-                  :disable="disabledByAge && scope.opt != '$12 - $10'"
+                  :disable="disabledByAge && scope.opt != '$10 - $12'"
                 >
                   <q-item-section>
                     <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
@@ -445,14 +442,6 @@
               </template>
             </base-select>
 
-            <!-- <money-input
-              :disable="disabledByAge"
-              min="120000"
-              max="300000"
-              :label="$t('patient.would_you_be_willing_to_subscribe')"
-              v-model="patient.would_you_be_willing_to_subscribe"
-              :validator="v$.patient.would_you_be_willing_to_subscribe"
-            /> -->
             <base-select
               class="tw-full"
               v-model="patient.would_you_like_medical_card"
@@ -622,7 +611,7 @@ export default {
         '$6-$10',
         'More than $10',
       ],
-      howMuchCanYouPaye: ['$0', '$12 - $10', '$20 - $30'],
+      howMuchCanYouPaye: ['$0', '$10 - $12', '$20 - $30'],
       typeOfConsultation: ['Teleconsultation', 'Homecare', 'Mass consultation'],
       matrimonialStatusOptions: ['Married', 'Divorced', 'Widow', 'Single'],
       cleanWaterOptions: ['Well water', 'Tap water', 'Mineral water'],
@@ -683,9 +672,15 @@ export default {
       const d = date.formatDate(Date.now(), 'YYYY/MM/DD');
       return d;
     },
-    disabledFields() {
-      this.disabledByAge =
-        moment().diff(this.patient.date_of_birth, 'years') < 18;
+    disabledFields(date_of_birth) {
+      this.disabledByAge = moment().diff(date_of_birth, 'years') < 18;
+      this.patient.profession = null;
+      this.patient.daily_expenditure = null;
+      this.patient.matrimonial_status = null;
+      this.patient.would_you_be_willing_to_subscribe = null;
+      this.patient.would_you_like_medical_card = null;
+
+      console.log('bobo', this.disabledByAge);
     },
     disabledPregnant() {
       this.pregnantStatus =
@@ -697,6 +692,7 @@ export default {
       let date = new Date(year, 0, 1);
       this.patient.date_of_birth = moment(date).format('YYYY/MM/DD');
       this.birthDayStatus = false;
+      this.disabledFields(this.patient.date_of_birth);
     },
     updateIsWoman(value: string) {
       if (value == 'Female') {
@@ -867,10 +863,12 @@ export default {
       } else {
         this.birthDayStatus = true;
       }
+      this.patient.date_of_birth = null;
+      this.patient.gender = null;
+      this.patient.pregnant = null;
     },
   },
   created() {
-    this.disabledFields();
     this.disabledPregnant();
     this.patient.photo = '';
     this.patient.do_you_know_date_of_birth = 'Yes';

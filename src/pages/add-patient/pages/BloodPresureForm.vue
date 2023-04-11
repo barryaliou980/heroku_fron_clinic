@@ -9,38 +9,19 @@
         <tr class="tw-divide-x tw-divide-gray-200">
           <th
             scope="col"
-            class="
-              tw-py-3.5 tw-pl-4 tw-pr-3
-              text-left
-              tw-text-sm tw-font-semibold tw-text-gray-900
-              tw-sm:pl-6
-            "
+            class="tw-py-3.5 tw-pl-4 tw-pr-3 text-left tw-text-sm tw-font-semibold tw-text-gray-900 tw-sm:pl-6"
           ></th>
 
           <th
             scope="col"
-            class="
-              tw-px-3
-              tw-py-3.5
-              tw-text-center
-              tw-text-md
-              tw-font-semibold
-              tw-text-gray-900
-            "
+            class="tw-px-3 tw-py-3.5 tw-text-center tw-text-md tw-font-semibold tw-text-gray-900"
           >
             Systol
           </th>
 
           <th
             scope="col"
-            class="
-              tw-px-3
-              tw-py-3.5
-              tw-text-center
-              tw-text-md
-              tw-font-semibold
-              tw-text-gray-900
-            "
+            class="tw-px-3 tw-py-3.5 tw-text-center tw-text-md tw-font-semibold tw-text-gray-900"
           >
             Diastol
           </th>
@@ -93,6 +74,28 @@
     size="sm"
     persistent
   >
+    <base-select
+      class="tw-full"
+      v-model="bloodPre.do_you_have_the_disease"
+      :label="$t('do_you_have_the_disease_d')"
+      :options="Qoptions"
+      :display-value="
+        bloodPre.do_you_have_the_disease
+          ? $t(`${bloodPre.do_you_have_the_disease}`)
+          : ''
+      "
+      :validator="v$.bloodPre.do_you_have_the_disease"
+      @update:model-value="weFirst(bloodPre)"
+    >
+      <template v-slot:option="scope">
+        <q-item v-bind="scope.itemProps">
+          <q-item-section>
+            <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+          </q-item-section>
+        </q-item>
+      </template>
+    </base-select>
+    <q-separator class="tw-mt-3 tw-mb-3" />
     <div class="tw-flex tw-justify-left"></div>
     <p>{{ $t('arm_right') }}</p>
     <base-input
@@ -101,6 +104,7 @@
       :label="$t('systol')"
       v-model="bloodPre.bp_sys_right"
       :validator="v$.bloodPre.bp_sys_right"
+      @update:model-value="weFirst(bloodPre)"
     />
 
     <base-input
@@ -109,6 +113,7 @@
       :label="$t('diastol')"
       v-model="bloodPre.bp_dias_right"
       :validator="v$.bloodPre.bp_dias_right"
+      @update:model-value="weFirst(bloodPre)"
     />
 
     <q-separator />
@@ -119,6 +124,7 @@
       :label="$t('systol')"
       v-model="bloodPre.bp_sys_left"
       :validator="v$.bloodPre.bp_sys_left"
+      @update:model-value="weFirst(bloodPre)"
     />
     <base-input
       type="number"
@@ -126,7 +132,16 @@
       :label="$t('diastol')"
       v-model="bloodPre.bp_dias_left"
       :validator="v$.bloodPre.bp_dias_left"
+      @update:model-value="weFirst(bloodPre)"
     />
+
+    <div class="text-center">
+      <q-badge
+        v-if="msgShow"
+        color="secondary"
+        :label="$t('clinic_O_is_first')"
+      />
+    </div>
 
     <div class="tw-flex tw-justify-end">
       <q-btn
@@ -152,9 +167,11 @@ export default {
     return {
       selectedRowId: 0,
       formLoading: false,
+      msgShow: false,
       showFormDialog: false,
       bloodPre: {} as BloodPresure,
       bloodPreResult: {} as BloodPresure,
+      Qoptions: ['Yes', 'No'],
     };
   },
   validations() {
@@ -164,11 +181,55 @@ export default {
         bp_dias_right: { required },
         bp_sys_left: { required },
         bp_dias_left: { required },
+        do_you_have_the_disease: { required },
       },
     };
   },
   methods: {
+    weFirst(bloodPresureData) {
+      let nameOfItem,
+        valueOfItem,
+        averageSys,
+        averageDias,
+        bp_sys_right,
+        bp_dias_right,
+        bp_sys_left,
+        bp_dias_left = 0;
+      for (var i in bloodPresureData) {
+        nameOfItem = i;
+        valueOfItem = bloodPresureData[i];
+        if (nameOfItem == 'bp_sys_right') {
+          bp_sys_right = valueOfItem;
+        }
+        if (nameOfItem == 'bp_dias_right') {
+          bp_dias_right = valueOfItem;
+        }
+        if (nameOfItem == 'bp_sys_left') {
+          bp_sys_left = valueOfItem;
+        }
+        if (nameOfItem == 'bp_dias_left') {
+          bp_dias_left = valueOfItem;
+        }
+      }
+
+      let sumSys = bp_sys_right * 1 + bp_sys_left * 1;
+      let sumDias = bp_dias_right * 1 + bp_dias_left * 1;
+
+      averageSys = sumSys / 2;
+      averageDias = sumDias / 2;
+
+      if (
+        averageSys >= 140 &&
+        averageDias >= 90 &&
+        bloodPresureData.do_you_have_the_disease == 'No'
+      ) {
+        this.msgShow = true;
+      } else {
+        this.msgShow = false;
+      }
+    },
     onFormDialogClose() {
+      this.bloodPre = {};
       this.showFormDialog = false;
     },
     EntrezBloodPre() {

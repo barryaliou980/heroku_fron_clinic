@@ -9,10 +9,7 @@
 
     <q-separator />
     <div
-      class="
-        tw-border-b tw-min-h-1/2 tw-border-gray-200 tw-bg-white tw-px-4 tw-py-5
-        sm:tw-px-6
-      "
+      class="tw-border-b tw-min-h-1/2 tw-border-gray-200 tw-bg-white tw-px-4 tw-py-5 sm:tw-px-6"
     >
       <div class="sm:tw-w-full lg:tw-w-1/2 tw-min-h-1/2">
         <base-table
@@ -52,12 +49,41 @@
       size="sm"
       persistent
     >
-      <base-input
-        label=" Entrez la valuer "
-        v-model="glucose"
-        type="number"
-        :validator="v$.glucose"
-      />
+      <div class="tw-grid tw-grid-cols-1 tw-gap-3">
+        <base-select
+          class="tw-full"
+          v-model="do_you_have_the_disease"
+          :label="$t('do_you_have_the_disease_d')"
+          :options="Qoptions"
+          :display-value="
+            do_you_have_the_disease ? $t(`${do_you_have_the_disease}`) : ''
+          "
+          :validator="v$.do_you_have_the_disease"
+          @update:model-value="weFirst(glucose, $event)"
+        >
+          <template v-slot:option="scope">
+            <q-item v-bind="scope.itemProps">
+              <q-item-section>
+                <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
+        </base-select>
+        <base-input
+          label=" Entrez la valuer "
+          v-model="glucose"
+          type="number"
+          @update:model-value="weFirst($event, do_you_have_the_disease)"
+          :validator="v$.glucose"
+        />
+      </div>
+      <div class="text-center">
+        <q-badge
+          v-if="msgShow"
+          color="secondary"
+          :label="$t('clinic_O_is_first')"
+        />
+      </div>
       <q-btn
         class="tw-mt-3"
         @click="submit"
@@ -82,9 +108,12 @@ export default {
     return {
       glucose: null,
       glucoses: [],
+      do_you_have_the_disease: null,
+      showMsg: false,
       showFormDialog: false,
       formLoading: false,
       title: 'Gucose',
+      Qoptions: ['Yes', 'No'],
       columns: [
         {
           field: 'glucose_level',
@@ -116,12 +145,23 @@ export default {
     onFormDialogClose() {
       this.showFormDialog = false;
     },
+    weFirst(level, disease) {
+      if (level >= 1.26 && disease == 'No') {
+        this.msgShow = true;
+      } else {
+        this.msgShow = false;
+      }
+    },
     async submit() {
-      if (this.v$.glucose.$validate()) {
+      if (
+        (await this.v$.glucose.$validate()) &&
+        (await this.v$.do_you_have_the_disease.$validate())
+      ) {
         if (this.store.glucose.id === undefined) {
           let formData = {
             patient_id: this.store?.currentPatient?.id,
             vital_type: 'glucose',
+            do_you_have_the_disease: this.do_you_have_the_disease,
             glucose_level: this.glucose,
           };
           this.$emit('isLoading', true);
@@ -136,6 +176,7 @@ export default {
             id: this.store.glucose.id,
             patient_id: this.store?.currentPatient?.id,
             vital_type: 'glucose',
+            do_you_have_the_disease: this.do_you_have_the_disease,
             glucose_level: this.glucose,
           };
           this.$emit('isLoading', true);
@@ -146,6 +187,9 @@ export default {
           this.store.setGlucose(data.data);
           this.showFormDialog = false;
         }
+
+        this.glucose = null;
+        this.do_you_have_the_disease = null;
 
         if (this.store.glucose?.id !== undefined) {
           this.glucoses = [this.store.glucose];
@@ -169,6 +213,7 @@ export default {
   validations() {
     return {
       glucose: { required },
+      do_you_have_the_disease: { required },
     };
   },
   // updated() {
