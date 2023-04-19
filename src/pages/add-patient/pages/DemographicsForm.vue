@@ -140,23 +140,48 @@
               </template>
             </q-uploader>
 
-            <base-input
+            <base-select
+              filled
+              :validator="v$.patient.town"
+              new-value-mode="add"
+              use-input
               :label="$t('patient.town')"
               v-model="patient.town"
-              :disable="true"
+              :options="townOptions"
+              :display-value="patient.town ? $t(`${patient.town}`) : ''"
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
+
+            <!-- <base-input
+              :label="$t('patient.town')"
+              v-model="patient.town"
+              :disable="false"
               :validator="v$.patient.town"
-            />
+            /> -->
             <base-select
               :options="sPrefectures"
               :label="$t('patient.quartier')"
               v-model="patient.quartier"
               :validator="v$.patient.quartier"
+              new-value-mode="add"
+              use-input
             />
+
             <base-select
+              ref="smartAdd"
               :options="patient.quartier == 'Soyah' ? sectorS : sectorO"
               label="Secteur"
               v-model="patient.sector"
               :validator="v$.patient.sector"
+              new-value-mode="add"
+              use-input
             />
 
             <div class="q-gutter-sm">
@@ -550,7 +575,7 @@ export default {
     return {
       disabledByAge: false,
       pregnantStatus: true,
-      sPrefectures: ['Soyah', 'Oure Kaba'],
+      sPrefectures: ['Soumanbossia', 'Soyah', 'Oure Kaba'],
       receivedAtOptions: ['atTheHeadOfTheDistrict', 'atTheHeadOfTheDepartment'],
       sectorS: [
         'Soyah Centre',
@@ -582,10 +607,11 @@ export default {
       image: '',
       imageUploadedUrl: '',
       patient: {
-        town: 'Mamou',
+        town: '',
         quartier: 'Soyah',
       } as Patient,
       Qoptions: ['Yes', 'No'],
+      townOptions: ['Conakry', 'Mamou'],
       GenderOptions: ['Male', 'Female'],
       isWoman: false,
       YesOrNoOptions: ['Yes', 'No'],
@@ -873,12 +899,14 @@ export default {
     this.patient.photo = '';
     this.patient.do_you_know_date_of_birth = 'Yes';
     if (this.store.currentPatient.id) {
+      this.disabledFields(this.store.currentPatient.date_of_birth);
       this.patient = this.store.currentPatient;
       this.imageUploadedUrl = this.patient.photo;
     }
   },
   setup() {
     return {
+      model: ref(''),
       step: ref(1),
       v$: useVuelidate(),
       store: useAppStore(),

@@ -28,7 +28,7 @@
         </q-input>
       </template>
       <template v-slot:header="props">
-        <q-td v-for="head in props.cols" :key="head.name">
+        <q-td class="text-center" v-for="head in props.cols" :key="head.name">
           {{ $t(`${head.field}`) }}
         </q-td>
       </template>
@@ -45,10 +45,19 @@
             <div v-else-if="col.name === 'type_consult'">
               <p>
                 <q-badge
-                  outline
                   :color="
                     col.value == 'Mass consultation' ? 'secondary' : 'orange'
                   "
+                  :label="col.value"
+                />
+              </p>
+            </div>
+            <div v-else-if="col.name === 'people_enrolled'">
+              <p>
+                <q-badge
+                  rounded
+                  color="green"
+                  class="q-ml-xs"
                   :label="col.value"
                 />
               </p>
@@ -242,6 +251,13 @@ export default {
         descending: false,
       },
       columns: [
+        {
+          name: 'people_enrolled',
+          label: 'people_enrolled',
+          align: 'center',
+          field: 'people_enrolled',
+          sortable: true,
+        },
         {
           name: 'date_of_consult',
           label: 'date_of_consult',

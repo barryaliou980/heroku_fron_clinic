@@ -190,6 +190,7 @@ export default {
   people_attending:'Personnes touchées',
   home_attending:'Maisons touchées',
   add_consultation:'Ajouter une consultation',
+  people_enrolled: 'Personne enrollées',
 
 
   'Smart phone': 'Téléphone intelligent',
