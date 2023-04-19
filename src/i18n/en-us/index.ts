@@ -188,6 +188,7 @@ export default {
   people_attending:'People attending',
   home_attending:'Home attending',
   add_consultation:'Add new consultation',
+  people_enrolled: 'People enrolled',
 
 
   'Smart phone': 'Smart phone',
