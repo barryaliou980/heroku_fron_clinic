@@ -3,9 +3,9 @@
     <q-page-container>
       <q-page class="flex bg-image flex-center">
         <q-card class="lg:tw-w-150 tw-w-1/2">
-          <q-card-section>
+          <q-card-section style="margin-top: 7%">
             <q-avatar size="103px" class="absolute-center shadow-10">
-              <img src="../assets/logo.jpg" />
+              <img src="../assets/logo.png" />
             </q-avatar>
           </q-card-section>
           <q-card-section>

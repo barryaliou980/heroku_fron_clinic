@@ -39,6 +39,7 @@
             <div>
               <base-input
                 v-if="birthDayStatus === true"
+                :label="$t('patient.date_of_birth')"
                 filled
                 :validator="v$.patient.date_of_birth"
                 v-model="patient.date_of_birth"
@@ -68,6 +69,7 @@
                 </template>
               </base-input>
               <base-input
+                :label="$t('patient.date_of_birth')"
                 v-else
                 :validator="v$.patient.date_of_birth"
                 v-model="patient.date_of_birth"
@@ -176,7 +178,9 @@
 
             <base-select
               ref="smartAdd"
-              :options="patient.quartier == 'Soyah' ? sectorS : sectorO"
+              :options="
+                patient.quartier == 'Dubréka Centre' ? sectorS : sectorO
+              "
               label="Secteur"
               v-model="patient.sector"
               :validator="v$.patient.sector"
@@ -568,6 +572,7 @@ import { required, maxValue, numeric, minLength } from '@vuelidate/validators';
 import moment from 'moment';
 import { useAppStore } from 'src/stores/appStor';
 import { date } from 'quasar';
+import Compressor from 'compressorjs';
 
 export default {
   emits: [],
@@ -575,32 +580,26 @@ export default {
     return {
       disabledByAge: false,
       pregnantStatus: true,
-      sPrefectures: ['Soumanbossia', 'Soyah', 'Oure Kaba'],
-      receivedAtOptions: ['atTheHeadOfTheDistrict', 'atTheHeadOfTheDepartment'],
-      sectorS: [
-        'Soyah Centre',
-        'Berteyah',
-        'Farenta',
-        'Nôbé',
-        'Kenten',
-        'Bhoully',
-        'Fodeyah',
-      ],
+      path: backendImagePath,
+      sPrefectures: ['Soumanbossia', 'Manéah', 'Dubréka Centre'],
       sectorO: [
-        'Kaba Centre',
-        'Dian-Dian',
-        'Kouloundala',
-        'Sitakötö',
-        'Banékötö',
-        'Sogoroya',
-        'Sébékötö',
-        'Portofita',
-        'Séléya',
-        'Alphaya',
-        'Bantamaya',
-        'Kolimö',
-        'Yomaya Limban',
+        'Bambaya',
+        'Bentouraya',
+        'CBA',
+        'Fassia',
+        'Friguiady',
+        'Gomboyah',
+        'Hermakono',
+        'Kalokoya',
+        'Kassonya',
+        'Kountia',
+        'Sanoyah Km 36',
+        'Sanoyah Rails',
+        'Tanènè',
       ],
+      sectorS: ['Kagbelen Plateau', 'Kagbelen Village'],
+      receivedAtOptions: ['atTheHeadOfTheDistrict', 'atTheHeadOfTheDepartment'],
+
       birthDayStatus: true,
       alert: false,
       selected_file: '',
@@ -608,10 +607,10 @@ export default {
       imageUploadedUrl: '',
       patient: {
         town: '',
-        quartier: 'Soyah',
+        quartier: '',
       } as Patient,
       Qoptions: ['Yes', 'No'],
-      townOptions: ['Conakry', 'Mamou'],
+      townOptions: ['Conakry', 'Coyah', 'Dubreka'],
       GenderOptions: ['Male', 'Female'],
       isWoman: false,
       YesOrNoOptions: ['Yes', 'No'],
@@ -705,8 +704,6 @@ export default {
       this.patient.matrimonial_status = null;
       this.patient.would_you_be_willing_to_subscribe = null;
       this.patient.would_you_like_medical_card = null;
-
-      console.log('bobo', this.disabledByAge);
     },
     disabledPregnant() {
       this.pregnantStatus =
@@ -863,21 +860,32 @@ export default {
       }
     },
     async uploadFile(patient_id) {
-      const fileData = new FormData();
+      new Compressor(this.image, {
+        quality: 0.6,
 
-      fileData.append('photo', this.image);
-      fileData.append('patient_id', patient_id);
+        // The compression process is asynchronous,
+        // which means you have to access the `result` in the `success` hook function.
+        success(result) {
+          const fileData = new FormData();
 
-      const uploadFile = api
-        .post('/upload', fileData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        .then((response) => {
-          this.imageUploadedUrl = backendImagePath + response.data;
-        });
+          fileData.append('photo', result, result.name);
+          fileData.append('patient_id', patient_id);
+          const uploadFile = api
+            .post('/upload', fileData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            })
+            .then((response) => {
+              console.log(response.data);
+            });
+        },
+        error(err) {
+          console.log('Error', err.message);
+        },
+      });
     },
+
     file_selected: function (file) {
       this.image = file[0];
       this.imageUploadedUrl = URL.createObjectURL(this.image);
@@ -901,7 +909,7 @@ export default {
     if (this.store.currentPatient.id) {
       this.disabledFields(this.store.currentPatient.date_of_birth);
       this.patient = this.store.currentPatient;
-      this.imageUploadedUrl = this.patient.photo;
+      this.imageUploadedUrl = this.path + '' + this.patient.photo;
     }
   },
   setup() {

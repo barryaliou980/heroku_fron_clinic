@@ -175,7 +175,6 @@ export default {
       }
     },
     instruction() {
-
       if (
         moment().diff(this.store.currentPatient.date_of_birth, 'years') < 5 ||
         this.store.currentPatient?.pregnant == 'Yes'

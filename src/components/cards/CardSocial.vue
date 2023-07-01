@@ -572,6 +572,8 @@ export default {
 
     this.patientCovid = dataStatistics.patientCovid;
 
+    console.log('Smart ', dataStatistics);
+
     this.statPersons(dataStatistics);
     this.statVitals(dataStatistics);
     this.statCovid(dataStatistics);

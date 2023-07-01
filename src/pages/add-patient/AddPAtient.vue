@@ -317,11 +317,15 @@
 
       <q-card-actions align="right">
         <q-btn
-          label="I Agree"
+          :label="$t('consentementAgree')"
           color="blue"
           @click="consentementModal = false"
         />
-        <q-btn label="I disagree" color="red" @click="consentement()" />
+        <q-btn
+          :label="$t('consentementDisagree')"
+          color="red"
+          @click="consentement()"
+        />
       </q-card-actions>
     </q-card>
   </base-dialog>
@@ -541,48 +545,14 @@ export default {
         }
       });
     },
-    // async submit() {
-    //   if (await this.v$.rdtTestResult.$validate()) {
-    //     const fileData = new FormData();
-    //     this.loading = true;
-    //     this.saveBtn = true;
-    //     fileData.append('rdt_image', this.rdtTestResult.image);
-    //     fileData.append('patient_id', this.store.currentPatient?.id);
-    //     fileData.append('rdt_type', this.rdtTestResult.label);
-    //     fileData.append('rdt_result', this.rdtTestResult.result);
-    //     fileData.append('symptome_id', this.store.symptom?.id);
 
-    //     api
-    //       .post('/rdt', fileData, {
-    //         headers: {
-    //           'Content-Type': 'multipart/form-data',
-    //         },
-    //       })
-    //       .then((response) => {
-    //         this.open = false;
-    //         this.loading = false;
-    //         this.saveBtn = false;
-    //         if (response.data.data.rdt_type === 'covid') {
-    //           this.hideCovidBtn = false;
-    //           this.store.setCovidResult(response.data.data);
-    //           this.store.setActiveCovid(false);
-    //           console.log('covid', response.data);
-    //           this.loading = false;
-    //         } else if (response.data.data.rdt_type === 'malaria') {
-    //           this.hideMalariaBtn = false;
-    //           this.store.setMalariaResult(response.data.data);
-    //           this.store.setActiveMalaria(false);
-    //           console.log('covid', response.data);
-    //           this.loading = false;
-    //         }
-    //       });
-    //   }
-    // },
     isLoading(status: boolean) {
       this.loading = status;
     },
   },
   async created() {
+    this.malariaTimer = 300 * 1000;
+    this.covidTimer = 900 * 1000;
     if (this.$route.params.id !== undefined) {
       this.isLoading(true);
       const { data } = await api.get(`/patients/${this.$route.params.id}`);
