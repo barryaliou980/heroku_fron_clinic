@@ -101,6 +101,7 @@ import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { useAppStore } from 'src/stores/appStor';
 import { api } from 'src/boot/axios';
+import moment from 'moment';
 
 export default {
   emits: [],
@@ -202,8 +203,16 @@ export default {
           this.$emit('next', 'test_covid');
           this.store.setTabs('test_covid');
         } else {
-          this.$emit('next', 'blood_pr');
-          this.store.setTabs('blood_pr');
+          if (
+            moment().diff(this.store.currentPatient.date_of_birth, 'years') >=
+            18
+          ) {
+            this.$emit('next', 'blood_pr');
+            this.store.setTabs('blood_pr');
+          } else {
+            this.$emit('next', 'medical_back');
+            this.store.setTabs('medical_back');
+          }
         }
       } else {
         console.log('Glucose');

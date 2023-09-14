@@ -146,6 +146,18 @@
         <q-separator class="tw-mt-2" />
         <div class="tw-ml-4 tw-mt-2">
           <p class="text-h6">
+            {{ $t('phone_number') }}:
+            <span class="tw-text-gray-500">
+              {{ row.phone_number }}
+            </span>
+          </p>
+          <p class="text-h6">
+            {{ $t('patient_uid') }}:
+            <span class="tw-text-gray-500">
+              {{ row.patient_uid }}
+            </span>
+          </p>
+          <p class="text-h6">
             {{ $t('patient.name') }}:<span class="tw-text-gray-500">
               {{ row.name }}
             </span>

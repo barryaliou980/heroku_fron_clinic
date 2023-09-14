@@ -56,6 +56,26 @@ const routes: RouteRecordRaw[] = [
         name: 'admin.consult',
         component: () => import('../pages/Consultation/Consultation.vue'),
       },
+      {
+        path: 'referals/:id',
+        name: 'admin.referals',
+        component: () => import('../pages/Referals/Referals.vue'),
+      },
+      {
+        path: 'list-referals',
+        name: 'admin.list.referals',
+        component: () => import('../pages/Referals/PatientReferalList.vue'),
+      },
+      {
+        path: 'list-followup',
+        name: 'admin.list.followup',
+        component: () => import('../pages/followUp/PatientFollowUp.vue'),
+      },
+      {
+        path: 'detail-followup/:id',
+        name: 'admin.list.detail-followup',
+        component: () => import('../pages/followUp/FollowUpDetails.vue'),
+      },
     ],
   },
 

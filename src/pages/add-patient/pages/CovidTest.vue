@@ -160,16 +160,17 @@ export default {
         this.$emit('next', 'malnutrition');
         this.store.setTabs('malnutrition');
       } else {
-        if(   moment().diff(this.store.currentPatient.date_of_birth, 'years') >= 18){
+        if (
+          moment().diff(this.store.currentPatient.date_of_birth, 'years') >= 18
+        ) {
           this.$emit('next', 'blood_pr');
           this.store.setTabs('blood_pr');
-           this.$emit('startCountdownCovid', 900);
-        }else{
-              this.$emit('next', 'medical_back');
-              this.store.setTabs('medical_back');
-               this.$emit('startCountdownCovid', 900);
+          this.$emit('startCountdownCovid', 900);
+        } else {
+          this.$emit('next', 'medical_back');
+          this.store.setTabs('medical_back');
+          this.$emit('startCountdownCovid', 900);
         }
-
       }
     },
     onFormDialogClose() {

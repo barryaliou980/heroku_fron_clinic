@@ -213,16 +213,16 @@
       @click="submit"
       color="primary"
       class="tw-mt-2"
-      :label="$t('save')"
+      :label="$t('save_and_end')"
       :loading="loadingBtn"
     />
 
     <div class="tw-flex tw-justify-center tw-mt-4">
-      <q-btn
+      <!-- <q-btn
         @click="validerEndProcess"
         color="red"
         :label="$t('end_the_process')"
-      />
+      /> -->
     </div>
   </div>
   <q-dialog v-model="open" persistent color="red">
@@ -293,7 +293,17 @@ export default {
         '3 years',
         'More than 3 years',
       ],
-      wtafOptions: ['Hypertensionn', 'Diabetes'],
+      wtafOptions: [
+        'Gastritis or ulcer Gastritis',
+        'Preeclampsia (Pregnancy with Hypertension)',
+        'Anemia (lack of blood)',
+        'Cataract, Glaucoma, Diabetic Retinopathy (eye diseases)',
+        'Sinusitis',
+        'Tuberculosis',
+        'Articular rheumatism',
+        'Hypertrophie de prostate',
+        'Delirious puff (mental illness)',
+      ],
       vacinationsOptions: [
         'Not known',
         'Covid',
@@ -360,7 +370,7 @@ export default {
     },
     async testBackrournd4() {
       if (
-        moment().diff(this.store.currentPatient.date_of_birth, 'years') < 18
+        moment().diff(this.store.currentPatient.date_of_birth, 'years') <= 18
       ) {
         return true;
       } else {
@@ -419,25 +429,33 @@ export default {
       const result_2 = await this.testBackrournd2();
       const result_3 = await this.testBackrournd3();
       const result_4 = await this.testBackrournd4();
-      if (result_1 && result_2 && result_3 && result_4) {
-        this.loadingBtn = true;
-        this.medical_back.patient_id = this.store.currentPatient.id;
 
-        if (this.store.medicalBackground.id === undefined) {
-          const { data } = await api.post('/medical', this.medical_back);
-          this.medical_back = data.data;
-          this.store.setMedicalBackground(data.data);
-          this.loadingBtn = false;
-          this.open1 = true;
+      const saveRdtResult = this.isOk();
+
+      if (result_1 && result_2 && result_3 && result_4) {
+        if (saveRdtResult) {
+          this.loadingBtn = true;
+          this.medical_back.patient_id = this.store.currentPatient.id;
+
+          if (this.store.medicalBackground.id === undefined) {
+            const { data } = await api.post('/medical', this.medical_back);
+            this.medical_back = data.data;
+            this.store.setMedicalBackground(data.data);
+            this.loadingBtn = false;
+            this.open1 = true;
+          } else {
+            const { data } = await api.put(
+              `/medical/${this.store.medicalBackground.id}`,
+              this.medical_back
+            );
+            this.medical_back = data.data;
+            this.store.setMedicalBackground(data.data);
+            this.loadingBtn = false;
+            this.open1 = true;
+          }
+          this.end_process();
         } else {
-          const { data } = await api.put(
-            `/medical/${this.store.medicalBackground.id}`,
-            this.medical_back
-          );
-          this.medical_back = data.data;
-          this.store.setMedicalBackground(data.data);
-          this.loadingBtn = false;
-          this.open1 = true;
+          this.open2 = true;
         }
       }
     },
@@ -472,10 +490,22 @@ export default {
       }
       return true;
     },
+
+    mustReferal(patient_id) {
+      api.get(`/mbr/${patient_id}`).then((response) => {
+        if (response.data > 0) {
+          this.$router.replace(`/referals/${patient_id}`);
+        } else {
+          this.$router.replace({ name: 'admin.list.patient' });
+        }
+      });
+    },
+
     end_process() {
       this.$emit('endProcess');
+      const currentPatientId = this.store.currentPatient.id;
       this.store.resetStore();
-      this.$router.replace({ name: 'admin.list.patient' });
+      this.mustReferal(currentPatientId);
     },
   },
   computed: {

@@ -126,6 +126,24 @@
             <q-item-label>{{ $t('sidebar.consultations') }}</q-item-label>
           </q-item-section>
         </q-item>
+
+        <q-item to="/list-referals" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="trending_up" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ $t('sidebar.referals') }}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item to="/list-followup" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="trending_up" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{ $t('sidebar.followup') }}</q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-drawer>
 

@@ -244,7 +244,7 @@ export default {
       consultationID: 0,
       showFormDialog: false,
       filterOptions: locationOptions,
-      ConsultationOptions: ['Mass consultation', 'Home visit'],
+      ConsultationOptions: ['Mass consultation', 'Homecare'],
       pagination: {
         rowsPerPage: 10,
         sortBy: 'date_of_consult',

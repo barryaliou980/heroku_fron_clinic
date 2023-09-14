@@ -63,7 +63,7 @@
       </q-card-section>
     </div>
     <q-card-section class="q-pa-none tw-px-4 tw-py-4">
-      <q-table grid :rows="data" :filter="filter">
+      <q-table grid :rows="data" :filter="filter" row-key="name">
         <template v-slot:item="props">
           <div class="q-pa-xs col-xs-12 col-sm-6 col-md-6 col-lg-6">
             <card-profile :row="props.row"></card-profile>
