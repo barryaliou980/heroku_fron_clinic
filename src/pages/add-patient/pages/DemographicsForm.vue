@@ -145,17 +145,29 @@
             <base-select
               filled
               :validator="v$.patient.town"
-              new-value-mode="add"
               use-input
               :label="$t('patient.town')"
               v-model="patient.town"
               :options="townOptions"
-              :display-value="patient.town ? $t(`${patient.town}`) : ''"
+              @update:model-value="getQuartiers"
+              :display-value="
+                patient.town ? $t(`${patient.town.prefectures}`) : ''
+              "
+              @filter="filterFn"
             >
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    No results
+                  </q-item-section>
+                </q-item>
+              </template>
               <template v-slot:option="scope">
                 <q-item v-bind="scope.itemProps">
                   <q-item-section>
-                    <q-item-label>{{ $t(`${scope.opt}`) }}</q-item-label>
+                    <q-item-label>{{
+                      $t(`${scope.opt.prefectures}`)
+                    }}</q-item-label>
                   </q-item-section>
                 </q-item>
               </template>
@@ -174,19 +186,46 @@
               :validator="v$.patient.quartier"
               new-value-mode="add"
               use-input
-            />
+              @update:model-value="getSectors"
+              :display-value="
+                patient.quartier ? $t(`${patient.quartier.quartiers}`) : ''
+              "
+              @filter="filterQuartiersFn"
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{
+                      $t(`${scope.opt.quartiers}`)
+                    }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
 
             <base-select
               ref="smartAdd"
-              :options="
-                patient.quartier == 'Dubréka Centre' ? sectorS : sectorO
-              "
+              :options="sectorS"
               label="Secteur"
               v-model="patient.sector"
               :validator="v$.patient.sector"
               new-value-mode="add"
               use-input
-            />
+              :display-value="
+                patient.sector ? $t(`${patient.sector.secteurs}`) : ''
+              "
+              @filter="filterSectorsFn"
+            >
+              <template v-slot:option="scope">
+                <q-item v-bind="scope.itemProps">
+                  <q-item-section>
+                    <q-item-label>{{
+                      $t(`${scope.opt.secteurs}`)
+                    }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </base-select>
 
             <div class="q-gutter-sm">
               <q-checkbox
@@ -581,7 +620,7 @@ export default {
       disabledByAge: false,
       pregnantStatus: true,
       path: backendImagePath,
-      sPrefectures: ['Soumanbossia', 'Manéah', 'Dubréka Centre'],
+      sPrefectures: [],
       sectorO: [
         'Bambaya',
         'Bentouraya',
@@ -597,7 +636,7 @@ export default {
         'Sanoyah Rails',
         'Tanènè',
       ],
-      sectorS: ['Kagbelen Plateau', 'Kagbelen Village'],
+      sectorS: [],
       receivedAtOptions: ['atTheHeadOfTheDistrict', 'atTheHeadOfTheDepartment'],
 
       birthDayStatus: true,
@@ -610,7 +649,8 @@ export default {
         quartier: '',
       } as Patient,
       Qoptions: ['Yes', 'No'],
-      townOptions: ['Conakry', 'Coyah', 'Dubreka'],
+      townOptions: [],
+      filterLocationsOptions: [],
       GenderOptions: ['Male', 'Female'],
       isWoman: false,
       YesOrNoOptions: ['Yes', 'No'],
@@ -693,6 +733,71 @@ export default {
     };
   },
   methods: {
+    filterFn(val, update) {
+      update(() => {
+        if (val === '') {
+          this.townOptions = this.townOptions;
+        } else {
+          const needle = val.toLowerCase();
+          this.townOptions = this.townOptions.filter(
+            (v) => v.prefectures.toLowerCase().indexOf(needle) > -1
+          );
+        }
+      });
+    },
+    filterQuartiersFn(val, update) {
+      update(() => {
+        if (val === '') {
+          this.sPrefectures = this.sPrefectures;
+        } else {
+          const needle = val.toLowerCase();
+          this.sPrefectures = this.sPrefectures.filter(
+            (v) => v.quartiers.toLowerCase().indexOf(needle) > -1
+          );
+        }
+      });
+    },
+    filterSectorsFn(val, update) {
+      update(() => {
+        if (val === '') {
+          this.sectorS = this.sectorS;
+        } else {
+          const needle = val.toLowerCase();
+          this.sectorS = this.sectorS.filter(
+            (v) => v.secteurs.toLowerCase().indexOf(needle) > -1
+          );
+        }
+      });
+    },
+    async prefectures() {
+      const town = await api.get('/prefectures');
+      this.townOptions = town.data.data;
+      this.filterLocationsOptions = this.townOptions;
+    },
+    async getQuartiers(town) {
+      this.patient.quartier = '';
+      this.patient.sector = '';
+      this.sPrefectures = [];
+      this.sectorS = [];
+      if (town !== null) {
+        const quartiers = await api.get(
+          `/quartiers?prefectures=${town.prefectures}`
+        );
+        this.sPrefectures = quartiers.data.data;
+      }
+    },
+
+    async getSectors(quartiers) {
+      this.patient.sector = '';
+      this.sectorS = [];
+      if (quartiers !== null) {
+        const sectors = await api.get(
+          `/sectors?prefectures=${this.patient.town.prefectures}&quartiers=${quartiers.quartiers}`
+        );
+        this.sectorS = sectors.data.data;
+      }
+    },
+
     maxDate() {
       const d = date.formatDate(Date.now(), 'YYYY/MM/DD');
       return d;
@@ -903,6 +1008,7 @@ export default {
     },
   },
   created() {
+    this.prefectures();
     this.disabledPregnant();
     this.patient.photo = '';
     this.patient.do_you_know_date_of_birth = 'Yes';
